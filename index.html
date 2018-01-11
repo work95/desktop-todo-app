@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>What to do?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="./assets/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="./assets/css/mdb.min.css" />
+  <link rel="stylesheet" href="./assets/css/style.css" />
+  <link rel="stylesheet" href="./assets/css/fontawesome-all.min.css" />
+  <link rel="stylesheet" href="./assets/css/index.css" />
+</head>
+
+<body>
+
+  <header>
+    <div>
+      <span>
+        <h1>Todo</h1>
+      </span>
+
+      <span id="header-icon-cont">
+        <span id="add-task-btn">
+          <i class="fa fa-plus"></i>
+        </span>
+        <span id="delete-task-btn">
+          <i class="fa fa-trash"></i>
+        </span>
+        <span id="reglog-btn">
+          <i class="fa fa-signup"></i>
+        </span>
+      </span>
+
+    </div>
+  </header>
+
+  <article>
+
+    <div id="task-add-input-box">
+      <input type="text" id="task-text-input" placeholder="What do you want to do next?" autofocus />
+      <div id="task-input-error-box"></div>
+    </div>
+
+    <div id="task-list-cont">
+      <ul class="list-group">
+        <li style="display: none;" id="task_0" class="list-group-item">
+          <input type="checkbox" taskid="task_0" class="select-task" />
+        </li>
+      </ul>
+    </div>
+
+  </article>
+
+  <script src="./index_main.js"></script>
+  <script src="./assets/js/popper.min.js"></script>
+  <script src="./assets/js/bootstrap.min.js"></script>
+  <script src="./assets/js/mdb.min.js"></script>
+
+</body>
+
+</html>
