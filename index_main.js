@@ -10,6 +10,7 @@ var selectedTask = [];
 const USER_LIST_FILE_PATH = "./data-store/user-store/user_list.txt";
 var nextUserId = 0;
 
+var SESSION_STORE = "";
 
 /* Common key codes. */
 const KeyCodes = {
@@ -47,9 +48,19 @@ $(function () {
   });
 });
 
-
-var SESSION_STORE = "";
-
+function disableReloadKeyShortcut() {
+  $(window).on('keydown', function (e) {
+    var keyCombination = "";
+    if (e.keyCode === KeyCodes.CONTROL) {
+      keyCombination = "";
+    }
+    keyCombination += e.keyCode;
+ 
+    if (keyCombination.match(/^[1][7](82)+$/i) !== null) {
+      e.preventDefault();
+    }
+  });
+}
 
 /* For performing operations when certain key combinations are pressed. */
 var keyCombination = "";
@@ -68,7 +79,7 @@ $(function () {
       }
 
       keyCombination += e.keyCode;    // Concatenate the key code.
-      
+
       // If the last key code forms 1723 (that means ctrl + enter is pressed together).
       if (keyCombination.match(/^[1][7](13)+$/i) !== null) {
         addTask($('#task-text-input').val());
