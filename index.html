@@ -10,32 +10,115 @@
   <link rel="stylesheet" href="./assets/css/style.css" />
   <link rel="stylesheet" href="./assets/css/fontawesome-all.min.css" />
   <link rel="stylesheet" href="./assets/css/index.css" />
+  <link rel="stylesheet" href="./assets/css/reglog.css" />
 </head>
 
 <body>
 
+  <div id="reglog-page">
+    <div id="back-cover-screen">
+      <span id="reglog-close-btn"><i class="fa fa-arrow-circle-left"></i></span>
+    </div>
+    <div id="tab-cont">
+      <div class="tabs-wrapper"> 
+        <ul class="nav classic-tabs tabs-orange" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link waves-light" ref="pane2">Sign In</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link waves-light active" ref="pane1">Sign Up</a>
+          </li>
+        </ul>
+      </div>
+        
+      <div class="tab-content card">
+        
+        <div class="tab-content-body" id="pane2" state="off">
+          <form>
+            <p class="h5 text-center mb-4">Sign in</p>
+        
+            <div class="md-form">
+              <i class="fa fa-envelope prefix grey-text"></i>
+              <input type="text" id="defaultForm-email" class="form-control">
+              <label for="defaultForm-email">Your email</label>
+            </div>
+          
+            <div class="md-form">
+              <i class="fa fa-lock prefix grey-text"></i>
+              <input type="password" id="defaultForm-pass" class="form-control">
+              <label for="defaultForm-pass">Your password</label>
+            </div>
+            
+            <div class="text-center">
+              <div id="login-btn" class="btn btn-elegant">Login</div>
+            </div>              
+          </form>
+        </div>
+
+        <div class="tab-content-body" id="pane1" state="on">
+          <form>
+            <p class="h5 text-center mb-4">Sign up</p>
+            <div class="md-form">
+              <i class="fa fa-user prefix grey-text"></i>
+              <input type="text" id="orangeForm-name" class="form-control">
+              <label for="orangeForm-name">Your name</label>
+            </div>
+            <div class="md-form">
+              <i class="fa fa-envelope prefix grey-text"></i>
+              <input type="text" id="orangeForm-email" class="form-control">
+              <label for="orangeForm-email">Your email</label>
+            </div>
+      
+            <div class="md-form">
+              <i class="fa fa-lock prefix grey-text"></i>
+              <input type="password" id="orangeForm-pass" class="form-control">
+              <label for="orangeForm-pass">Your password</label>
+            </div>
+    
+            <div class="text-center">
+              <div id="register-btn" class="btn btn-elegant">Sign up</div>
+            </div>
+    
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <header>
     <div>
-      <span>
-        <h1>Todo</h1>
+      <span id="user-name-display">
+        <h2>Todo</h2>
       </span>
 
       <span id="header-icon-cont">
-        <span id="add-task-btn">
+        <span id="add-task-btn" class="disabled">
           <i class="fa fa-plus"></i>
         </span>
-        <span id="delete-task-btn">
-          <i class="fa fa-trash"></i>
+        <span id="delete-task-btn" class="disabled">
+          <i class="fa fa-trash-alt"></i>
         </span>
-        <span id="reglog-btn">
-          <i class="fa fa-signup"></i>
-        </span>
+        
+        <button type="button" id="reglog-btn" class="btn btn-outline-warning waves-effect">SIGN IN</button>
+        <button type="button" id="sign-out-btn" class="btn btn-outline-success waves-effect">SIGN OUT</button>
       </span>
 
     </div>
   </header>
 
   <article>
+
+    <div id="startup-message-screen">
+      <section id="startup-message">
+        <h3>No tasks yet</h2>
+          <h6>Join now to become more organized.</h6>
+          <div class="btn btn-indigo" id="startup-message-btn">
+            <p>Get Started</p>
+            <section id="startup-message-spinner" class="spin"></section>
+          </div>
+      </section>
+    </div>
 
     <div id="task-add-input-box">
       <input type="text" id="task-text-input" placeholder="What do you want to do next?" autofocus />
