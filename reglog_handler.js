@@ -1,3 +1,5 @@
+const USER_LIST_FILE_PATH = './data-store/user-store/next_user_id.txt';
+
 /* For registering the user. */
 function registerUser(name, email, password, callback) {
 
@@ -59,6 +61,11 @@ function registerUser(name, email, password, callback) {
 /* For signing the user in by checking his/her credentials. */
 function loginUser(email, password, callback) {
 
+  /* Do validation first. */
+  if (!validateLoginForm()) {
+    return;
+  }
+
   if (!fs.existsSync('./data-store/user-store/')) {
     fs.mkdirSync('./data-store/user-store/');
   }
@@ -119,6 +126,9 @@ $(function () {
   $('#register-btn').click(function () {
 
     /* Do validation first. */
+    if (!validateRegistrationForm()) {
+      return;
+    }
 
     registerUser($('#orangeForm-name').val().trim(), $('#orangeForm-email').val().trim(), $('#orangeForm-pass').val().trim());
     $('#add-task-btn').removeClass('disabled');
@@ -170,6 +180,7 @@ $(function () {
 function closeRegLogPane() {
   document.getElementById("reglog-page").style.width = "0";
   $('#tab-cont').fadeOut(200);
+  clearRegLogInputForms();
 }
 
 /* For handling the tabs. */
@@ -191,11 +202,17 @@ $(function () {
     $('#user-name-display h2').text("Todo");
     $('#sign-out-btn').fadeOut(10);
     $('#reglog-btn').fadeIn(300);
-
-    currentTask = 0;
-
     $('#task-list-cont ul').html("");
     $('#add-task-btn').addClass('disabled');
     $('#delete-task-btn').addClass('disabled');
+    clearRegLogInputForms();
   });
 });
+
+function clearRegLogInputForms() {
+  $('#orangeForm-name').val("");
+  $('#orangeForm-email').val("");
+  $('#orangeForm-pass').val("");
+  $('#defaultForm-email').val("");
+  $('#defaultForm-pass').val("");
+}
