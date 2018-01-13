@@ -96,9 +96,6 @@
         <span id="add-task-btn" class="disabled">
           <i class="fa fa-plus"></i>
         </span>
-        <span id="delete-task-btn" class="disabled">
-          <i class="fa fa-trash-alt"></i>
-        </span>
         
         <button type="button" id="reglog-btn" class="btn btn-outline-warning waves-effect">SIGN IN</button>
         <button type="button" id="sign-out-btn" class="btn btn-outline-success waves-effect">SIGN OUT</button>
@@ -128,7 +125,8 @@
     <div id="task-list-cont">
       <ul class="list-group">
         <li style="display: none;" id="task_0" class="list-group-item">
-          <input type="checkbox" taskid="task_0" class="select-task" />
+          <span class="delete-task-btn"><i class="fa fa-trash"></i></span>
+          <!-- <input type="checkbox" taskid="task_0" class="select-task" /> -->
         </li>
       </ul>
     </div>
@@ -136,6 +134,7 @@
   </article>
 
   <script src="./index_main.js"></script>
+  <script src="./reglog_handler.js"></script>
   <script src="./assets/js/popper.min.js"></script>
   <script src="./assets/js/bootstrap.min.js"></script>
   <script src="./assets/js/mdb.min.js"></script>
