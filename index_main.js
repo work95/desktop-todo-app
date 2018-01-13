@@ -118,7 +118,10 @@ function validateRegistrationForm() {
   } else if (password.length > 32) {
     errorFlag++;
     $('#reg-pass-error').text('Password longer than 32 characters').slideDown(200);
-  } else if (invalidCharacterValidation(password)) {
+  } else if (!((password.search(/\//) < 0) || (password.search(/\\/) < 0)
+  || (password.search(/~/) < 0) || (password.search(/|/) < 0)
+  || (password.search(/[ ]/) < 0))) {
+    errorFlag++;
     $('#reg-pass-error').text('Password contains one of the invalid character [\\, /, ~,  ,|]').slideDown(200);
   } else {
     $('#reg-pass-error').text('').slideUp(200);
@@ -148,7 +151,9 @@ function validateLoginForm() {
   } else if (password.length > 32) {
     errorFlag++;
     $('#log-pass-error').text('Password longer than 32 characters').slideDown(200);
-  } else if (invalidCharacterValidation(password)) {
+  } else if (!((password.search(/\//) < 0) || (password.search(/\\/) < 0)
+    || (password.search(/~/) < 0) || (password.search(/|/) < 0)
+    || (password.search(/[ ]/) < 0))) { 
     errorFlag++;
     $('#log-pass-error').text('Password contains one of the invalid character [\\, /, ~,  ,|]').slideDown(200);
   } else {
@@ -156,15 +161,4 @@ function validateLoginForm() {
   }
 
   return (errorFlag > 0) ? false : true;
-}
-
-function invalidCharacterValidation(string) {
-  if ((string.search(/\//) < 0) || (string.search(/\\/) < 0)
-    || (string.search(/~/) < 0) || (string.search(/|/) < 0)
-    || (string.search(/[ ]/) < 0)) {
-
-    return false;
-  } else {
-    return true;
-  }
 }
