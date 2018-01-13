@@ -22,7 +22,7 @@ function registerUser(name, email, password, callback) {
     });
   }
 
-  var file = fs.appendFile(USER_LIST_FILE_PATH, (email + ":" + nextUserId) + ",", function (err) {
+  var file = fs.appendFile(USER_LIST_FILE_PATH, (email + ":" + NEXT_USER_ID) + ",", function (err) {
     if (err) {
       logger.warn('[Error]: ' + err);
     } else {
@@ -32,20 +32,20 @@ function registerUser(name, email, password, callback) {
 
   /* Create a directory for user. */
 
-  fs.mkdirSync('./data-store/user-store/' + nextUserId);
+  fs.mkdirSync('./data-store/user-store/' + NEXT_USER_ID);
 
   // Add a file for user information.
   var userInfo = name + "\n" + email + "\n" + password;
-  fs.appendFile('./data-store/user-store/' + nextUserId + '/user_info.txt', userInfo, function (err) {
+  fs.appendFile('./data-store/user-store/' + NEXT_USER_ID + '/user_info.txt', userInfo, function (err) {
     if (err) {
       logger.warn('[Error]: ' + err);
     } else {
-      fs.appendFile('./data-store/user-store/' + nextUserId + '/user_task_list.txt', "", function (err) {
+      fs.appendFile('./data-store/user-store/' + NEXT_USER_ID + '/user_task_list.txt', "", function (err) {
         if (err) {
           logger.warn('[Error]: ' + err);
         } else {
-          // Update the 'nextUserId' in file.
-          fs.writeFileSync('./data-store/user-store/next_user_id.txt', (++nextUserId).toString());
+          // Update the 'NEXT_USER_ID' in file.
+          fs.writeFileSync('./data-store/user-store/next_user_id.txt', (++NEXT_USER_ID).toString());
           $('#reglog-btn').fadeOut(10);
           $('#sign-out-btn').fadeIn(300);
           closeRegLogPane();
