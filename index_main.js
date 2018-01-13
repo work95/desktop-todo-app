@@ -9,7 +9,6 @@ var SESSION_STORE = "";
 /* Remove the loading screen. */
 function removeLoadingScreen() {
   $('#loading-screen').fadeOut(1200);
-  $('body').css('overflow', 'auto');
 }
 
 $(function () {
@@ -35,6 +34,7 @@ $(function () {
 $(function () {
   $(window).on('resize', function () {
     centerAbsElementVertically('startup-message');
+    centerAbsElementVertically('reglog-page');
   });
 });
 
