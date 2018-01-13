@@ -215,4 +215,9 @@ function clearRegLogInputForms() {
   $('#orangeForm-pass').val("");
   $('#defaultForm-email').val("");
   $('#defaultForm-pass').val("");
+  $('#reg-name-error').text("").slideDown(200);
+  $('#reg-email-error').text("").slideDown(200);
+  $('#reg-pass-error').text("").slideDown(200);
+  $('#log-email-error').text("").slideDown(200);
+  $('#log-pass-error').text("").slideDown(200);
 }

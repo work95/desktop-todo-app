@@ -11,9 +11,21 @@
   background-color: rgb(62, 0, 0);
 }
 
+@media only screen and (max-height: 620px) {
+  #tab-cont {
+    margin: 20px auto
+  }
+}
+
+@media only screen and (min-height: 621px) {
+  #tab-cont {
+    margin: 70px auto;
+  }
+}
+
 #tab-cont {
   width: 70%;
-  margin: 150px auto;
+  max-width: 500px;
   display: none;
 }
 
@@ -37,7 +49,11 @@
 }
 
 #tab-cont div div form div input { color: white; }
-#tab-cont div div form p { color: white; }
+
+#tab-cont div div form p {
+  color: white;
+  padding-bottom: 20px;
+}
 
 #pane1 { display: none; }
 
