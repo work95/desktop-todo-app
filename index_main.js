@@ -3,7 +3,6 @@ const logger = require('tracer').colorConsole();
 
 window.$ = window.jQuery = require('./assets/js/jquery-3.2.1.min.js');
 
-const USER_LIST_FILE_PATH = "./data-store/user-store/user_list.txt";
 var NEXT_USER_ID = 0;
 var SESSION_STORE = "";
 
