@@ -15,6 +15,19 @@
 
 <body>
 
+  <div id="loading-screen">
+    <div class="outer">
+        <div class="middle">
+          <div class="inner">
+              <section id="load-screen-spinner">
+                <section class="spin load-spinner"></section>
+                <section class="spin-load-title" style="color: white;">Loading...</section>
+              </section>
+          </div>
+        </div>
+      </div>
+  </div>
+
   <div id="reglog-page">
     <div id="back-cover-screen">
       <span id="reglog-close-btn"><i class="fa fa-arrow-circle-left"></i></span>
@@ -39,14 +52,16 @@
         
             <div class="md-form">
               <i class="fa fa-envelope prefix grey-text"></i>
-              <input type="text" id="defaultForm-email" class="form-control">
+              <input type="text" id="defaultForm-email" class="form-control" autofocus>
               <label for="defaultForm-email">Your email</label>
+              <div id="log-email-error" class="reglog-error-box"></div>
             </div>
           
             <div class="md-form">
               <i class="fa fa-lock prefix grey-text"></i>
               <input type="password" id="defaultForm-pass" class="form-control">
               <label for="defaultForm-pass">Your password</label>
+              <div id="log-pass-error" class="reglog-error-box"></div>
             </div>
             
             <div class="text-center">
@@ -60,19 +75,22 @@
             <p class="h5 text-center mb-4">Sign up</p>
             <div class="md-form">
               <i class="fa fa-user prefix grey-text"></i>
-              <input type="text" id="orangeForm-name" class="form-control">
+              <input type="text" id="orangeForm-name" class="form-control" autofocus>
               <label for="orangeForm-name">Your name</label>
+              <div id="reg-name-error" class="reglog-error-box"></div>
             </div>
             <div class="md-form">
               <i class="fa fa-envelope prefix grey-text"></i>
               <input type="text" id="orangeForm-email" class="form-control">
               <label for="orangeForm-email">Your email</label>
+              <div id="reg-email-error" class="reglog-error-box"></div>
             </div>
       
             <div class="md-form">
               <i class="fa fa-lock prefix grey-text"></i>
               <input type="password" id="orangeForm-pass" class="form-control">
               <label for="orangeForm-pass">Your password</label>
+              <div id="reg-pass-error" class="reglog-error-box"></div>
             </div>
     
             <div class="text-center">
@@ -140,6 +158,12 @@
   <script src="./assets/js/popper.min.js"></script>
   <script src="./assets/js/bootstrap.min.js"></script>
   <script src="./assets/js/mdb.min.js"></script>
+  <script>
+    $(window).on('load', function () {
+      removeLoadingScreen();
+      $('#startup-message-screen').fadeIn(1000);
+    });
+  </script>
 
 </body>
 
