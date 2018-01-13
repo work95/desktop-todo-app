@@ -17,21 +17,21 @@
 
   <div id="loading-screen">
     <div class="outer">
-        <div class="middle">
-          <div class="inner">
-              <section id="load-screen-spinner">
-                <section class="spin load-spinner"></section>
-                <section class="spin-load-title" style="color: white;">Loading...</section>
-              </section>
-          </div>
+      <div class="middle">
+        <div class="inner">
+          <section id="load-screen-spinner">
+            <section class="spin load-spinner"></section>
+            <section class="spin-load-title" style="color: white;">Loading...</section>
+          </section>
         </div>
       </div>
+    </div>
   </div>
 
   <div id="reglog-page">
     <span id="reglog-close-btn"><i class="fa fa-arrow-circle-left"></i></span>
     <div id="tab-cont">
-      <div class="tabs-wrapper"> 
+      <div class="tabs-wrapper">
         <ul class="nav classic-tabs tabs-orange" role="tablist">
           <li class="nav-item">
             <a class="nav-link waves-light" ref="pane2">Sign In</a>
@@ -41,30 +41,31 @@
           </li>
         </ul>
       </div>
-        
+
       <div class="tab-content card">
-        
+
         <div class="tab-content-body" id="pane2" state="off">
           <form>
             <p class="h5 text-center mb-4">Sign in</p>
-        
+
             <div class="md-form">
               <i class="fa fa-envelope prefix grey-text"></i>
               <input type="text" id="defaultForm-email" class="form-control" autofocus>
               <label for="defaultForm-email">Your email</label>
               <div id="log-email-error" class="reglog-error-box"></div>
             </div>
-          
+
             <div class="md-form">
               <i class="fa fa-lock prefix grey-text"></i>
               <input type="password" id="defaultForm-pass" class="form-control">
               <label for="defaultForm-pass">Your password</label>
               <div id="log-pass-error" class="reglog-error-box"></div>
             </div>
-            
+
             <div class="text-center">
               <div id="login-btn" class="btn btn-elegant">Login</div>
-            </div>              
+              <span class="badge red darken-3" id="login-btn-badge" style="display: none;"></span>
+            </div>
           </form>
         </div>
 
@@ -83,18 +84,19 @@
               <label for="orangeForm-email">Your email</label>
               <div id="reg-email-error" class="reglog-error-box"></div>
             </div>
-      
+
             <div class="md-form">
               <i class="fa fa-lock prefix grey-text"></i>
               <input type="password" id="orangeForm-pass" class="form-control">
               <label for="orangeForm-pass">Your password</label>
               <div id="reg-pass-error" class="reglog-error-box"></div>
             </div>
-    
+
             <div class="text-center">
               <div id="register-btn" class="btn btn-elegant">Sign up</div>
+              <span class="badge red darken-3" id="reg-btn-badge" style="display: none;"></span>
             </div>
-    
+
           </form>
         </div>
       </div>
@@ -112,7 +114,7 @@
         <span id="add-task-btn" class="disabled">
           <i class="fa fa-plus"></i>
         </span>
-        
+
         <button type="button" id="reglog-btn" class="btn btn-outline-warning waves-effect">SIGN IN</button>
         <button type="button" id="sign-out-btn" class="btn btn-outline-success waves-effect">SIGN OUT</button>
       </span>

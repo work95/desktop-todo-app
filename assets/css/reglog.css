@@ -92,3 +92,9 @@
 .tab-content-body {
   padding: 40px;
 }
+
+#login-btn-badge {
+  padding: 8px; 
+  font-size: 16px; 
+  font-family: 'Quicksand-Light';
+}
