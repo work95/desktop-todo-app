@@ -6,6 +6,12 @@ window.$ = window.jQuery = require('./assets/js/jquery-3.2.1.min.js');
 var NEXT_USER_ID = 0;
 var SESSION_STORE = "";
 
+/* Remove the loading screen. */
+function removeLoadingScreen() {
+  $('#loading-screen').fadeOut(1200);
+  $('body').css('overflow', 'auto');
+}
+
 $(function () {
   var filePath = './data-store/user-store/next_user_id.txt';
   if (!fs.existsSync(filePath)) {
@@ -24,6 +30,12 @@ $(function () {
 
 $(function () {
   centerAbsElementVertically('startup-message');
+});
+
+$(function () {
+  $(window).on('resize', function () {
+    centerAbsElementVertically('startup-message');
+  });
 });
 
 $(function () {
@@ -74,5 +86,85 @@ function loadSpinner(state, elementId) {
     // Remove the loading spinner and title below it.
     node.children('.spin').fadeOut(300).removeClass('load-spinner');
     node.children('.spin-load-title').fadeOut(100);
+  }
+}
+
+function validateRegistrationForm() {
+  var name = $('#orangeForm-name').val().trim();
+  var email = $('#orangeForm-email').val().trim();
+  var password = $('#orangeForm-pass').val().trim();
+  var errorFlag = 0;
+
+  if (name.length < 1) {
+    errorFlag++;
+    $('#reg-name-error').text('Name not entered').slideDown(200);;
+  } else {
+    $('#reg-name-error').text('').slideUp(200);
+  }
+
+  if (email.length < 1) {
+    errorFlag++;
+    $('#reg-email-error').text('Email not entered').slideDown(200);
+  } else if (email.match(/[\d\w]+[@][\d\w]+.(com|co[.]in)/ig) === null) {
+    errorFlag++;
+    $('#reg-email-error').text('Email pattern incorrect').slideDown(200);
+  } else {
+    $('#reg-email-error').text('').slideUp(200);
+  }
+
+  if (password.length < 8) {
+    errorFlag++;
+    $('#reg-pass-error').text('Password shorter than 8 characters').slideDown(200);
+  } else if (password.length > 32) {
+    errorFlag++;
+    $('#reg-pass-error').text('Password longer than 32 characters').slideDown(200);
+  } else if (invalidCharacterValidation(password)) {
+    $('#reg-pass-error').text('Password contains one of the invalid character [\\, /, ~,  ,|]').slideDown(200);
+  } else {
+    $('#reg-pass-error').text('').slideUp(200);
+  }
+
+  return (errorFlag > 0) ? false : true;
+}
+
+function validateLoginForm() {
+  var email = $('#defaultForm-email').val().trim();
+  var password = $('#defaultForm-pass').val().trim();
+  var errorFlag = 0;
+
+  if (email.length < 1) {
+    errorFlag++;
+    $('#log-email-error').text("Email not entered").slideDown(200);
+  } else if (email.match(/[\d\w]+[@][\d\w]+.(com|co[.]in)/ig) === null) {
+    errorFlag++;
+    $('#log-email-error').text('Email pattern incorrect').slideDown(200);
+  } else {
+    $('#log-email-error').text("").slideUp(200);
+  }
+
+  if (password.length < 8) {
+    errorFlag++;
+    $('#log-pass-error').text('Password shorter than 8 characters').slideDown(200);
+  } else if (password.length > 32) {
+    errorFlag++;
+    $('#log-pass-error').text('Password longer than 32 characters').slideDown(200);
+  } else if (invalidCharacterValidation(password)) {
+    errorFlag++;
+    $('#log-pass-error').text('Password contains one of the invalid character [\\, /, ~,  ,|]').slideDown(200);
+  } else {
+    $('#log-pass-error').text('').slideUp(200);
+  }
+
+  return (errorFlag > 0) ? false : true;
+}
+
+function invalidCharacterValidation(string) {
+  if ((string.search(/\//) < 0) || (string.search(/\\/) < 0)
+    || (string.search(/~/) < 0) || (string.search(/|/) < 0)
+    || (string.search(/[ ]/) < 0)) {
+
+    return false;
+  } else {
+    return true;
   }
 }
