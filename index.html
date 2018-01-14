@@ -14,6 +14,9 @@
 </head>
 
 <body>
+  <div id="back-wall">
+    <img src="./assets/images/cartoon_solar_system.png" />
+  </div>
 
   <div id="loading-screen">
     <div class="outer">
@@ -104,7 +107,7 @@
     </div>
   </div>
 
-  <header>
+  <header class="purple darken-1">
     <div>
       <span id="user-name-display">
         <h2>Todo</h2>
@@ -115,8 +118,8 @@
           <i class="fa fa-plus"></i>
         </span>
 
-        <button type="button" id="reglog-btn" class="btn btn-outline-warning waves-effect">SIGN IN</button>
-        <button type="button" id="sign-out-btn" class="btn btn-outline-success waves-effect">SIGN OUT</button>
+        <button type="button" id="reglog-btn" class="btn purple darken-4 waves-effect">SIGN IN</button>
+        <button type="button" id="sign-out-btn" class="btn red darken-4 waves-effect">SIGN OUT</button>
       </span>
 
     </div>
@@ -161,7 +164,12 @@
   <script>
     $(window).on('load', function () {
       removeLoadingScreen();
-      $('#startup-message-screen').fadeIn(1000);
+      if (loadLastLoginSession() === null) {
+        $('#startup-message-screen').fadeIn(1000);
+        return;
+      } else {
+        closeRegLogPane();
+      }
     });
   </script>
 
