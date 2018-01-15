@@ -335,3 +335,12 @@ header div h2 {
   box-shadow: 2px 4px 8px 0 rgba(46,61,73,.2);
   color: white;
 }
+
+#task-complete-icon {
+  width: 30px;
+  height: 30px;
+  margin-top: -20px;
+  margin-right: -10px;
+
+  display: none;
+}
