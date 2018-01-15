@@ -217,10 +217,6 @@ header div h2 {
   box-shadow: -2px 4px 10px 1px rgba(0, 0, 0, 0.1);
 }
 
-.delete-task-btn {
-  float: right;
-}
-
 #startup-message-screen {
   overflow: auto;
   position: fixed;
@@ -294,4 +290,48 @@ header div h2 {
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+.task-options-cont {
+  position: relative;
+  top: 3px;
+  float: right;
+  cursor: pointer;
+}
+
+.dot-set { display: inline-block; }
+
+.dot {
+  margin-bottom: 2px;
+  display: block; 
+  width: 5px; 
+  height: 5px; 
+  border-radius: 50%; 
+  background-color: black; 
+}
+
+.dot:last-child {
+  margin-bottom: 0px;
+}
+
+#task-options-menu { 
+  width: 170px;
+  padding: 10px;
+  border: none;
+  background-color: rgb(129, 255, 255);
+  box-shadow: 2px 4px 8px 0 rgba(46,61,73,.2);
+}
+
+#task-options-menu a span i { margin-right: 10px; }
+
+#task-options-menu a { 
+  border-radius: 4px; 
+  padding: 5px 5px; 
+  display: block;
+}
+
+#task-options-menu a:hover {
+  background-color: #2bbbad;
+  box-shadow: 2px 4px 8px 0 rgba(46,61,73,.2);
+  color: white;
 }
