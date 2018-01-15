@@ -1,3 +1,6 @@
+const electron = require('electron');
+const currentWindow = electron.remote.getCurrentWindow();
+
 const fs = require('fs');
 const logger = require('tracer').colorConsole();
 
@@ -162,3 +165,22 @@ function validateLoginForm() {
 
   return (errorFlag > 0) ? false : true;
 }
+
+
+/* To close, minimize, maximize the browser window. */
+$(function () {
+  // Close window.
+  $('#window-close-btn').click(function () {
+    currentWindow.close();
+  });
+
+  // Minimize window.
+  $('#window-minimize-btn').click(function () {
+    currentWindow.minimize();
+  });
+
+  // Maximize window.
+  $('#window-maximize-btn').click(function () {
+    currentWindow.maximize();
+  })
+});
