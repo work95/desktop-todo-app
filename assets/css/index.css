@@ -64,9 +64,27 @@
 }
 
 body {
+  overflow: hidden;
   margin: 0px;
   padding: 0px;
 }
+
+#title-bar { 
+  background-color:rgba(0, 0, 0, 0.85);
+  overflow: hidden;
+  padding: 5px;
+  -webkit-app-region: drag;
+}
+
+#window-close-btn { position: relative; top: 2px; }
+
+#title-bar span { -webkit-app-region: no-drag; }
+
+#title-bar span i {
+  font-size: 18px;
+  margin-left: 10px;
+  color: white;
+}    
 
 #back-wall {
   position: fixed;
