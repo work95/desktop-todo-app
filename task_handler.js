@@ -9,16 +9,14 @@ function addTask(taskText, taskId) {
     }
   }
   $('#task-list-cont ul').append('<li class="list-group-item" id="' + taskId + '"><img id="task-complete-icon" src="./assets/images/checked.svg" /><span>' + taskText + '</span><div class="task-options-cont"><div class="dot-set dropdown" id="dropdownMenu2" data-toggle="dropdown" aria-expanded="false"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div><div id="task-options-menu" class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2"><a class="complete-task-btn" state="false" class="dropdown-item" href="#"><span><i class="fa fa-check"></i></span>Complete Task</a><a class="delete-task-btn" class="dropdown-item" href="#"><span><i class="fa fa-trash-alt"></i></span>Delete Task</a></div></div></li>');
-  attachTaskDeleteBtnListener();
-  attachTaskCompleteBtnListener();
+  attachTaskOptionBtnListener();
 
   var taskInfo = taskId + ":" + taskText;
   TASK_LIST.push(taskInfo);
   addTaskInStore(SESSION_STORE, taskInfo);
 }
 
-/* Attach click listener on the delete button of the task node. */
-function attachTaskDeleteBtnListener() {
+function attachTaskOptionBtnListener() {
   $(function () {
     /*
      * Since this event listener is attached twice (one when 
@@ -31,6 +29,7 @@ function attachTaskDeleteBtnListener() {
      * Just unbind the first and add new.
      */
     $('.delete-task-btn').unbind('click');
+    $('.complete-task-btn').unbind('click');
 
     // Attach again.
     $('.delete-task-btn').click(function () {
@@ -40,12 +39,7 @@ function attachTaskDeleteBtnListener() {
       $('#' + nodeId).remove();
       deleteTaskFromStore(SESSION_STORE, nodeId);
     });
-  });
-}
 
-function attachTaskCompleteBtnListener() {
-  $(function () {
-    $('.complete-task-btn').unbind('click');
     $('.complete-task-btn').click(function () {
       $('#task-input-error-box').text("").slideUp(300).css('color', 'white');
       var nodeId = $(this).parent().parent().parent().attr('id');
@@ -150,7 +144,6 @@ function loadTaskList(userId) {
         $('#' + TASK_LIST[i] + ' div div ' + '.complete-task-btn').attr('state', 'true').html('<span><i class="fa fa-check"></i></span>Undone task');
       }
     }
-    attachTaskDeleteBtnListener();
-    attachTaskCompleteBtnListener();
+    attachTaskOptionBtnListener();
   }
 }
