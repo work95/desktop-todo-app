@@ -161,18 +161,18 @@ header div h2 {
   font-size: 20px;
   font-weight: 600;
   line-height: 2.2;
+  letter-spacing: 1px;
 }
 
-.float-header-name {
+/* .float-header-name {
   background-color: white;
+  border-radius: 50%;
   font-size: 18px;
-  width: 40px;
-  height: 40px;
-  padding-left: 7px;
+  padding: 0px 10px;
   color: black !important;
   line-height: 2.3 !important;
   box-shadow: 0px 3px 13px 0px rgba(0, 0, 0, 0.1);
-}
+} */
 
 #header-icon-cont {
   float: right;
