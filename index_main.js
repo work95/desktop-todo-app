@@ -167,20 +167,20 @@ function validateLoginForm() {
 }
 
 
-/* To close, minimize, maximize the browser window. */
-$(function () {
-  // Close window.
-  $('#window-close-btn').click(function () {
-    currentWindow.close();
-  });
+// /* To close, minimize, maximize the browser window. */
+// $(function () {
+//   // Close window.
+//   $('#window-close-btn').click(function () {
+//     currentWindow.close();
+//   });
 
-  // Minimize window.
-  $('#window-minimize-btn').click(function () {
-    currentWindow.minimize();
-  });
+//   // Minimize window.
+//   $('#window-minimize-btn').click(function () {
+//     currentWindow.minimize();
+//   });
 
-  // Maximize window.
-  $('#window-maximize-btn').click(function () {
-    currentWindow.maximize();
-  })
-});
+//   // Maximize window.
+//   $('#window-maximize-btn').click(function () {
+//     currentWindow.maximize();
+//   })
+// });
