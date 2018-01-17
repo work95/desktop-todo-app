@@ -8,7 +8,7 @@ function addTask(taskText, taskId) {
       return;
     }
   }
-  $('#task-list-cont ul').append('<li class="list-group-item" id="' + taskId + '"><img id="task-complete-icon" src="./assets/images/checked.svg" /><span>' + taskText + '</span><div class="task-options-cont"><div class="dot-set dropdown" id="dropdownMenu2" data-toggle="dropdown" aria-expanded="false"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div><div id="task-options-menu" class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2"><a class="complete-task-btn" state="false" class="dropdown-item" href="#"><span><i class="fa fa-check"></i></span>Complete Task</a><a class="delete-task-btn" class="dropdown-item" href="#"><span><i class="fa fa-trash-alt"></i></span>Delete Task</a></div></div></li>');
+  $('#task-list-cont ul').append('<li class="list-group-item" id="' + taskId + '"><img id="task-complete-icon" src="./assets/images/checked.svg" /><span class="task-text">' + taskText + '</span><div class="task-options-cont"><div class="dot-set dropdown" id="dropdownMenu2" data-toggle="dropdown" aria-expanded="false"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div><div id="task-options-menu" class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2"><a class="complete-task-btn" state="false" class="dropdown-item" href="#"><span><i class="fa fa-check"></i></span>Complete Task</a><a class="delete-task-btn" class="dropdown-item" href="#"><span><i class="fa fa-trash-alt"></i></span>Delete Task</a></div></div></li>');
   attachTaskOptionBtnListener();
 
   var taskInfo = taskId + ":" + taskText;
@@ -45,11 +45,13 @@ function attachTaskOptionBtnListener() {
       var nodeId = $(this).parent().parent().parent().attr('id');
       if ($(this).attr('state') === "false") {
         $(this).attr('state', 'true');
+        $('#' + nodeId + ' .task-text').css('opacity', '0.5');
         $(this).html('<span><i class="fa fa-check"></i></span>Undone task');
         $(this).parent().parent().parent().children('img').fadeIn(300);
         updateTaskCompleteInStore(SESSION_STORE, nodeId, true);
       } else {
         $(this).attr('state', 'false');
+        $('#' + nodeId + ' .task-text').css('opacity', '1');
         $(this).html('<span><i class="fa fa-check"></i></span>Complete task');
         updateTaskCompleteInStore(SESSION_STORE, nodeId, false);
         $(this).parent().parent().parent().children('img').fadeOut(300);
@@ -135,12 +137,14 @@ function loadTaskList(userId) {
  
     for (var i = 0; i < TASK_LIST.length; i++) {
       var data = fs.readFileSync('./data-store/user-store/' + userId + '/task-store-dir/' + TASK_LIST[i] + '.txt').toString().split("\n\n");
-      $('#task-list-cont ul').append('<li class="list-group-item" id="' + TASK_LIST[i] + '"><img id="task-complete-icon" src="./assets/images/checked.svg" /><span>' + data[1] + '</span><div class="task-options-cont"><div class="dot-set dropdown" id="dropdownMenu2" data-toggle="dropdown" aria-expanded="false"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div><div id="task-options-menu" class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2"><a class="complete-task-btn" state="false" class="dropdown-item" href="#"><span><i class="fa fa-check"></i></span>Task Complete</a><a class="delete-task-btn" class="dropdown-item" href="#"><span><i class="fa fa-trash-alt"></i></span>Delete Task</a></div></div></li>');
+      $('#task-list-cont ul').append('<li class="list-group-item" id="' + TASK_LIST[i] + '"><img id="task-complete-icon" src="./assets/images/checked.svg" /><span class="task-text">' + data[1] + '</span><div class="task-options-cont"><div class="dot-set dropdown" id="dropdownMenu2" data-toggle="dropdown" aria-expanded="false"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div><div id="task-options-menu" class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2"><a class="complete-task-btn" state="false" class="dropdown-item" href="#"><span><i class="fa fa-check"></i></span>Task Complete</a><a class="delete-task-btn" class="dropdown-item" href="#"><span><i class="fa fa-trash-alt"></i></span>Delete Task</a></div></div></li>');
       if (data[0] === null || data[0] === undefined || data[0] === "false") {
         $('#' + TASK_LIST[i]).children('img').fadeOut(300);
+        $('#' + TASK_LIST[i] + ' .task-text').css('opacity', '1');
         $('#' + TASK_LIST[i] + ' div div ' + '.complete-task-btn').attr('state', 'false').html('<span><i class="fa fa-check"></i></span>Complete task');;
       } else {
         $('#' + TASK_LIST[i]).children('img').fadeIn(300);
+        $('#' + TASK_LIST[i] + ' .task-text').css('opacity', '0.5');
         $('#' + TASK_LIST[i] + ' div div ' + '.complete-task-btn').attr('state', 'true').html('<span><i class="fa fa-check"></i></span>Undone task');
       }
     }

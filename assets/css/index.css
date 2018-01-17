@@ -165,12 +165,12 @@ header div h2 {
 
 .float-header-name {
   background-color: white;
-  border-radius: 50%;
+  font-size: 18px;
   width: 40px;
   height: 40px;
   padding-left: 7px;
   color: black !important;
-  line-height: 2.1 !important;
+  line-height: 2.3 !important;
   box-shadow: 0px 3px 13px 0px rgba(0, 0, 0, 0.1);
 }
 
@@ -334,6 +334,7 @@ header div h2 {
 
 #task-options-menu { 
   width: 170px;
+  margin-left: 10px;
   padding: 10px;
   border: none;
   background-color: rgb(129, 255, 255);
