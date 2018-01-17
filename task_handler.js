@@ -3,7 +3,7 @@ var TASK_LIST = [];
 /* To add the task in the list. */
 function addTask(taskText, taskId) {
   for (var i = 0; i < TASK_LIST.length; i++) {
-    if (taskText === TASK_LIST[i].split(":")[1]) {
+    if (taskText.toLowerCase() === TASK_LIST[i].split(":")[1].toLowerCase()) {
       $('#task-input-error-box').text('Task already added!').slideDown(300);
       return;
     }
@@ -89,7 +89,7 @@ $(function () {
     } else if (e.keyCode === KeyCodes.CONTROL) {
       return;
     } else {
-      $('#task-input-error-box').text("").slideUp(300).css('color', 'white');
+      $('#task-input-error-box').text("").slideUp(300).css('color', 'black');
     }
   });
 });
@@ -132,20 +132,21 @@ function loadTaskList(userId) {
       "error": "NO_RECORD"
     };
   } else {
-    TASK_LIST = fs.readFileSync(filePath).toString().split("\n");
-    TASK_LIST.pop();
+    var taskList = fs.readFileSync(filePath).toString().split("\n");
+    taskList.pop();
  
-    for (var i = 0; i < TASK_LIST.length; i++) {
-      var data = fs.readFileSync('./data-store/user-store/' + userId + '/task-store-dir/' + TASK_LIST[i] + '.txt').toString().split("\n\n");
-      $('#task-list-cont ul').append('<li class="list-group-item" id="' + TASK_LIST[i] + '"><img id="task-complete-icon" src="./assets/images/checked.svg" /><span class="task-text">' + data[1] + '</span><div class="task-options-cont"><div class="dot-set dropdown" id="dropdownMenu2" data-toggle="dropdown" aria-expanded="false"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div><div id="task-options-menu" class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2"><a class="complete-task-btn" state="false" class="dropdown-item" href="#"><span><i class="fa fa-check"></i></span>Task Complete</a><a class="delete-task-btn" class="dropdown-item" href="#"><span><i class="fa fa-trash-alt"></i></span>Delete Task</a></div></div></li>');
+    for (var i = 0; i < taskList.length; i++) {
+      var data = fs.readFileSync('./data-store/user-store/' + userId + '/task-store-dir/' + taskList[i] + '.txt').toString().split("\n\n");
+      TASK_LIST.push(taskList[i] + ":" + data[1]);
+      $('#task-list-cont ul').append('<li class="list-group-item" id="' + taskList[i] + '"><img id="task-complete-icon" src="./assets/images/checked.svg" /><span class="task-text">' + data[1] + '</span><div class="task-options-cont"><div class="dot-set dropdown" id="dropdownMenu2" data-toggle="dropdown" aria-expanded="false"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div><div id="task-options-menu" class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2"><a class="complete-task-btn" state="false" class="dropdown-item" href="#"><span><i class="fa fa-check"></i></span>Task Complete</a><a class="delete-task-btn" class="dropdown-item" href="#"><span><i class="fa fa-trash-alt"></i></span>Delete Task</a></div></div></li>');
       if (data[0] === null || data[0] === undefined || data[0] === "false") {
-        $('#' + TASK_LIST[i]).children('img').fadeOut(300);
-        $('#' + TASK_LIST[i] + ' .task-text').css('opacity', '1');
-        $('#' + TASK_LIST[i] + ' div div ' + '.complete-task-btn').attr('state', 'false').html('<span><i class="fa fa-check"></i></span>Complete task');;
+        $('#' + taskList[i]).children('img').fadeOut(300);
+        $('#' + taskList[i] + ' .task-text').css('opacity', '1');
+        $('#' + taskList[i] + ' div div ' + '.complete-task-btn').attr('state', 'false').html('<span><i class="fa fa-check"></i></span>Complete task');;
       } else {
-        $('#' + TASK_LIST[i]).children('img').fadeIn(300);
-        $('#' + TASK_LIST[i] + ' .task-text').css('opacity', '0.5');
-        $('#' + TASK_LIST[i] + ' div div ' + '.complete-task-btn').attr('state', 'true').html('<span><i class="fa fa-check"></i></span>Undone task');
+        $('#' + taskList[i]).children('img').fadeIn(300);
+        $('#' + taskList[i] + ' .task-text').css('opacity', '0.5');
+        $('#' + taskList[i] + ' div div ' + '.complete-task-btn').attr('state', 'true').html('<span><i class="fa fa-check"></i></span>Undone task');
       }
     }
     attachTaskOptionBtnListener();
