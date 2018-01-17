@@ -43,7 +43,7 @@ $(function () {
 
 $(function () {
   $('#add-task-btn').click(function () {
-    $('#task-add-input-box').slideDown();
+    $('#task-add-input-box').slideDown(250);
     $('#task-text-input').focus();
   });
 });

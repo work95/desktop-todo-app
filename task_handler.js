@@ -34,14 +34,14 @@ function attachTaskOptionBtnListener() {
     // Attach again.
     $('.delete-task-btn').click(function () {
       // Remove error message if add task modal is open.
-      $('#task-input-error-box').text("").slideUp(300).css('color', 'white');
+      $('#task-input-error-box').text("").slideUp(300).css('color', 'black');
       var nodeId = $(this).parent().parent().parent().attr('id');
       $('#' + nodeId).remove();
       deleteTaskFromStore(SESSION_STORE, nodeId);
     });
 
     $('.complete-task-btn').click(function () {
-      $('#task-input-error-box').text("").slideUp(300).css('color', 'white');
+      $('#task-input-error-box').text("").slideUp(300).css('color', 'black');
       var nodeId = $(this).parent().parent().parent().attr('id');
       if ($(this).attr('state') === "false") {
         $(this).attr('state', 'true');

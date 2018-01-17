@@ -14,7 +14,7 @@ $(function () {
     // Close the task text dialog box when escape key is pressed.
     if (e.keyCode === KeyCodes.ESCAPE) {
       keyCombination = "";
-      $('#task-add-input-box').slideUp().children('input').val("");
+      $('#task-add-input-box').slideUp(250).children('input').val("");
       $('#task-input-error-box').html("");
     }
 
@@ -32,7 +32,7 @@ $(function () {
       addTask($('#task-text-input').val(), 'task_' + new Date().getTime());
     }
     if (keyCombination == "1784") {
-      $('#task-add-input-box').slideDown();
+      $('#task-add-input-box').slideDown(250);
       $('#task-text-input').focus();
     }
   });
