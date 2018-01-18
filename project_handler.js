@@ -13,6 +13,15 @@ function addProject(projectName, projectId) {
   PROJECT_LIST.push(projectInfo);
   addProjectInStore(SESSION_STORE, projectInfo);
   attachProjectLinkListener();
+
+  CURRENT_PROJECT_ID = projectId;
+  $('#delete-project-btn').fadeIn(300);
+  $('#project-tag-display').text(projectName).fadeIn(300);
+  $('#switch-list-cont').css('opacity', 0.5);
+  $('#task-list-cont').slideUp(300);
+  $('#project-task-list-cont').fadeIn(300);
+  $('#menu-icon').fadeOut(100);
+  LIST_CONT_STATE = 2;
 }
 
 function addProjectTask(taskText, taskId) {
@@ -74,7 +83,7 @@ function attachProjectLinkListener() {
     $('.project-item').click(function () {
       var projectId = $(this).attr('project-id').toString();
       var projectInfo = fs.readFileSync('./data-store/user-store/' + SESSION_STORE + '/project-store-dir/' + projectId + '/project_info.txt').toString().split(":");
-
+      $('#delete-project-btn').fadeIn(300);
       loadProjectTasks(projectId);
       CURRENT_PROJECT_ID = projectId;
       closeProjectNav();
@@ -196,12 +205,18 @@ function openProjectNav() {
   $('#menu-icon').fadeOut(300);
   menu_icon_state = 0;
   if (data === null || data === undefined) {
-    $(node).text('Cannot fetch projects').fadeIn(300);
+    $(node).fadeOut(0);
+    $(node).children('span').text('Cannot fetch projects');
+    $('#project-pane-message-btn').fadeOut(0);
   } else {
     if (data.length < 1) {
-      $(node).text('No projects found').fadeIn(300);
+      $(node).fadeIn(300);
+      $(node).children('span').text('No projects found');
+      $('#project-pane-message-btn').text('Add project').fadeIn(300);
     } else {
-      $(node).text('').fadeOut(0);
+      $(node).fadeOut(0);
+      $(node).children('span').text('');
+      $('#project-pane-message-btn').fadeOut(0);
       for (var i = 0; i < data.length; i++) {
         var info = fs.readFileSync('./data-store/user-store/' + SESSION_STORE + '/project-store-dir/' + data[i] + '/project_info.txt').toString().split(':');
         $('#project-list-cont').append('<a href="#" class="project-item" project-id="' + info[0] + '">' + info[1] + '</a>');
@@ -210,6 +225,15 @@ function openProjectNav() {
     }
   }
 }
+
+$(function () {
+  $('#project-pane-message-box button').click(function () {
+    closeProjectNav();
+    OPEN_DROPDOWN_BOX = 2;
+    $('#project-add-input-box').slideDown(250);
+    $('#project-text-input').focus();
+  });
+});
 
 function loadProjects() {
   var filePath = './data-store/user-store/' + SESSION_STORE + '/project-store-dir/';
@@ -227,10 +251,51 @@ function loadProjects() {
   return projectList;
 }
 
-
-/* Set the width of the side navigation to 0 */
 function closeProjectNav() {
   document.getElementById("side-nav").style.width = "0";
+  if (CURRENT_PROJECT_ID === "" || CURRENT_PROJECT_ID === undefined || CURRENT_PROJECT_ID === null) {
+    $('#project-tag-display').fadeOut(300);
+    $('#delete-project-btn').fadeOut(300);
+    $('#switch-list-cont').css('opacity', 1);
+    $('#project-task-list-cont').slideUp(300);
+    $('#task-list-cont').fadeIn(300);
+    LIST_CONT_STATE = 1;
+    $('#menu-icon').fadeOut(300);
+  }
   $('#menu-icon').fadeIn(300);
 }
 
+$(function () {
+  $('#delete-project-btn').click(function () {
+    deleteProjectFromStore();
+    $(this).fadeOut(300);
+    $('#project-task-list-cont ul').html("");
+    openProjectNav();
+    $('#project-tag-display').text("").fadeOut(300);
+    $('#menu-icon').fadeOut(100);
+  });
+});
+
+function deleteProjectFromStore() {
+  var filePath = './data-store/user-store/' + SESSION_STORE + '/project-store-dir/' + CURRENT_PROJECT_ID;
+  var objectList = fs.readdirSync(filePath);
+  for (var i = 0; i < objectList.length; i++) {
+    fs.unlinkSync(filePath + '/' + objectList[i]);
+  }
+  fs.rmdirSync(filePath);
+  var projectList = fs.readFileSync('./data-store/user-store/' + SESSION_STORE + '/project-store-dir/project_list.txt').toString().split('\n');
+  projectList.pop();
+  for (var i = 0; i < projectList.length; i++) {
+    if (projectList[i] === CURRENT_PROJECT_ID) {
+      projectList.splice(i, 1);
+      break;
+    }
+  }
+  var finalList = "";
+  for (var i = 0; i < projectList.length; i++) {
+    finalList += projectList[i];
+  }
+  fs.writeFileSync('./data-store/user-store/' + SESSION_STORE + '/project-store-dir/project_list.txt', finalList);
+  
+  CURRENT_PROJECT_ID = "";
+}
