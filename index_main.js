@@ -6,10 +6,28 @@ const logger = require('tracer').colorConsole();
 
 window.$ = window.jQuery = require('./assets/js/jquery-3.2.1.min.js');
 
+
+/* What user ID to assign to next arriving user */
 var NEXT_USER_ID = 0;
+
+/* Current user's userID */
 var SESSION_STORE = "";
+
+/* Which type of list (project type or normal ones) is currently being managed. */
 var LIST_CONT_STATE = 1;
+
+/* Which project is chosen currently. */
 var CURRENT_PROJECT_ID = "";
+
+/* Contains the normal tasks. */
+var TASK_LIST = [];
+
+/* Contains the projects for which task are managed. */
+var PROJECT_LIST = [];
+
+/* Contains the tasks of a particular project (choosen project). */
+var PROJECT_TASK_LIST = [];
+
 
 /* Remove the loading screen. */
 function removeLoadingScreen() {
@@ -40,13 +58,6 @@ $(function () {
   $(window).on('resize', function () {
     centerAbsElementVertically('startup-message');
     centerAbsElementVertically('reglog-page');
-  });
-});
-
-$(function () {
-  $('#add-task-btn').click(function () {
-    $('#task-add-input-box').slideDown(250);
-    $('#task-text-input').focus();
   });
 });
 

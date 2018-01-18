@@ -1,6 +1,3 @@
-var PROJECT_LIST = [];
-var PROJECT_TASK_LIST = [];
-
 function addProject(projectName, projectId) {
   for (var i = 0;i < PROJECT_LIST.length; i++) {
     if (projectName.toLowerCase() === PROJECT_LIST[i].split(":")[1].toLowerCase()) {
