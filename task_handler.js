@@ -21,7 +21,7 @@ function addTaskInStore(userId, taskInfo) {
     fs.mkdirSync(filePath);
   }
   var info = taskInfo.split(":");
-  fs.appendFileSync(filePath + '/' + 'task-list.txt', info[0] + '\n');
+  fs.appendFileSync(filePath + '/' + 'task_list.txt', info[0] + '\n');
   fs.writeFileSync(filePath + '/' + info[0] + '.txt', 'false\n\n' + info[1]);
 }
 
@@ -33,43 +33,34 @@ function updateTaskCompleteInStore(userId, taskId, state) {
 
 /* Delete the task from the record. */
 function deleteTaskFromStore(userId, taskId) {
-  var filePath = './data-store/user-store/' + userId + '/task-store-dir/task-list.txt';
-  if (!fs.existsSync(filePath)) {
-    return {
-      "status": false,
-      "error": "NO_RECORD"
-    }
+  var filePathA = './data-store/user-store/' + userId + '/task-store-dir';
+  var filePathB = filePathA + '/task_list.txt';
+
+  if (!fs.existsSync(filePathB)) {
+    return;
   } else {
-    var list = fs.readFileSync(filePath).toString().split("\n");
-    list.pop();
     var finalList = "";
+    var list = fs.readFileSync(filePathB).toString().split("\n");
+    list.pop();
 
     for (var i = 0; i < list.length; i++) {
       if (list[i].split(":")[0] === taskId) {
         list.splice(i, 1);
-        break;
       } else {
         finalList += list[i] + '\n';
       }
     }
 
-    for (var i = 0; i < list.length; i++) {
-      finalList += list[i] + "\n";
-    }
-
-    fs.writeFileSync(filePath, finalList);
-    fs.unlinkSync('./data-store/user-store/' + userId + '/task-store-dir/' + taskId + '.txt');
+    fs.writeFileSync(filePathB, finalList);
+    fs.unlinkSync(filePathA + '/' + taskId + '.txt');
   }
 }
 
 /* Load the task list. */
 function loadTaskList(userId) {
-  var filePath = './data-store/user-store/' + userId + '/task-store-dir/task-list.txt';
+  var filePath = './data-store/user-store/' + userId + '/task-store-dir/task_list.txt';
   if (!fs.existsSync(filePath)) {
-    return {
-      "status": false,
-      "error": "NO_RECORD"
-    };
+    return;
   } else {
     var taskList = fs.readFileSync(filePath).toString().split("\n");
     taskList.pop();
@@ -92,6 +83,7 @@ function loadTaskList(userId) {
   }
 }
 
+/* Show the task input box when plus button on the header is clicked. */
 $(function () {
   $('#add-task-btn').click(function () {
     $('#task-add-input-box').slideDown(250);
