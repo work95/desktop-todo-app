@@ -1,94 +1,46 @@
 @font-face {
-  src: url('../fonts/Alegreya/Alegreya-Italic.ttf');
-  font-family: 'Alegreya-Italic';
+  src: url("../fonts/Quicksand/Quicksand-Bold.ttf");
+  font-family: "Quicksand-Bold";
 }
 
 @font-face {
-  src: url('../fonts/Courgette/Courgette-Regular.ttf');
-  font-family: 'Courgette-Regular';
+  src: url("../fonts/Ubuntu/Ubuntu-Light.ttf");
+  font-family: "Ubuntu-Light";
 }
 
 @font-face {
-  src: url('../fonts/Quicksand/Quicksand-Light.ttf');
-  font-family: 'Quicksand-Light';
+  src: url("../fonts/Ubuntu/Ubuntu-Regular.ttf");
+  font-family: "Ubuntu-Regular";
 }
 
 @font-face {
-  src: url('../fonts/Quicksand/Quicksand-Bold.ttf');
-  font-family: 'Quicksand-Bold';
+  src: url("../fonts/Ubuntu/Ubuntu-Medium.ttf");
+  font-family: "Ubuntu-Medium";
 }
 
 @font-face {
-  src: url('../fonts/Ubuntu/Ubuntu-Light.ttf');
-  font-family: 'Ubuntu-Light';
+  src: url("../fonts/Ubuntu/Ubuntu-Bold.ttf");
+  font-family: "Ubuntu-Bold";
 }
 
 @font-face {
-  src: url('../fonts/Ubuntu/Ubuntu-Regular.ttf');
-  font-family: 'Ubuntu-Regular';
+  src: url("../fonts/roboto/Roboto-Regular.ttf");
+  font-family: "Roboto-Regular";
 }
 
 @font-face {
-  src: url('../fonts/Ubuntu/Ubuntu-Medium.ttf');
-  font-family: 'Ubuntu-Medium';
+  src: url("../fonts/roboto/Roboto-Light.ttf");
+  font-family: "Roboto-Light";
 }
 
 @font-face {
-  src: url('../fonts/Ubuntu/Ubuntu-Bold.ttf');
-  font-family: 'Ubuntu-Bold';
+  src: url("../fonts/roboto/Roboto-Medium.ttf");
+  font-family: "Roboto-Medium";
 }
-
-@font-face {
-  src: url('../fonts/roboto/Roboto-Regular.ttf');
-  font-family: 'Roboto-Regular';
-}
-
-@font-face {
-  src: url('../fonts/roboto/Roboto-Light.ttf');
-  font-family: 'Roboto-Light';
-}
-
-@font-face {
-  src: url('../fonts/roboto/Roboto-Medium.ttf');
-  font-family: 'Roboto-Medium';
-}
-
 
 body {
   margin: 0px;
   padding: 0px;
-}
-
-#title-bar { 
-  background-color:rgba(0, 0, 0, 0.85);
-  overflow: hidden;
-  padding: 5px;
-  -webkit-app-region: drag;
-}
-
-#window-close-btn { position: relative; top: 2px; }
-
-#title-bar span { -webkit-app-region: no-drag; }
-
-#title-bar span i {
-  font-size: 18px;
-  margin-left: 10px;
-  color: white;
-}    
-
-#back-wall {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  z-index: -9999;
-  background-color: #060f1f;
-}
-
-#back-wall img {
-  width: 100%;
-  height: 100%;
-  filter: blur(2px);
-  -webkit-filter: blur(2px);
 }
 
 #loading-screen {
@@ -101,13 +53,13 @@ body {
 }
 
 #load-screen-spinner {
-  font-family: 'Ubuntu-Regular';
+  font-family: "Ubuntu-Regular";
   font-size: 18px;
-  text-align: center;   /* Center the text in the container. */
+  text-align: center; /* Center the text in the container. */
 }
 
 #load-screen-spinner .load-spinner {
-  margin:auto;    /* To center the load spinner horizontally. */
+  margin: auto; /* To center the load spinner horizontally. */
 }
 
 /* To center the loading screen. */
@@ -125,7 +77,7 @@ body {
 
 .inner {
   margin-left: auto;
-  margin-right: auto; 
+  margin-right: auto;
   width: 400px; /*whatever width you want*/
 }
 
@@ -149,7 +101,7 @@ header div h2 {
   margin-left: 50px;
   margin-bottom: 0px;
   float: left;
-  font-family: 'Quicksand-Light';
+  font-family: "Quicksand-Light";
   position: relative;
   z-index: -1;
   font-size: 20px;
@@ -157,16 +109,6 @@ header div h2 {
   line-height: 2.2;
   letter-spacing: 1px;
 }
-
-/* .float-header-name {
-  background-color: white;
-  border-radius: 50%;
-  font-size: 18px;
-  padding: 0px 10px;
-  color: black !important;
-  line-height: 2.3 !important;
-  box-shadow: 0px 3px 13px 0px rgba(0, 0, 0, 0.1);
-} */
 
 #header-icon-cont {
   float: right;
@@ -185,12 +127,15 @@ header div h2 {
 #switch-list-cont span {
   color: white;
   cursor: pointer;
-  font-family: 'Ubuntu-Regular';
+  font-family: "Ubuntu-Regular";
   position: relative;
   top: -2px;
 }
 
-#delete-project-btn { display: none; color: white; }
+#delete-project-btn {
+  display: none;
+  color: white;
+}
 
 /* 
  * Placing the menu icon at the bottom. 
@@ -204,42 +149,21 @@ span#menu-icon {
   display: none;
 }
 
-.zoom-float-btn {
-  animation-duration: 0.4s;
-  display: none;
-}
-
-#project-pane-message-box { 
+#project-pane-message-box {
   color: white;
   text-align: center;
 
-  display: none; 
+  display: none;
 }
 
 #project-pane-message-btn {
   margin: 20px auto;
 
-  display: block; 
+  display: block;
 }
 
-.project-item { text-align: center; }
-
-span#projects-task-icon {
-  background-color: aqua;
-  bottom: 235px;
-  left: 35px;
-}
-
-span#general-task-icon {
-  background-color: brown;
-  bottom: 235px;
-  left: 235px;
-}
-
-span#special-task-icon {
-  background-color: darkgreen;
-  left: 235px;
-  bottom: 35px;
+.project-item {
+  text-align: center;
 }
 
 .float-btn {
@@ -255,12 +179,14 @@ span#special-task-icon {
   z-index: 15;
 }
 
-#menu-icon { z-index: 9; /* Temporary placement. */ }
+#menu-icon {
+  z-index: 9; /* Temporary placement. */
+}
 
 #project-tag-display {
   position: absolute;
   top: 100px;
-  font-family: 'Ubuntu-Regular';
+  font-family: "Ubuntu-Regular";
   background-color: #f44336;
   color: white;
   padding: 5px 10px;
@@ -297,7 +223,7 @@ span#special-task-icon {
   left: 0;
   background-color: rgba(17, 17, 17, 0.95);
   padding-top: 120px;
-  font-family: 'Quicksand-Light';
+  font-family: "Quicksand-Light";
   font-weight: 600;
   z-index: 10;
 }
@@ -309,11 +235,12 @@ span#special-task-icon {
   font-size: 20px;
   color: #818181;
   display: block;
-  transition: 0.3s
+  transition: 0.3s;
 }
 
 /* When you mouse over the navigation links, change their color */
-.sidenav a:hover, .offcanvas a:focus{
+.sidenav a:hover,
+.offcanvas a:focus {
   color: #f1f1f1;
 }
 
@@ -328,12 +255,17 @@ span#special-task-icon {
 
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {
-  .sidenav { padding-top: 15px; }
-  .sidenav a { font-size: 18px; }
+  .sidenav {
+    padding-top: 15px;
+  }
+  .sidenav a {
+    font-size: 18px;
+  }
 }
 
-
-#add-task-btn i { color: white; }
+#add-task-btn i {
+  color: white;
+}
 
 .disabled {
   opacity: 0.5;
@@ -344,9 +276,9 @@ span#special-task-icon {
   width: 75%;
   margin: auto;
   margin-top: 54px;
-  font-family: 'Ubuntu-Regular';
+  font-family: "Ubuntu-Regular";
 
-  display: none;    /* Hide the task text input box. */
+  display: none; /* Hide the task text input box. */
 }
 
 .input-box input {
@@ -354,7 +286,7 @@ span#special-task-icon {
   box-shadow: 0px 3px 13px 0px rgba(0, 0, 0, 0.1);
   border: 0px;
   font-size: 16px;
-  font-family: 'Roboto-Regular';
+  font-family: "Roboto-Regular";
   background-color: rgba(35, 26, 26, 0.87);
   color: white;
   border-radius: 2px;
@@ -365,12 +297,15 @@ span#special-task-icon {
   color: rgba(255, 255, 255, 0.7);
 }
 
-#task-input-error-box, #project-input-error-box { display: none; }
+#task-input-error-box,
+#project-input-error-box {
+  display: none;
+}
 
 .list-cont {
   width: 70%;
   margin: auto;
-  font-family: 'Ubuntu-Regular';
+  font-family: "Ubuntu-Regular";
   margin-top: 70px;
 }
 
@@ -400,28 +335,32 @@ span#special-task-icon {
 
 #startup-message {
   margin: auto;
-  text-align: center; 
+  text-align: center;
   max-width: 700px;
-  font-family: 'Ubuntu-Light';
+  font-family: "Ubuntu-Light";
   box-shadow: 0px 3px 13px 0px rgba(0, 0, 0, 0.2);
   background-color: rgba(255, 255, 255, 1);
   padding: 20px;
 }
 
-#startup-message h6 { margin-top: 20px; }
-
-#startup-message div { 
-  margin-top: 30px; 
-  display: block; 
-  font-weight: 600; 
-  font-family: 'Ubuntu-Light'; 
+#startup-message h6 {
+  margin-top: 20px;
 }
 
-#startup-message-btn p { margin: 0px; }
+#startup-message div {
+  margin-top: 30px;
+  display: block;
+  font-weight: 600;
+  font-family: "Ubuntu-Light";
+}
 
-#startup-message-spinner { 
+#startup-message-btn p {
+  margin: 0px;
+}
+
+#startup-message-spinner {
   margin: auto;
-  display: none; 
+  display: none;
 }
 
 .load-spinner {
@@ -433,7 +372,6 @@ span#special-task-icon {
   height: 60px;
   animation: spin 1s linear infinite;
 }
-
 
 .load-spinner-20 {
   margin: 20px;
@@ -456,8 +394,12 @@ span#special-task-icon {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .task-options-cont {
@@ -467,41 +409,45 @@ span#special-task-icon {
   cursor: pointer;
 }
 
-.dot-set { display: inline-block; }
+.dot-set {
+  display: inline-block;
+}
 
 .dot {
   margin-bottom: 2px;
-  display: block; 
-  width: 5px; 
-  height: 5px; 
-  border-radius: 50%; 
-  background-color: black; 
+  display: block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: black;
 }
 
 .dot:last-child {
   margin-bottom: 0px;
 }
 
-#task-options-menu { 
+#task-options-menu {
   width: 170px;
   margin-left: 10px;
   padding: 10px;
   border: none;
   background-color: rgb(129, 255, 255);
-  box-shadow: 2px 4px 8px 0 rgba(46,61,73,.2);
+  box-shadow: 2px 4px 8px 0 rgba(46, 61, 73, 0.2);
 }
 
-#task-options-menu a span i { margin-right: 10px; }
+#task-options-menu a span i {
+  margin-right: 10px;
+}
 
-#task-options-menu a { 
-  border-radius: 4px; 
-  padding: 5px 5px; 
+#task-options-menu a {
+  border-radius: 4px;
+  padding: 5px 5px;
   display: block;
 }
 
 #task-options-menu a:hover {
   background-color: #2bbbad;
-  box-shadow: 2px 4px 8px 0 rgba(46,61,73,.2);
+  box-shadow: 2px 4px 8px 0 rgba(46, 61, 73, 0.2);
   color: white;
 }
 
@@ -514,8 +460,13 @@ span#special-task-icon {
   display: none;
 }
 
-::-webkit-scrollbar { width: 7px; }
-::-webkit-scrollbar-track { background-color: #fff; }
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #fff;
+}
 
 ::-webkit-scrollbar-thumb {
   -webkit-border-radius: 1px;

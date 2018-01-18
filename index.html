@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>What to do?</title>
+  <title>Todo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="stylesheet" href="./assets/css/bootstrap.min.css" />
   <link rel="stylesheet" href="./assets/css/mdb.min.css" />
@@ -14,17 +14,6 @@
 </head>
 
 <body>
-
-  <!-- <div id="title-bar">
-    <span id="window-close-btn"><i class="fa fa-times"></i></span>
-    <span id="window-minimize-btn"><i class="fa fa-window-minimize"></i></span>
-    <span id="window-maximize-btn"><i class="fa fa-window-maximize"></i></span>
-  </div> -->
-
-  <!-- <div id="back-wall">
-    <img src="./assets/images/cartoon_solar_system.png" />
-  </div> -->
-
   <div id="loading-screen">
     <div class="outer">
       <div class="middle">
@@ -39,7 +28,9 @@
   </div>
 
   <div id="reglog-page">
-    <span id="reglog-close-btn"><i class="fa fa-arrow-circle-left"></i></span>
+    <span id="reglog-close-btn">
+      <i class="fa fa-arrow-circle-left"></i>
+    </span>
     <div id="tab-cont">
       <div class="tabs-wrapper">
         <ul class="nav classic-tabs tabs-orange" role="tablist">
@@ -125,7 +116,9 @@
           <span>Projects</span>
         </span>
 
-        <span id="delete-project-btn"><i class="fa fa-trash"></i></span>
+        <span id="delete-project-btn">
+          <i class="fa fa-trash"></i>
+        </span>
 
         <span id="add-task-btn" class="disabled">
           <i class="fa fa-plus"></i>
@@ -134,28 +127,13 @@
         <button type="button" id="reglog-btn" class="btn purple darken-4 waves-effect">SIGN IN</button>
         <button type="button" id="sign-out-btn" class="btn red darken-4 waves-effect">SIGN OUT</button>
       </span>
-
     </div>
-
   </header>
 
   <article>
-
     <span onclick="openProjectNav()" class="btn-floating float-btn" id="menu-icon">
       <i class="fa fa-ellipsis-h"></i>
     </span>
-
-    <!-- <span onclick="openProjectMenu()" class="animated zoomIn btn-floating float-btn zoom-float-btn" id="projects-task-icon">
-      <i class="fa fa-bars"></i>
-    </span>
-
-    <span onclick="openGeneral" class="animated zoomIn btn-floating float-btn zoom-float-btn" id="general-task-icon">
-      <i class="fa fa-bars"></i>
-    </span>
-
-    <span class="animated zoomIn btn-floating float-btn zoom-float-btn" id="special-task-icon">
-      <i class="fa fa-bars"></i>
-    </span> -->
 
     <div id="side-nav" class="sidenav side-pane">
       <section id="project-list-cont">
@@ -167,8 +145,6 @@
         <a href="#" class="project-item" project-id="display: none;"></a>
       </section>
     </div>
-
-    <!-- <div id="menu-icon-cover"></div> -->
 
     <div id="startup-message-screen">
       <section id="startup-message">
@@ -194,28 +170,7 @@
     <div class="animated fadeInLeft" id="project-tag-display"></div>
 
     <div id="task-list-cont" class="list-cont">
-      <ul class="list-group">
-
-        <!-- <li class="list-group-item" id="task_0" style="display: none;">
-          <span></span>
-          <div class="task-options-cont">
-            <div class="dot-set dropdown" id="dropdownMenu2" data-toggle="dropdown" aria-expanded="false">
-              <span class="dot"></span>
-              <span class="dot"></span>
-              <span class="dot"></span>
-            </div>
-            <div id="task-options-menu" class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
-              <a class="complete-task-btn" class="dropdown-item" href="#">
-                <span><i class="fa fa-check"></i></span>Task Complete
-              </a>
-              <a class="delete-task-btn" class="dropdown-item" href="#">
-                <span><i class="fa fa-trash-alt"></i></span>Delete Task
-              </a>
-            </div>
-          </div>
-        </li> -->
-
-      </ul>
+      <ul class="list-group"></ul>
     </div>
 
     <div id="project-task-list-cont" class="list-cont">
