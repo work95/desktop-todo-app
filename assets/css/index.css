@@ -101,7 +101,7 @@ header div h2 {
   margin-left: 50px;
   margin-bottom: 0px;
   float: left;
-  font-family: "Quicksand-Light";
+  font-family: "Ubuntu-Regular";
   position: relative;
   z-index: -1;
   font-size: 20px;
@@ -223,7 +223,7 @@ span#menu-icon {
   left: 0;
   background-color: rgba(17, 17, 17, 0.95);
   padding-top: 120px;
-  font-family: "Quicksand-Light";
+  font-family: "Ubuntu-Regular";
   font-weight: 600;
   z-index: 10;
 }
