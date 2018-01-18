@@ -186,6 +186,7 @@ $(function () {
         $('header').removeClass('purple darken-1');
         loadTaskList(SESSION_STORE);
         addLastLoginSession(SESSION_STORE);
+        loadProjects();
       }
     });
   });
