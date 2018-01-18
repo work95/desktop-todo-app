@@ -190,6 +190,8 @@ header div h2 {
   top: -2px;
 }
 
+#delete-project-btn { display: none; color: white; }
+
 /* 
  * Placing the menu icon at the bottom. 
  * Since we do not want the header to be fixed.
@@ -207,7 +209,20 @@ span#menu-icon {
   display: none;
 }
 
-#project-pane-message-box { color: white; display: none; }
+#project-pane-message-box { 
+  color: white;
+  text-align: center;
+
+  display: none; 
+}
+
+#project-pane-message-btn {
+  margin: 20px auto;
+
+  display: block; 
+}
+
+.project-item { text-align: center; }
 
 span#projects-task-icon {
   background-color: aqua;

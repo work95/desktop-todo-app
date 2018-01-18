@@ -125,6 +125,8 @@
           <span>Projects</span>
         </span>
 
+        <span id="delete-project-btn"><i class="fa fa-trash"></i></span>
+
         <span id="add-task-btn" class="disabled">
           <i class="fa fa-plus"></i>
         </span>
@@ -158,7 +160,10 @@
     <div id="side-nav" class="sidenav side-pane">
       <section id="project-list-cont">
         <a href="javascript:void(0)" class="closebtn" onclick="closeProjectNav()">&times;</a>
-        <div id="project-pane-message-box"></div>
+        <div id="project-pane-message-box">
+          <span></span>
+          <button id="project-pane-message-btn" class="btn btn-red darken-3"></button>
+        </div>
         <a href="#" class="project-item" project-id="display: none;"></a>
       </section>
     </div>
