@@ -182,6 +182,142 @@ header div h2 {
   font-size: 25px;
 }
 
+#switch-list-cont span {
+  color: white;
+  cursor: pointer;
+  font-family: 'Ubuntu-Regular';
+  position: relative;
+  top: -2px;
+}
+
+/* 
+ * Placing the menu icon at the bottom. 
+ * Since we do not want the header to be fixed.
+ */
+span#menu-icon {
+  left: 35px;
+  bottom: 35px;
+  background-color: rgb(46, 56, 111);
+
+  display: none;
+}
+
+.zoom-float-btn {
+  animation-duration: 0.4s;
+  display: none;
+}
+
+#project-pane-message-box { color: white; display: none; }
+
+span#projects-task-icon {
+  background-color: aqua;
+  bottom: 235px;
+  left: 35px;
+}
+
+span#general-task-icon {
+  background-color: brown;
+  bottom: 235px;
+  left: 235px;
+}
+
+span#special-task-icon {
+  background-color: darkgreen;
+  left: 235px;
+  bottom: 35px;
+}
+
+.float-btn {
+  font-size: 25px;
+  color: #fff;
+  position: fixed;
+  z-index: 9999;
+  margin: 18px 20px;
+  padding: 19px 26px;
+  border-radius: 50%;
+  box-shadow: -1px 3px 12px 2px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  z-index: 15;
+}
+
+#menu-icon { z-index: 9; /* Temporary placement. */ }
+
+#project-tag-display {
+  position: absolute;
+  top: 100px;
+  font-family: 'Ubuntu-Regular';
+  background-color: #f44336;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 1px;
+  box-shadow: 2px 4px 8px 0px rgba(0, 0, 0, 0.1);
+  animation-duration: 0.3s;
+
+  display: none;
+}
+
+#menu-icon-cover {
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  transition: 0.3s;
+  background-color: rgba(17, 17, 17, 0.95);
+  z-index: 14;
+
+  display: none;
+}
+
+.side-pane {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  top: 0;
+  overflow-x: hidden;
+  transition: 0.5s;
+}
+
+/* The side navigation menu */
+.sidenav {
+  left: 0;
+  background-color: rgba(17, 17, 17, 0.95);
+  padding-top: 120px;
+  font-family: 'Quicksand-Light';
+  font-weight: 600;
+  z-index: 10;
+}
+
+/* The navigation menu links */
+.sidenav a {
+  padding: 10px 8px 16px 25px;
+  text-decoration: none;
+  font-size: 20px;
+  color: #818181;
+  display: block;
+  transition: 0.3s
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidenav a:hover, .offcanvas a:focus{
+  color: #f1f1f1;
+}
+
+/* Position and style the close button (top right corner) */
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 40px;
+  margin-left: 50px;
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+  .sidenav { padding-top: 15px; }
+  .sidenav a { font-size: 18px; }
+}
+
+
 #add-task-btn i { color: white; }
 
 .disabled {
@@ -189,7 +325,7 @@ header div h2 {
   cursor: not-allowed;
 }
 
-#task-add-input-box {
+.input-box {
   width: 75%;
   margin: auto;
   margin-top: 54px;
@@ -198,7 +334,7 @@ header div h2 {
   display: none;    /* Hide the task text input box. */
 }
 
-#task-add-input-box input {
+.input-box input {
   padding: 10px;
   box-shadow: 0px 3px 13px 0px rgba(0, 0, 0, 0.1);
   border: 0px;
@@ -210,20 +346,24 @@ header div h2 {
   border: 2px solid rgba(103, 86, 86, 0.42);
 }
 
-#task-add-input-box input::placeholder {
+.input-box input::placeholder {
   color: rgba(255, 255, 255, 0.7);
 }
 
-#task-input-error-box { display: none; }
+#task-input-error-box, #project-input-error-box { display: none; }
 
-#task-list-cont {
+.list-cont {
   width: 70%;
   margin: auto;
   font-family: 'Ubuntu-Regular';
   margin-top: 70px;
 }
 
-#task-list-cont ul li {
+#project-task-list-cont {
+  display: none;
+}
+
+.list-cont ul li {
   margin-top: 10px;
   border: 1px solid rgba(0, 0, 0, 0.05);
   padding: 20px;

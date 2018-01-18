@@ -121,6 +121,10 @@
       </span>
 
       <span id="header-icon-cont">
+        <span id="switch-list-cont">
+          <span>Projects</span>
+        </span>
+
         <span id="add-task-btn" class="disabled">
           <i class="fa fa-plus"></i>
         </span>
@@ -130,9 +134,37 @@
       </span>
 
     </div>
+
   </header>
 
   <article>
+
+    <span onclick="openProjectNav()" class="btn-floating float-btn" id="menu-icon">
+      <i class="fa fa-ellipsis-h"></i>
+    </span>
+
+    <!-- <span onclick="openProjectMenu()" class="animated zoomIn btn-floating float-btn zoom-float-btn" id="projects-task-icon">
+      <i class="fa fa-bars"></i>
+    </span>
+
+    <span onclick="openGeneral" class="animated zoomIn btn-floating float-btn zoom-float-btn" id="general-task-icon">
+      <i class="fa fa-bars"></i>
+    </span>
+
+    <span class="animated zoomIn btn-floating float-btn zoom-float-btn" id="special-task-icon">
+      <i class="fa fa-bars"></i>
+    </span> -->
+
+    <div id="side-nav" class="sidenav side-pane">
+      <section id="project-list-cont">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeProjectNav()">&times;</a>
+        <div id="project-pane-message-box"></div>
+        <a href="#" class="project-item" project-id="display: none;"></a>
+      </section>
+    </div>
+
+    <!-- <div id="menu-icon-cover"></div> -->
+
     <div id="startup-message-screen">
       <section id="startup-message">
         <h3>No tasks yet</h2>
@@ -144,12 +176,19 @@
       </section>
     </div>
 
-    <div id="task-add-input-box">
+    <div id="project-add-input-box" class="input-box">
+      <input type="text" id="project-text-input" placeholder="Your project's name" autofocus />
+      <div id="project-input-error-box"></div>
+    </div>
+
+    <div id="task-add-input-box" class="input-box">
       <input type="text" id="task-text-input" placeholder="What do you want to do next?" autofocus />
       <div id="task-input-error-box"></div>
     </div>
 
-    <div id="task-list-cont">
+    <div class="animated fadeInLeft" id="project-tag-display"></div>
+
+    <div id="task-list-cont" class="list-cont">
       <ul class="list-group">
 
         <!-- <li class="list-group-item" id="task_0" style="display: none;">
@@ -174,12 +213,17 @@
       </ul>
     </div>
 
+    <div id="project-task-list-cont" class="list-cont">
+      <ul class="list-group"></ul>
+    </div>
+
   </article>
 
   <script src="./index_main.js"></script>
+  <script src="./reglog_handler.js"></script>
   <script src="./key_handler.js"></script>
   <script src="./task_handler.js"></script>
-  <script src="./reglog_handler.js"></script>
+  <script src="./project_handler.js"></script>
   <script src="./assets/js/popper.min.js"></script>
   <script src="./assets/js/bootstrap.min.js"></script>
   <script src="./assets/js/mdb.min.js"></script>
