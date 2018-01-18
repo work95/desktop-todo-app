@@ -8,6 +8,8 @@ window.$ = window.jQuery = require('./assets/js/jquery-3.2.1.min.js');
 
 var NEXT_USER_ID = 0;
 var SESSION_STORE = "";
+var LIST_CONT_STATE = 1;
+var CURRENT_PROJECT_ID = 0;
 
 /* Remove the loading screen. */
 function removeLoadingScreen() {
@@ -184,3 +186,40 @@ function validateLoginForm() {
 //     currentWindow.maximize();
 //   })
 // });
+
+
+$(function () {
+  $('#switch-list-cont').click(function () {
+    if (LIST_CONT_STATE === 1) {
+      $('#switch-list-cont').css('opacity', 0.5);
+      openProjectNav();
+      $('#task-list-cont').slideUp(300);
+      $('#project-task-list-cont').fadeIn(300);
+      $('#menu-icon').fadeOut(100);
+      LIST_CONT_STATE = 2;
+    } else {
+      $('#project-tag-display').fadeOut(300);
+      $('#switch-list-cont').css('opacity', 1);
+      $('#project-task-list-cont').slideUp(300);
+      $('#task-list-cont').fadeIn(300);
+      LIST_CONT_STATE = 1;
+      closeProjectNav();
+      $('#menu-icon').fadeOut(300);
+    }
+  });
+});
+
+var menu_icon_state = 0;
+$(function () {
+  $('#menu-icon').click(function () {
+    if (menu_icon_state === 1) {
+      closeProjectNav();
+      $(this).fadeOut(300);
+      menu_icon_state = 0;
+    } else {
+      openProjectNav();
+      $(this).fadeOut(300);
+      menu_icon_state = 1;
+    }
+  });
+});
