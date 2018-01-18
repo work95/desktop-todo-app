@@ -235,3 +235,13 @@ $(function () {
     }
   });
 });
+
+function showMainTaskListCont() {
+  $('#project-tag-display').fadeOut(300);
+  $('#delete-project-btn').fadeOut(300);
+  $('#switch-list-cont').css('opacity', 1);
+  $('#project-task-list-cont').slideUp(300);
+  $('#task-list-cont').fadeIn(300);
+  $('#menu-icon').fadeOut(300);
+  LIST_CONT_STATE = 1;
+}

@@ -53,6 +53,13 @@ function deleteTaskFromStore(userId, taskId) {
 
     fs.writeFileSync(filePathB, finalList);
     fs.unlinkSync(filePathA + '/' + taskId + '.txt');
+
+    for (var i = 0; i < TASK_LIST.length; i++) {
+      if (TASK_LIST[i].split(":")[0] === taskId) {
+        TASK_LIST.splice(i, 1);
+        break;
+      }
+    }
   }
 }
 

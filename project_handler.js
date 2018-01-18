@@ -12,13 +12,7 @@ function addProject(projectName, projectId) {
   attachProjectLinkListener();
 
   CURRENT_PROJECT_ID = projectId;
-  $('#delete-project-btn').fadeIn(300);
-  $('#project-tag-display').text(projectName).fadeIn(300);
-  $('#switch-list-cont').css('opacity', 0.5);
-  $('#task-list-cont').slideUp(300);
-  $('#project-task-list-cont').fadeIn(300);
-  $('#menu-icon').fadeOut(100);
-  LIST_CONT_STATE = 2;
+  showProjectTaskListCont(projectName);
 }
 
 function addProjectTask(taskText, taskId) {
@@ -142,10 +136,7 @@ function updateProjectTaskCompleteInStore(userId, taskId, state) {
 function deleteProjectTaskFromStore(userId, taskId) {
   var filePath = './data-store/user-store/' + SESSION_STORE + '/project-store-dir/' + CURRENT_PROJECT_ID + '/project_task_list.txt';
   if (!fs.existsSync(filePath)) {
-    return {
-      "status": false,
-      "error": "NO_RECORD"
-    }
+    return null;
   } else {
     var list = fs.readFileSync(filePath).toString().split("\n");
     list.pop();
@@ -154,16 +145,20 @@ function deleteProjectTaskFromStore(userId, taskId) {
     for (var i = 0; i < list.length; i++) {
       if (list[i].split(":")[0] === taskId) {
         list.splice(i, 1);
-        break;
+      } else {
+        finalList += list[i] + "\n";
       }
-    }
-
-    for (var i = 0; i < list.length; i++) {
-      finalList += list[i] + "\n";
     }
 
     fs.writeFileSync(filePath, finalList);
     fs.unlinkSync('./data-store/user-store/' + SESSION_STORE + '/project-store-dir/' + CURRENT_PROJECT_ID + '/' + taskId + '.txt');
+
+    for (var i = 0; i < PROJECT_TASK_LIST.length; i++) {
+      if (PROJECT_TASK_LIST[i].split(":")[0] === taskId) {
+        PROJECT_TASK_LIST.splice(i, 1);
+        break;
+      }
+    }
   }
 }
 
@@ -223,6 +218,16 @@ function openProjectNav() {
   }
 }
 
+function closeProjectNav() {
+  document.getElementById("side-nav").style.width = "0";
+  if (CURRENT_PROJECT_ID === "" || CURRENT_PROJECT_ID === undefined || CURRENT_PROJECT_ID === null) {
+    showMainTaskListCont();
+    $('#menu-icon').fadeOut(300);
+  } else {
+    $('#menu-icon').fadeIn(300);
+  }
+}
+
 $(function () {
   $('#project-pane-message-box button').click(function () {
     closeProjectNav();
@@ -248,20 +253,6 @@ function loadProjects() {
   return projectList;
 }
 
-function closeProjectNav() {
-  document.getElementById("side-nav").style.width = "0";
-  if (CURRENT_PROJECT_ID === "" || CURRENT_PROJECT_ID === undefined || CURRENT_PROJECT_ID === null) {
-    $('#project-tag-display').fadeOut(300);
-    $('#delete-project-btn').fadeOut(300);
-    $('#switch-list-cont').css('opacity', 1);
-    $('#project-task-list-cont').slideUp(300);
-    $('#task-list-cont').fadeIn(300);
-    LIST_CONT_STATE = 1;
-    $('#menu-icon').fadeOut(300);
-  }
-  $('#menu-icon').fadeIn(300);
-}
-
 $(function () {
   $('#delete-project-btn').click(function () {
     deleteProjectFromStore();
@@ -280,19 +271,39 @@ function deleteProjectFromStore() {
     fs.unlinkSync(filePath + '/' + objectList[i]);
   }
   fs.rmdirSync(filePath);
+
+  var finalList = "";
   var projectList = fs.readFileSync('./data-store/user-store/' + SESSION_STORE + '/project-store-dir/project_list.txt').toString().split('\n');
   projectList.pop();
+
   for (var i = 0; i < projectList.length; i++) {
     if (projectList[i] === CURRENT_PROJECT_ID) {
       projectList.splice(i, 1);
-      break;
+    } else {
+      finalList += projectList[i] + '\n';
     }
-  }
-  var finalList = "";
-  for (var i = 0; i < projectList.length; i++) {
-    finalList += projectList[i];
   }
   fs.writeFileSync('./data-store/user-store/' + SESSION_STORE + '/project-store-dir/project_list.txt', finalList);
   
+  // Remove project from the loaded list.
+  for (var i = 0; i < PROJECT_LIST.length; i++) {
+    if (PROJECT_LIST[i].split(":")[0] === CURRENT_PROJECT_ID) {
+      PROJECT_LIST.splice(i, 1);
+      break;
+    }
+  }
+
   CURRENT_PROJECT_ID = "";
+}
+
+function showProjectTaskListCont(projectName) {
+  $('#project-add-input-box').slideUp(250).children('input').val("");
+  $('#project-input-error-box').html("");
+  $('#delete-project-btn').fadeIn(300);
+  $('#project-tag-display').text(projectName).fadeIn(300);
+  $('#switch-list-cont').css('opacity', 0.5);
+  $('#task-list-cont').slideUp(300);
+  $('#project-task-list-cont').fadeIn(300);
+  $('#menu-icon').fadeOut(100);
+  LIST_CONT_STATE = 2;
 }
