@@ -171,10 +171,11 @@ function loadProjectTasks(projectId) {
   }
   var projectTaskList = fs.readFileSync(filePath).toString().split("\n");
   projectTaskList.pop();
+  PROJECT_TASK_LIST = [];
 
   for (var i = 0; i < projectTaskList.length; i++) {
     var data = fs.readFileSync('./data-store/user-store/' + SESSION_STORE + '/project-store-dir/' + projectId + '/' + projectTaskList[i] + '.txt').toString().split('\n\n');
-    PROJECT_LIST.push(projectTaskList[i] + ":" + data[1]);
+    PROJECT_TASK_LIST.push(projectTaskList[i] + ":" + data[1]);
     $('#project-task-list-cont ul').append('<li class="list-group-item" id="' + projectTaskList[i] + '"><img id="task-complete-icon" src="./assets/images/checked.svg" /><span class="task-text">' + data[1] + '</span><div class="task-options-cont"><div class="dot-set dropdown" id="dropdownMenu2" data-toggle="dropdown" aria-expanded="false"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div><div id="task-options-menu" class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2"><a class="complete-task-btn" state="false" class="dropdown-item" href="#"><span><i class="fa fa-check"></i></span>Task Complete</a><a class="delete-task-btn" class="dropdown-item" href="#"><span><i class="fa fa-trash-alt"></i></span>Delete Task</a></div></div></li>');
     if (data[0] === null || data[0] === undefined || data[0] === "false") {
       $('#' + projectTaskList[i]).children('img').fadeOut(300);
