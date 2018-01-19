@@ -4,6 +4,8 @@ const currentWindow = electron.remote.getCurrentWindow();
 const fs = require('fs');
 const logger = require('tracer').colorConsole();
 
+const logging = require('./logging');
+
 window.$ = window.jQuery = require('./assets/js/jquery-3.2.1.min.js');
 
 
