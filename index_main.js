@@ -205,6 +205,7 @@ $(function () {
       $('#project-tag-display').fadeOut(300);
       $('#delete-project-btn').fadeOut(300);
       $('#switch-list-cont').css('opacity', 1);
+      loadTaskList(SESSION_STORE);
       $('#project-task-list-cont').slideUp(300);
       $('#project-task-list-cont ul').html("");
       $('#task-list-cont').fadeIn(300);
@@ -236,6 +237,7 @@ function showMainTaskListCont() {
   $('#switch-list-cont').css('opacity', 1);
   $('#project-task-list-cont').slideUp(300);
   $('#project-task-list-cont ul').html("");
+  loadTaskList(SESSION_STORE);
   $('#task-list-cont').fadeIn(300);
   $('#menu-icon').fadeOut(300);
   LIST_CONT_STATE = 1;
