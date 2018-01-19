@@ -6,12 +6,17 @@ function registerUser(name, email, password, callback) {
   // Check for existence of '/data-store/user-store' directory.
   if (!fs.existsSync('./data-store/user-store/')) {
     fs.mkdirSync('./data-store/user-store/');
-  } 
+    fs.writeFileSync('./data-store/user-store/next_user_id.txt', "0");
+  } else if (!fs.existsSync('./data-store/user-store/next_user_id.txt')) {
+    fs.writeFileSync('./data-store/user-store/usernext_user_id.txt', "0");
+    NEXT_USER_ID = 0;
+  } else {
+    NEXT_USER_ID = parseInt(fs.readFileSync('./data-store/user-store/next_user_id.txt').toString().trim());
+  }
 
   /* See if the user already exists in the record or not. */
   fs.readFile(USER_LIST_FILE_PATH, function (err, data) {
     if (err) {
-      logger.warn('[Error]: ' + err);
       callback({
         "status": "null"
       });
@@ -31,12 +36,10 @@ function registerUser(name, email, password, callback) {
   /* Enter the new user in the user list. */
   var file = fs.appendFile(USER_LIST_FILE_PATH, (email + ":" + NEXT_USER_ID) + ",", function (err) {
     if (err) {
-      logger.warn('[Error]: ' + err);
       callback({
         "status": false
       });
     } else {
-      logger.info('User ['  + email + '] registered');
 
       /* Create a directory for user. */
       fs.mkdirSync('./data-store/user-store/' + NEXT_USER_ID);
@@ -74,6 +77,16 @@ function registerUser(name, email, password, callback) {
 function loginUser(email, password, callback) {
   if (!fs.existsSync('./data-store/user-store/')) {
     fs.mkdirSync('./data-store/user-store/');
+
+    // Add the user list now.
+    if (!fs.existsSync(USER_LIST_FILE_PATH)) {
+      fs.writeFileSync(USER_LIST_FILE_PATH, "");
+    }
+
+    // Since there is no user found.
+    callback({
+      "status": false
+    });
   }
 
   fs.readFile(USER_LIST_FILE_PATH, function (err, data) {
@@ -103,7 +116,7 @@ function loginUser(email, password, callback) {
               // Compare the passwords.
               var completeInfo = data.toString().split("\n");
               if (password === completeInfo[2]) {
-                // On success, return the name of the user.
+                // On success, return the name and ID of the user.
                 callback({
                   "status": true,
                   "name": completeInfo[0],
@@ -113,18 +126,26 @@ function loginUser(email, password, callback) {
               } else {
                 // On failure, return a false status.
                 callback({
-                  "status": false
+                  "status": false,
+                  "error": "WRONG_PASSWORD"
                 });
               }
             }
           });
         } else {
+          // Can't find the user in record.
           callback({
             "status": false,
             "error": "NO_SUCH_USER"
           });
         }
       }
+
+      // No users registered in record.
+      callback({
+        "status": false,
+        "error": "NO_SUCH_USER"
+      });
     }
   });
 }
@@ -171,7 +192,13 @@ $(function () {
       if (result.status === null) {
         $('#login-btn-badge').text("Internal Error").fadeIn(300);
       } else if (!result.status) {
-        $('#login-btn-badge').text('User not found').fadeIn(300);
+        var message = '';
+        if (result.error === "WRONG_PASSWORD") {
+          message = 'Email or password mismatch';
+        } else {
+          message = 'User not found';
+        }
+        $('#login-btn-badge').text(message).fadeIn(300);
       } else {
         $('#login-btn-badge').text("").fadeOut(300);
         // Store the session of the logged in user.
@@ -262,7 +289,6 @@ function clearRegLogInputForms() {
 }
 
 function addLastLoginSession(sessionId) {
-  console.log(sessionId);
   var filePath = './data-store/last_login.txt';
   if (!fs.existsSync(filePath)) {
     fs.writeFileSync(filePath, "");
@@ -271,7 +297,6 @@ function addLastLoginSession(sessionId) {
 }
 
 function removeLastLoginSession() {
-  console.log('hello');
   var filePath = './data-store/last_login.txt';
   if (!fs.existsSync(filePath)) {
     fs.writeFileSync(filePath, "");
@@ -283,7 +308,7 @@ function removeLastLoginSession() {
 function loadLastLoginSession() {
   var filePath = './data-store/last_login.txt';
   if (!fs.existsSync(filePath)) {
-    fs.writeFileSync(filePath, "");
+    fs.writeFileSync(filePath, "0");
     return null;
   }
 
