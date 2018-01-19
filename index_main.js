@@ -35,18 +35,8 @@ function removeLoadingScreen() {
 }
 
 $(function () {
-  var filePath = './data-store/user-store/next_user_id.txt';
-  if (!fs.existsSync(filePath)) {
-    fs.writeFileSync(filePath, "0");
-  } else {
-    /* Read the file containing next user ID to assign. */
-    fs.readFile(filePath, function (err, data) {
-      if (err) {
-        logger.warn('[Error]: ' + err);
-      } else {
-        NEXT_USER_ID = data.toString().trim();
-      }
-    });
+  if (!fs.existsSync('./data-store')) {
+    fs.mkdir('./data-store');
   }
 });
 
