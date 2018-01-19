@@ -17,6 +17,7 @@ function registerUser(name, email, password, callback) {
   /* See if the user already exists in the record or not. */
   fs.readFile(USER_LIST_FILE_PATH, function (err, data) {
     if (err) {
+      logging.logError('reglog_handler.js (20): ' + err);
       callback({
         "status": "null"
       });
@@ -36,6 +37,7 @@ function registerUser(name, email, password, callback) {
   /* Enter the new user in the user list. */
   var file = fs.appendFile(USER_LIST_FILE_PATH, (email + ":" + NEXT_USER_ID) + ",", function (err) {
     if (err) {
+      logging.logError('reglog_handler.js (40): ' + err);
       callback({
         "status": null
       });
@@ -48,12 +50,14 @@ function registerUser(name, email, password, callback) {
       var userInfo = name + "\n" + email + "\n" + password;
       fs.appendFile('./data-store/user-store/' + NEXT_USER_ID + '/user_info.txt', userInfo, function (err) {
         if (err) {
+          logging.logError('reglog_handler.js (53): ' + err);
           callback({
             "status": null
           });
         } else {
           fs.appendFile('./data-store/user-store/' + NEXT_USER_ID + '/user_task_list.txt', "", function (err) {
             if (err) {
+              logging.logError('reglog_handler.js (60): ' + err);
               callback({
                 "status": null
               });
@@ -89,6 +93,7 @@ function loginUser(email, password, callback) {
 
   fs.readFile(USER_LIST_FILE_PATH, function (err, data) {
     if (err) {
+      logging.logError('reglog_handler.js (96): ' + err);
       callback({
         "status": null
       });
@@ -105,6 +110,7 @@ function loginUser(email, password, callback) {
           // Read the user's information to fetch the password.
           fs.readFile('./data-store/user-store/' + userInfo[1] + '/user_info.txt', function (err, data) {
             if (err) {
+              logging.logError('reglog_handler.js (113): ' + err);
               callback({
                 "status": null
               });
@@ -158,6 +164,7 @@ $(function () {
 
     registerUser($('#orangeForm-name').val().trim(), $('#orangeForm-email').val().trim(), $('#orangeForm-pass').val().trim(), function (result) {
       if (result.status === null) {
+        logging.logError('reglog_handler.js (167): ' + err);
         $('#reg-btn-badge').text("Internal Error. Try after sometime.").fadeIn(300);
       } else if (!result.status) {
         var message = '';
@@ -192,6 +199,7 @@ $(function () {
 
     loginUser($('#defaultForm-email').val().trim(), $('#defaultForm-pass').val().trim(), function (result) {
       if (result.status === null) {
+        logging.logError('reglog_handler.js (202): ' + err);
         $('#login-btn-badge').text("Internal Error. Try after sometime.").fadeIn(300);
       } else if (!result.status) {
         var message = '';
