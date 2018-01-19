@@ -197,7 +197,7 @@ function openProjectNav() {
   $('#menu-icon').fadeOut(300);
   menu_icon_state = 0;
   if (data === null || data === undefined) {
-    $(node).fadeOut(0);
+    $(node).fadeIn(0);
     $(node).children('span').text('Cannot fetch projects');
     $('#project-pane-message-btn').fadeOut(0);
   } else {
@@ -241,7 +241,8 @@ function loadProjects() {
   var filePath = './data-store/user-store/' + SESSION_STORE + '/project-store-dir/';
   if (!fs.existsSync(filePath)) {
     fs.mkdirSync(filePath);
-    return null;
+    fs.writeFileSync(filePath + '/project_list.txt', "");
+    return [];
   } else if (!fs.existsSync(filePath + '/project_list.txt')) {
     fs.writeFileSync(filePath + '/project_list.txt', "");
     return [];
