@@ -26,7 +26,7 @@ function registerUser(name, email, password, callback) {
         if (email === userList[i].split(":")[0]) {
           callback({
             "status": false,
-            "error": "USER_ALREADY_REGISTERED"
+            "error": "USER_PRESENT"
           });
         }
       }
@@ -37,7 +37,7 @@ function registerUser(name, email, password, callback) {
   var file = fs.appendFile(USER_LIST_FILE_PATH, (email + ":" + NEXT_USER_ID) + ",", function (err) {
     if (err) {
       callback({
-        "status": false
+        "status": null
       });
     } else {
 
@@ -48,16 +48,14 @@ function registerUser(name, email, password, callback) {
       var userInfo = name + "\n" + email + "\n" + password;
       fs.appendFile('./data-store/user-store/' + NEXT_USER_ID + '/user_info.txt', userInfo, function (err) {
         if (err) {
-          logger.warn('[Error]: ' + err);
           callback({
-            "status": false
+            "status": null
           });
         } else {
           fs.appendFile('./data-store/user-store/' + NEXT_USER_ID + '/user_task_list.txt', "", function (err) {
             if (err) {
-              logger.warn('[Error]: ' + err);
               callback({
-                "status": false
+                "status": null
               });
             } else {
               // Update the 'NEXT_USER_ID' in file.
@@ -91,7 +89,6 @@ function loginUser(email, password, callback) {
 
   fs.readFile(USER_LIST_FILE_PATH, function (err, data) {
     if (err) {
-      logger.warn('[Error]: ' + err);
       callback({
         "status": null
       });
@@ -108,7 +105,6 @@ function loginUser(email, password, callback) {
           // Read the user's information to fetch the password.
           fs.readFile('./data-store/user-store/' + userInfo[1] + '/user_info.txt', function (err, data) {
             if (err) {
-              logger.warn('[Error]: ' + err);
               callback({
                 "status": null
               });
@@ -156,14 +152,19 @@ $(function () {
 
     /* Do validation first. */
     if (!validateRegistrationForm()) {
+      $('#reg-btn-badge').fadeOut(300).text("");
       return;
     }
 
     registerUser($('#orangeForm-name').val().trim(), $('#orangeForm-email').val().trim(), $('#orangeForm-pass').val().trim(), function (result) {
       if (result.status === null) {
-        $('#reg-btn-badge').text("Internal Error").fadeIn(300);
+        $('#reg-btn-badge').text("Internal Error. Try after sometime.").fadeIn(300);
       } else if (!result.status) {
-        $('#reg-btn-badge').text("User not found").fadeIn(300);
+        var message = '';
+        if (result.error === "USER_PRESENT") {
+          message = 'User already registered';
+        }
+        $('#reg-btn-badge').text(message).fadeIn(300);
       } else {
         $('#user-name-display h2').text(splitName($('#orangeForm-name').val().trim()));
         $('#add-task-btn').removeClass('disabled');
@@ -185,12 +186,13 @@ $(function () {
 
     /* Do validation first. */
     if (!validateLoginForm()) {
+      $('#login-btn-badge').fadeOut(300).text("");
       return;
     }
 
     loginUser($('#defaultForm-email').val().trim(), $('#defaultForm-pass').val().trim(), function (result) {
       if (result.status === null) {
-        $('#login-btn-badge').text("Internal Error").fadeIn(300);
+        $('#login-btn-badge').text("Internal Error. Try after sometime.").fadeIn(300);
       } else if (!result.status) {
         var message = '';
         if (result.error === "WRONG_PASSWORD") {
