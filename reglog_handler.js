@@ -4,14 +4,24 @@ const USER_LIST_FILE_PATH = './data-store/user-store/user_list.txt';
 function registerUser(name, email, password, callback) {
 
   // Check for existence of '/data-store/user-store' directory.
+  if (!fs.existsSync('./data-store')) {
+    fs.mkdirSync('./data-store');
+  } 
+  
   if (!fs.existsSync('./data-store/user-store/')) {
     fs.mkdirSync('./data-store/user-store/');
     fs.writeFileSync('./data-store/user-store/next_user_id.txt', "0");
-  } else if (!fs.existsSync('./data-store/user-store/next_user_id.txt')) {
-    fs.writeFileSync('./data-store/user-store/usernext_user_id.txt', "0");
+  } 
+  
+  if (!fs.existsSync('./data-store/user-store/next_user_id.txt')) {
+    fs.writeFileSync('./data-store/user-store/next_user_id.txt', "0");
     NEXT_USER_ID = 0;
   } else {
     NEXT_USER_ID = parseInt(fs.readFileSync('./data-store/user-store/next_user_id.txt').toString().trim());
+  }
+
+  if (!fs.existsSync('./data-store/user-store/user_list.txt')) {
+    fs.writeFileSync('./data-store/user-store/user_list.txt');
   }
 
   /* See if the user already exists in the record or not. */
@@ -42,6 +52,7 @@ function registerUser(name, email, password, callback) {
         "status": null
       });
     } else {
+      SESSION_STORE = NEXT_USER_ID;
 
       /* Create a directory for user. */
       fs.mkdirSync('./data-store/user-store/' + NEXT_USER_ID);
@@ -181,7 +192,7 @@ $(function () {
         $('header').addClass('red darken-1');
         $('header').removeClass('purple darken-1');
         closeRegLogPane();  
-        addLastLoginSession();      
+        addLastLoginSession(SESSION_STORE);      
       }
     });
   });
@@ -318,13 +329,13 @@ function removeLastLoginSession() {
 function loadLastLoginSession() {
   var filePath = './data-store/last_login.txt';
   if (!fs.existsSync(filePath)) {
-    fs.writeFileSync(filePath, "0");
+    fs.writeFileSync(filePath, "");
     return null;
   }
 
   // Load the session store.
   SESSION_STORE = fs.readFileSync(filePath).toString().trim();
-  if (SESSION_STORE === undefined || SESSION_STORE === null || SESSION_STORE === "") {
+  if (SESSION_STORE === undefined || SESSION_STORE === null || SESSION_STORE === "" || SESSION_STORE === "undefined") {
     return null;
   }
   $('#user-name-display h2').text(splitName(fs.readFileSync('./data-store/user-store/' + SESSION_STORE + '/user_info.txt').toString().trim().split("\n")[0]));
