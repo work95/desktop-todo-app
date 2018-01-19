@@ -163,7 +163,7 @@ function deleteProjectTaskFromStore(userId, taskId) {
 }
 
 function loadProjectTasks(projectId) {
-  $('#project-task-list-cont ul').html("");
+  $('#project-task-list-cont ul').html('');
   var filePath = './data-store/user-store/' + SESSION_STORE + '/project-store-dir/' + projectId + '/project_task_list.txt';
   if (!fs.existsSync(filePath)) {
     fs.writeFileSync(filePath, "");
@@ -305,6 +305,7 @@ function showProjectTaskListCont(projectName) {
   $('#switch-list-cont').css('opacity', 0.5);
   $('#task-list-cont').slideUp(300);
   $('#project-task-list-cont').fadeIn(300);
-  $('#menu-icon').fadeOut(100);
+  $('#project-task-list-cont ul').html('');
+  $('#menu-icon').fadeIn(100);
   LIST_CONT_STATE = 2;
 }
