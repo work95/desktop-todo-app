@@ -65,12 +65,14 @@ function deleteTaskFromStore(userId, taskId) {
 
 /* Load the task list. */
 function loadTaskList(userId) {
+  $('#task-list-cont ul').html('');
   var filePath = './data-store/user-store/' + userId + '/task-store-dir/task_list.txt';
   if (!fs.existsSync(filePath)) {
     return;
   } else {
     var taskList = fs.readFileSync(filePath).toString().split("\n");
     taskList.pop();
+    TASK_LIST = [];
  
     for (var i = 0; i < taskList.length; i++) {
       var data = fs.readFileSync('./data-store/user-store/' + userId + '/task-store-dir/' + taskList[i] + '.txt').toString().split("\n\n");
