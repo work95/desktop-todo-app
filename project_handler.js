@@ -5,6 +5,7 @@ function addProject(projectName, projectId) {
       return;
     }
   }
+
   $('#project-list-cont').append('<a href="#" class="project-item" project-id="' + projectId + '">' + projectName + '</a>')
   var projectInfo = projectId + ":" + projectName;
   PROJECT_LIST.push(projectInfo);
@@ -17,7 +18,7 @@ function addProject(projectName, projectId) {
 
 function addProjectTask(taskText, taskId) {
   for (var i = 0; i < PROJECT_TASK_LIST.length; i++) {
-    if (taskText.toLowerCase() === PROJECT_TASK_LIST[i].split(":")[1].toLowerCase()) {
+    if (encodeURIComponent(taskText).toLowerCase() === PROJECT_TASK_LIST[i].split(":")[1].toLowerCase()) {
       $('#task-input-error-box').text('Task already added!').slideDown(300);
       return;
     }
@@ -27,7 +28,7 @@ function addProjectTask(taskText, taskId) {
   $('#project-task-list-cont ul').append('<li class="list-group-item" id="' + taskId + '"><img id="task-complete-icon" src="./assets/images/checked.svg" /><span class="task-text">' + taskText + '<br /><span class="task-start-date">' + date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + '</span></span><div class="task-options-cont"><div class="dot-set dropdown" id="dropdownMenu2" data-toggle="dropdown" aria-expanded="false"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div><div id="task-options-menu" class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2"><a class="complete-task-btn" state="false" class="dropdown-item" href="#"><span><i class="fa fa-check"></i></span>Complete Task</a><a class="delete-task-btn" class="dropdown-item" href="#"><span><i class="fa fa-trash-alt"></i></span>Delete Task</a></div></div></li>');
   attachProjectTaskOptionBtnListener();
 
-  var taskInfo = taskId + ":" + taskText;
+  var taskInfo = taskId + ":" + encodeURIComponent(taskText);
   PROJECT_TASK_LIST.push(taskInfo);
   addProjectTaskInStore(SESSION_STORE, taskInfo);
 }
@@ -176,8 +177,8 @@ function loadProjectTasks(projectId) {
   PROJECT_TASK_LIST = [];
 
   for (var i = 0; i < projectTaskList.length; i++) {
-    var data = fs.readFileSync('./data-store/user-store/' + SESSION_STORE + '/project-store-dir/' + projectId + '/' + projectTaskList[i] + '.txt').toString().split('\n\n');
-    PROJECT_TASK_LIST.push(projectTaskList[i] + ":" + data[1]);
+    var data = decodeURIComponent(fs.readFileSync('./data-store/user-store/' + SESSION_STORE + '/project-store-dir/' + projectId + '/' + projectTaskList[i] + '.txt').toString()).split('\n\n');
+    PROJECT_TASK_LIST.push(projectTaskList[i] + ":" + encodeURIComponent(data[1]));
     let date = new Date(parseInt(projectTaskList[i].substr(5)));
     $('#project-task-list-cont ul').append('<li class="list-group-item" id="' + projectTaskList[i] + '"><img id="task-complete-icon" src="./assets/images/checked.svg" /><span class="task-text">' + data[1] + '<br /><span class="task-start-date">' + date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + '</span></span><div class="task-options-cont"><div class="dot-set dropdown" id="dropdownMenu2" data-toggle="dropdown" aria-expanded="false"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div><div id="task-options-menu" class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2"><a class="complete-task-btn" state="false" class="dropdown-item" href="#"><span><i class="fa fa-check"></i></span>Task Complete</a><a class="delete-task-btn" class="dropdown-item" href="#"><span><i class="fa fa-trash-alt"></i></span>Delete Task</a></div></div></li>');
     if (data[0] === null || data[0] === undefined || data[0] === "false") {
