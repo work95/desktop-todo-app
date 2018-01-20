@@ -171,26 +171,6 @@ function validateLoginForm() {
   return (errorFlag > 0) ? false : true;
 }
 
-
-// /* To close, minimize, maximize the browser window. */
-// $(function () {
-//   // Close window.
-//   $('#window-close-btn').click(function () {
-//     currentWindow.close();
-//   });
-
-//   // Minimize window.
-//   $('#window-minimize-btn').click(function () {
-//     currentWindow.minimize();
-//   });
-
-//   // Maximize window.
-//   $('#window-maximize-btn').click(function () {
-//     currentWindow.maximize();
-//   })
-// });
-
-
 $(function () {
   $('#switch-list-cont').click(function () {
     if (LIST_CONT_STATE === 1) {
