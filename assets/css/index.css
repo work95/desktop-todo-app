@@ -321,6 +321,12 @@ span#menu-icon {
   box-shadow: -2px 4px 10px 1px rgba(0, 0, 0, 0.1);
 }
 
+.task-start-date {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.5);
+  font-family: 'Quicksand-Bold';
+}
+
 #startup-message-screen {
   overflow: auto;
   position: fixed;
