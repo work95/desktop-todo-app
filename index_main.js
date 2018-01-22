@@ -3,6 +3,7 @@ const currentWindow = electron.remote.getCurrentWindow();
 
 const fs = require('fs');
 const logger = require('tracer').colorConsole();
+const countdown = require('countdown');
 
 const logging = require('./logging');
 
@@ -223,11 +224,12 @@ function showMainTaskListCont() {
   LIST_CONT_STATE = 1;
 }
 
-function getTaskTemplate(taskId, taskText, date) {
+function getTaskTemplate(taskId, taskText, date, endTime) {
   var taskNode = '<li class="list-group-item" id="' + taskId + '">' +
     '<img id="task-complete-icon" src="./assets/images/checked.svg" />' +
     '<span class="task-text">' + taskText + '<br />' +
     '<span class="task-start-date">' + date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + '</span>' +
+    '<span class="task-end-time"></span>' +
     '</span>' +
     '<div class="task-options-cont">' +
     '<div class="dot-set dropdown" id="dropdownMenu2" data-toggle="dropdown" aria-expanded="false">' +
@@ -242,9 +244,67 @@ function getTaskTemplate(taskId, taskText, date) {
     '<a class="delete-task-btn" class="dropdown-item" href="#">' +
     '<span><i class="fa fa-trash-alt"></i></span>Delete Task' +
     '</a>' +
+    '<a class="add-time-limit-btn" task-id="" class="dropdown-item" data-toggle="modal" data-target="#task-time-limit-cont" href="#">' +
+    '<span><i class="fa fa-clock"></i></span>Add Time Limit' +
+    '</a>'
     '</div>' +
     '</div>' +
     '</li>';
 
     return taskNode;
+}
+
+$(function () {
+  $('#close-task-time-limit-modal').click(function () {
+    var day = $('#task-time-input-day').val().trim();
+    var month = $('#task-time-input-month').val().trim();
+    var year = $('#task-time-input-year').val().trim();
+    var hour = $('#task-time-input-hour').val().trim();
+    var minute = $('#task-time-input-minute').val().trim();
+    var second = $('#task-time-input-second').val().trim();
+    
+    var endTime = new Date(year + '/' + month + '/' + day + ' ' + hour + ':' + minute + ':' + second).getTime();
+    var taskId = $(this).attr('task-id').toString();
+    if ($('#remove-time-check input').prop('checked')) {
+      endTime = 0;
+    }
+
+    ($(this).attr('task-type').toString() === 'main') ? addMainTaskTimeLimit(taskId, endTime) : addProjectTaskTimeLimit(taskId, endTime);
+  });
+});
+
+$(function () {
+  setInterval(function () {
+    setTaskTimeLeft();
+  }, 1000);
+});
+
+function setTaskTimeLeft() {
+  if (LIST_CONT_STATE === 1) {
+    for (var i = 0; i < TASK_LIST.length; i++) {
+      var info = TASK_LIST[i].split(":");
+      var timeString = "";
+      if (info[1] === "0" || info[1] === "") {
+        timeString = "";
+      } else {
+        var dateStart = new Date();
+        var dateEnd = new Date(parseInt(info[1]));
+        timeString = dateStart < dateEnd ? (countdown(new Date(), new Date(parseInt(info[1]))).toString()) : "Time over";
+      }
+      $('#' + info[0] + ' span .task-end-time').text(timeString);
+    }
+  } else {
+    for (var i = 0; i < PROJECT_TASK_LIST.length; i++) {
+      var info = PROJECT_TASK_LIST[i].split(":");
+      var timeString = "";
+      if (info[1] === "0" || info[1] === "") {
+        timeString = "";
+      } else {
+        var dateStart = new Date();
+        var dateEnd = new Date(parseInt(info[1]));
+        timeString = dateStart < dateEnd ? (countdown(new Date(), new Date(parseInt(info[1]))).toString()) : "Time over";
+      }
+      $('#' + info[0] + ' span .task-end-time').text(timeString);
+    }
+  }
 }

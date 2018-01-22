@@ -1,7 +1,7 @@
 /* To add the task in the list. */
 function addTask(taskText, taskId) {
   for (var i = 0; i < TASK_LIST.length; i++) {
-    if (encodeURIComponent(taskText).toLowerCase() === TASK_LIST[i].split(":")[1].toLowerCase()) {
+    if (encodeURIComponent(taskText).toLowerCase() === TASK_LIST[i].split(":")[2].toLowerCase()) {
       $('#task-input-error-box').text('Task already added!').slideDown(300);
       return;
     }
@@ -11,7 +11,7 @@ function addTask(taskText, taskId) {
   $('#task-list-cont ul').append(getTaskTemplate(taskId, taskText, date));
   attachTaskOptionBtnListener();
 
-  var taskInfo = taskId + ":" + encodeURIComponent(taskText);
+  var taskInfo = taskId + ":0:" + encodeURIComponent(taskText);
   TASK_LIST.push(taskInfo);
   addTaskInStore(SESSION_STORE, taskInfo);
 }
@@ -24,13 +24,13 @@ function addTaskInStore(userId, taskInfo) {
   }
   var info = taskInfo.split(":");
   fs.appendFileSync(filePath + '/' + 'task_list.txt', info[0] + '\n');
-  fs.writeFileSync(filePath + '/' + info[0] + '.txt', 'false\n\n' + info[1]);
+  fs.writeFileSync(filePath + '/' + info[0] + '.txt', 'false\n\n' + '0\n\n' + info[2]);
 }
 
 function updateTaskCompleteInStore(userId, taskId, state) {
   var filePath = './data-store/user-store/' + userId + '/task-store-dir/';
   var taskInfo = fs.readFileSync(filePath + '/' + taskId + '.txt').toString().split("\n\n");
-  fs.writeFileSync(filePath + '/' + taskId + '.txt', state + '\n\n' + taskInfo[1]);
+  fs.writeFileSync(filePath + '/' + taskId + '.txt', state + '\n\n' + taskInfo[1] + '\n\n' + taskInfo[2]);
 }
 
 /* Delete the task from the record. */
@@ -78,9 +78,9 @@ function loadTaskList(userId) {
  
     for (var i = 0; i < taskList.length; i++) {
       var data = decodeURIComponent(fs.readFileSync('./data-store/user-store/' + userId + '/task-store-dir/' + taskList[i] + '.txt').toString()).split("\n\n");
-      TASK_LIST.push(taskList[i] + ":" + encodeURIComponent(data[1]));
+      TASK_LIST.push(taskList[i] + ":" + data[1] + ":" + encodeURIComponent(data[2]));
       var date = new Date(parseInt(taskList[i].substr(5)));
-      $('#task-list-cont ul').append(getTaskTemplate(taskList[i], data[1], date));
+      $('#task-list-cont ul').append(getTaskTemplate(taskList[i], data[2], date));
       if (data[0] === null || data[0] === undefined || data[0] === "false") {
         $('#' + taskList[i]).children('img').fadeOut(300);
         $('#' + taskList[i] + ' .task-text').css('opacity', '1');
@@ -92,6 +92,18 @@ function loadTaskList(userId) {
       }
     }
     attachTaskOptionBtnListener();
+  }
+}
+
+function addMainTaskTimeLimit(taskId, endTime) {
+  var filePath = './data-store/user-store/' + SESSION_STORE + '/task-store-dir/';
+  var taskInfo = fs.readFileSync(filePath + '/' + taskId + '.txt').toString().split("\n\n");
+  fs.writeFileSync(filePath + '/' + taskId + '.txt', taskInfo[0] + '\n\n' + endTime + '\n\n' + taskInfo[2]);
+  for (var i = 0; i < TASK_LIST.length; i++) {
+    if (TASK_LIST[i].split(":")[0] === taskId) {
+      var info = TASK_LIST[i].split(":");
+      TASK_LIST[i] = info[0] + ":" + endTime + info[2];
+    }
   }
 }
 
@@ -125,6 +137,7 @@ function attachTaskOptionBtnListener() {
     /* Unbind the previous ones. */
     $('.delete-task-btn').unbind('click');
     $('.complete-task-btn').unbind('click');
+    $('.add-time-limit-btn').unbind('click');
 
     /* Attach new ones. */
     $('.delete-task-btn').click(function () {
@@ -152,5 +165,12 @@ function attachTaskOptionBtnListener() {
         $(this).parent().parent().parent().children('img').fadeOut(300);
       }
     });
+
+    $('.add-time-limit-btn').click(function () {
+      var nodeId = $(this).parent().parent().parent().attr('id');
+      $('#close-task-time-limit-modal').attr('task-id', nodeId);
+      $('#close-task-time-limit-modal').attr('task-type', 'main');
+    });
+
   });
 }

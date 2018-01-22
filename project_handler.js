@@ -18,7 +18,7 @@ function addProject(projectName, projectId) {
 
 function addProjectTask(taskText, taskId) {
   for (var i = 0; i < PROJECT_TASK_LIST.length; i++) {
-    if (encodeURIComponent(taskText).toLowerCase() === PROJECT_TASK_LIST[i].split(":")[1].toLowerCase()) {
+    if (encodeURIComponent(taskText).toLowerCase() === PROJECT_TASK_LIST[i].split(":")[2].toLowerCase()) {
       $('#task-input-error-box').text('Task already added!').slideDown(300);
       return;
     }
@@ -28,7 +28,7 @@ function addProjectTask(taskText, taskId) {
   $('#project-task-list-cont ul').append(getTaskTemplate(taskId, taskText, date));
   attachProjectTaskOptionBtnListener();
 
-  var taskInfo = taskId + ":" + encodeURIComponent(taskText);
+  var taskInfo = taskId + ":0:" + encodeURIComponent(taskText);
   PROJECT_TASK_LIST.push(taskInfo);
   addProjectTaskInStore(SESSION_STORE, taskInfo);
 }
@@ -40,7 +40,7 @@ function addProjectTaskInStore(userId, taskInfo) {
   }
   var info = taskInfo.split(":");
   fs.appendFileSync(filePath + '/' + CURRENT_PROJECT_ID + '/project_task_list.txt', info[0] + '\n');
-  fs.writeFileSync(filePath + '/' + CURRENT_PROJECT_ID + '/' + info[0] + '.txt', 'false\n\n' + info[1]);
+  fs.writeFileSync(filePath + '/' + CURRENT_PROJECT_ID + '/' + info[0] + '.txt', 'false\n\n' + '0\n\n' + info[2]);
 }
 
 function addProjectInStore(userId, projectInfo) {
@@ -88,18 +88,9 @@ function attachProjectLinkListener() {
 
 function attachProjectTaskOptionBtnListener() {
   $(function () {
-    /*
-     * Since this event listener is attached twice (one when 
-     * a new task is added and other when tasks are loaded), this will 
-     * lead to the same event handler called twice on the elements
-     * on which this same event handler was attached before.
-     * But each time the listener is added, all the elements 
-     * (newly added and loaded ones) are attached to the listener,
-     * so it won't be problem if the previous listener is removed.
-     * Just unbind the first and add new.
-     */
     $('.delete-task-btn').unbind('click');
     $('.complete-task-btn').unbind('click');
+    $('.add-time-limit-btn').unbind('click');
 
     // Attach again.
     $('.delete-task-btn').click(function () {
@@ -127,13 +118,20 @@ function attachProjectTaskOptionBtnListener() {
         $(this).parent().parent().parent().children('img').fadeOut(300);
       }
     });
+
+    $('.add-time-limit-btn').click(function () {
+      var nodeId = $(this).parent().parent().parent().attr('id');
+      $('#close-task-time-limit-modal').attr('task-id', nodeId);
+      $('#close-task-time-limit-modal').attr('task-type', 'project');
+    });
+
   });
 }
 
 function updateProjectTaskCompleteInStore(userId, taskId, state) {
   var filePath = './data-store/user-store/' + SESSION_STORE + '/project-store-dir/' + CURRENT_PROJECT_ID + '/' + taskId + '.txt';
   var taskInfo = fs.readFileSync(filePath).toString().split("\n\n");
-  fs.writeFileSync(filePath, state + '\n\n' + taskInfo[1]);
+  fs.writeFileSync(filePath, state + '\n\n' + taskInfo[1] + '\n\n' + taskInfo[2]);
 }
 
 function deleteProjectTaskFromStore(userId, taskId) {
@@ -178,9 +176,9 @@ function loadProjectTasks(projectId) {
 
   for (var i = 0; i < projectTaskList.length; i++) {
     var data = decodeURIComponent(fs.readFileSync('./data-store/user-store/' + SESSION_STORE + '/project-store-dir/' + projectId + '/' + projectTaskList[i] + '.txt').toString()).split('\n\n');
-    PROJECT_TASK_LIST.push(projectTaskList[i] + ":" + encodeURIComponent(data[1]));
+    PROJECT_TASK_LIST.push(projectTaskList[i] + ":" + data[1] + ":" + encodeURIComponent(data[2]));
     let date = new Date(parseInt(projectTaskList[i].substr(5)));
-    $('#project-task-list-cont ul').append(getTaskTemplate(projectTaskList[i], data[1], date));
+    $('#project-task-list-cont ul').append(getTaskTemplate(projectTaskList[i], data[2], date));
     if (data[0] === null || data[0] === undefined || data[0] === "false") {
       $('#' + projectTaskList[i]).children('img').fadeOut(300);
       $('#' + projectTaskList[i] + ' .task-text').css('opacity', '1');
@@ -192,6 +190,18 @@ function loadProjectTasks(projectId) {
     }
   }
   attachProjectTaskOptionBtnListener();
+}
+
+function addProjectTaskTimeLimit(taskId, endTime) {
+  var filePath = './data-store/user-store/' + SESSION_STORE + '/project-store-dir/' + CURRENT_PROJECT_ID + '/' + taskId + '.txt';
+  var taskInfo = fs.readFileSync(filePath).toString().split("\n\n");
+  fs.writeFileSync(filePath, taskInfo[0] + '\n\n' + endTime + '\n\n' + taskInfo[2]);
+  for (var i = 0; i < PROJECT_TASK_LIST.length; i++) {
+    if (PROJECT_TASK_LIST[i].split(":")[0] === taskId) {
+      var info = PROJECT_TASK_LIST[i].split(":");
+      PROJECT_TASK_LIST[i] = info[0] + ":" + endTime + info[2];
+    }
+  }
 }
 
 function openProjectNav() {
