@@ -109,14 +109,6 @@ function addMainTaskTimeLimit(taskId, endTime) {
   }
 }
 
-/* Show the task input box when plus button on the header is clicked. */
-$(function () {
-  $('#add-task-btn').click(function () {
-    $('#task-add-input-box').slideDown(250);
-    $('#task-text-input').focus();
-  });
-});
-
 /* To hide the error message below the input form when a key is pressed again. */
 $(function () {
   $('#task-text-input').on('keydown', function (e) {

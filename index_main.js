@@ -61,6 +61,18 @@ $('#startup-message-btn').click(function () {
   $('#tab-cont').fadeIn(500);
 });
 
+/* Show the task input box when plus button on the header is clicked. */
+function attachAddTaskBtnListener() {
+  $(function () {
+    $('#add-task-btn').unbind('click');
+
+    $('#add-task-btn').click(function () {
+      $('#task-add-input-box').slideDown(250);
+      $('#task-text-input').focus();
+    });
+  });  
+}
+
 /* For centering the absolute positioned elements. */
 function centerAbsElementVertically(elementId) {
 
@@ -172,30 +184,34 @@ function validateLoginForm() {
   return (errorFlag > 0) ? false : true;
 }
 
-$(function () {
-  $('#switch-list-cont').click(function () {
-    if (LIST_CONT_STATE === 1) {
-      $('#switch-list-cont').css('opacity', 0.5);
-      openProjectNav();
-      $('#task-list-cont').slideUp(300);
-      $('#project-task-list-cont').fadeIn(300);
-      $('#menu-icon').fadeOut(100);
-      LIST_CONT_STATE = 2;
-    } else {
-      CURRENT_PROJECT_ID = "";
-      $('#project-tag-display').fadeOut(300);
-      $('#delete-project-btn').fadeOut(300);
-      $('#switch-list-cont').css('opacity', 1);
-      loadTaskList(SESSION_STORE);
-      $('#project-task-list-cont').slideUp(300);
-      $('#project-task-list-cont ul').html("");
-      $('#task-list-cont').fadeIn(300);
-      LIST_CONT_STATE = 1;
-      closeProjectNav();
-      $('#menu-icon').fadeOut(300);
-    }
-  });
-});
+function attachTaskListSwitchListener() {
+  $(function () {
+    $('#switch-list-cont').unbind('click');
+
+    $('#switch-list-cont').click(function () {
+      if (LIST_CONT_STATE === 1) {
+        $('#switch-list-cont').css('opacity', 0.5);
+        openProjectNav();
+        $('#task-list-cont').slideUp(300);
+        $('#project-task-list-cont').fadeIn(300);
+        $('#menu-icon').fadeOut(100);
+        LIST_CONT_STATE = 2;
+      } else {
+        CURRENT_PROJECT_ID = "";
+        $('#project-tag-display').fadeOut(300);
+        $('#delete-project-btn').fadeOut(300);
+        $('#switch-list-cont').css('opacity', 1);
+        loadTaskList(SESSION_STORE);
+        $('#project-task-list-cont').slideUp(300);
+        $('#project-task-list-cont ul').html("");
+        $('#task-list-cont').fadeIn(300);
+        LIST_CONT_STATE = 1;
+        closeProjectNav();
+        $('#menu-icon').fadeOut(300);
+      }
+    });
+  });    
+}
 
 var menu_icon_state = 0;
 $(function () {

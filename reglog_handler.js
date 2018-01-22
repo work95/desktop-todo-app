@@ -192,7 +192,10 @@ $(function () {
         $('header').addClass('red darken-1');
         $('header').removeClass('purple darken-1');
         closeRegLogPane();  
-        addLastLoginSession(SESSION_STORE);      
+        addLastLoginSession(SESSION_STORE);
+        attachTaskListSwitchListener();
+        attachWindowKeyListener();
+        attachAddTaskBtnListener();     
       }
     });
   });
@@ -234,9 +237,13 @@ $(function () {
         $('#user-name-display h2').addClass('float-header-name');
         $('header').addClass('red darken-1');
         $('header').removeClass('purple darken-1');
+
         loadTaskList(SESSION_STORE);
-        addLastLoginSession(SESSION_STORE);
         loadProjects();
+        addLastLoginSession(SESSION_STORE);
+        attachTaskListSwitchListener();        
+        attachWindowKeyListener();
+        attachAddTaskBtnListener();
       }
     });
   });
@@ -280,6 +287,8 @@ $(function () {
 $(function () {
   $('#sign-out-btn').click(function () {
     logOut();
+    $(window).unbind('keydown');  
+    $('#add-task-btn').unbind('click');  
   });
 });
 
@@ -299,6 +308,7 @@ function logOut() {
   $('#project-tag-display').fadeOut(300);
   $('#delete-project-btn').fadeOut(300);
   $('#switch-list-cont').css('opacity', 0.5);
+  $('#switch-list-cont').unbind('click');
   $('#project-task-list-cont').slideUp(300);
   $('#project-task-list-cont ul').html("");
   $('#menu-icon').fadeOut(300);
@@ -360,6 +370,9 @@ function loadLastLoginSession() {
   $('#user-name-display h2').addClass('float-header-name');
   $('#switch-list-cont').css('opacity', 1);
   loadTaskList(SESSION_STORE);
+  attachTaskListSwitchListener();
+  attachWindowKeyListener();
+  attachAddTaskBtnListener();
 }
 
 function splitName(name) {
