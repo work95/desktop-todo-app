@@ -83,10 +83,12 @@ function loadTaskList(userId) {
       $('#task-list-cont ul').append(getTaskTemplate(taskList[i], data[2], date));
       if (data[0] === null || data[0] === undefined || data[0] === "false") {
         $('#' + taskList[i]).children('img').fadeOut(300);
+        $('#' + taskList[i]).attr('status', 'false');
         $('#' + taskList[i] + ' .task-text').css('opacity', '1');
         $('#' + taskList[i] + ' div div ' + '.complete-task-btn').attr('state', 'false').html('<span><i class="fa fa-check"></i></span>Complete task');;
       } else {
         $('#' + taskList[i]).children('img').fadeIn(300);
+        $('#' + taskList[i]).attr('status', 'true');
         $('#' + taskList[i] + ' .task-text').css('opacity', '0.5');
         $('#' + taskList[i] + ' div div ' + '.complete-task-btn').attr('state', 'true').html('<span><i class="fa fa-check"></i></span>Undone task');
       }
@@ -132,45 +134,3 @@ $(function () {
   });
 });
 
-function attachTaskOptionBtnListener() {
-  $(function () {
-    /* Unbind the previous ones. */
-    $('.delete-task-btn').unbind('click');
-    $('.complete-task-btn').unbind('click');
-    $('.add-time-limit-btn').unbind('click');
-
-    /* Attach new ones. */
-    $('.delete-task-btn').click(function () {
-      // Remove error message if add task modal is open.
-      $('#task-input-error-box').text("").slideUp(300).css('color', 'black');
-      var nodeId = $(this).parent().parent().parent().attr('id');
-      $('#' + nodeId).remove();
-      deleteTaskFromStore(SESSION_STORE, nodeId);
-    });
-
-    $('.complete-task-btn').click(function () {
-      $('#task-input-error-box').text("").slideUp(300).css('color', 'black');
-      var nodeId = $(this).parent().parent().parent().attr('id');
-      if ($(this).attr('state') === "false") {
-        $(this).attr('state', 'true');
-        $('#' + nodeId + ' .task-text').css('opacity', '0.5');
-        $(this).html('<span><i class="fa fa-check"></i></span>Undone task');
-        $(this).parent().parent().parent().children('img').fadeIn(300);
-        updateTaskCompleteInStore(SESSION_STORE, nodeId, true);
-      } else {
-        $(this).attr('state', 'false');
-        $('#' + nodeId + ' .task-text').css('opacity', '1');
-        $(this).html('<span><i class="fa fa-check"></i></span>Complete task');
-        updateTaskCompleteInStore(SESSION_STORE, nodeId, false);
-        $(this).parent().parent().parent().children('img').fadeOut(300);
-      }
-    });
-
-    $('.add-time-limit-btn').click(function () {
-      var nodeId = $(this).parent().parent().parent().attr('id');
-      $('#close-task-time-limit-modal').attr('task-id', nodeId);
-      $('#close-task-time-limit-modal').attr('task-type', 'main');
-    });
-
-  });
-}

@@ -26,7 +26,7 @@ function addProjectTask(taskText, taskId) {
 
   var date = new Date(parseInt(taskId.substr(5)));
   $('#project-task-list-cont ul').append(getTaskTemplate(taskId, taskText, date));
-  attachProjectTaskOptionBtnListener();
+  attachTaskOptionBtnListener();
 
   var taskInfo = taskId + ":0:" + encodeURIComponent(taskText);
   PROJECT_TASK_LIST.push(taskInfo);
@@ -86,48 +86,6 @@ function attachProjectLinkListener() {
   });
 }
 
-function attachProjectTaskOptionBtnListener() {
-  $(function () {
-    $('.delete-task-btn').unbind('click');
-    $('.complete-task-btn').unbind('click');
-    $('.add-time-limit-btn').unbind('click');
-
-    // Attach again.
-    $('.delete-task-btn').click(function () {
-      // Remove error message if add task modal is open.
-      $('#task-input-error-box').text("").slideUp(300).css('color', 'black');
-      var nodeId = $(this).parent().parent().parent().attr('id');
-      $('#' + nodeId).remove();
-      deleteProjectTaskFromStore(SESSION_STORE, nodeId);
-    });
-
-    $('.complete-task-btn').click(function () {
-      $('#task-input-error-box').text("").slideUp(300).css('color', 'black');
-      var nodeId = $(this).parent().parent().parent().attr('id');
-      if ($(this).attr('state') === "false") {
-        $(this).attr('state', 'true');
-        $('#' + nodeId + ' .task-text').css('opacity', '0.5');
-        $(this).html('<span><i class="fa fa-check"></i></span>Undone task');
-        $(this).parent().parent().parent().children('img').fadeIn(300);
-        updateProjectTaskCompleteInStore(SESSION_STORE, nodeId, true);
-      } else {
-        $(this).attr('state', 'false');
-        $('#' + nodeId + ' .task-text').css('opacity', '1');
-        $(this).html('<span><i class="fa fa-check"></i></span>Complete task');
-        updateProjectTaskCompleteInStore(SESSION_STORE, nodeId, false);
-        $(this).parent().parent().parent().children('img').fadeOut(300);
-      }
-    });
-
-    $('.add-time-limit-btn').click(function () {
-      var nodeId = $(this).parent().parent().parent().attr('id');
-      $('#close-task-time-limit-modal').attr('task-id', nodeId);
-      $('#close-task-time-limit-modal').attr('task-type', 'project');
-    });
-
-  });
-}
-
 function updateProjectTaskCompleteInStore(userId, taskId, state) {
   var filePath = './data-store/user-store/' + SESSION_STORE + '/project-store-dir/' + CURRENT_PROJECT_ID + '/' + taskId + '.txt';
   var taskInfo = fs.readFileSync(filePath).toString().split("\n\n");
@@ -181,15 +139,17 @@ function loadProjectTasks(projectId) {
     $('#project-task-list-cont ul').append(getTaskTemplate(projectTaskList[i], data[2], date));
     if (data[0] === null || data[0] === undefined || data[0] === "false") {
       $('#' + projectTaskList[i]).children('img').fadeOut(300);
+      $('#' + projectTaskList[i]).attr('status', 'false');
       $('#' + projectTaskList[i] + ' .task-text').css('opacity', '1');
       $('#' + projectTaskList[i] + ' div div ' + '.complete-task-btn').attr('state', 'false').html('<span><i class="fa fa-check"></i></span>Complete task');;
     } else {
       $('#' + projectTaskList[i]).children('img').fadeIn(300);
+      $('#' + projectTaskList[i]).attr('status', 'true');
       $('#' + projectTaskList[i] + ' .task-text').css('opacity', '0.5');
       $('#' + projectTaskList[i] + ' div div ' + '.complete-task-btn').attr('state', 'true').html('<span><i class="fa fa-check"></i></span>Undone task');
     }
   }
-  attachProjectTaskOptionBtnListener();
+  attachTaskOptionBtnListener();  
 }
 
 function addProjectTaskTimeLimit(taskId, endTime) {

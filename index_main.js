@@ -128,8 +128,8 @@ function validateRegistrationForm() {
     errorFlag++;
     $('#reg-pass-error').text('Password longer than 32 characters').slideDown(200);
   } else if (!((password.search(/\//) < 0) || (password.search(/\\/) < 0)
-  || (password.search(/~/) < 0) || (password.search(/|/) < 0)
-  || (password.search(/[ ]/) < 0))) {
+    || (password.search(/~/) < 0) || (password.search(/|/) < 0)
+    || (password.search(/[ ]/) < 0))) {
     errorFlag++;
     $('#reg-pass-error').text('Password contains one of the invalid character [\\, /, ~,  ,|]').slideDown(200);
   } else {
@@ -162,7 +162,7 @@ function validateLoginForm() {
     $('#log-pass-error').text('Password longer than 32 characters').slideDown(200);
   } else if (!((password.search(/\//) < 0) || (password.search(/\\/) < 0)
     || (password.search(/~/) < 0) || (password.search(/|/) < 0)
-    || (password.search(/[ ]/) < 0))) { 
+    || (password.search(/[ ]/) < 0))) {
     errorFlag++;
     $('#log-pass-error').text('Password contains one of the invalid character [\\, /, ~,  ,|]').slideDown(200);
   } else {
@@ -225,7 +225,7 @@ function showMainTaskListCont() {
 }
 
 function getTaskTemplate(taskId, taskText, date, endTime) {
-  var taskNode = '<li class="list-group-item" id="' + taskId + '">' +
+  var taskNode = '<li class="list-group-item" id="' + taskId + '" status="false">' +
     '<img id="task-complete-icon" src="./assets/images/checked.svg" />' +
     '<span class="task-text">' + taskText + '<br />' +
     '<span class="task-start-date">' + date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + '</span>' +
@@ -247,11 +247,11 @@ function getTaskTemplate(taskId, taskText, date, endTime) {
     '<a class="add-time-limit-btn" task-id="" class="dropdown-item" data-toggle="modal" data-target="#task-time-limit-cont" href="#">' +
     '<span><i class="fa fa-clock"></i></span>Add Time Limit' +
     '</a>'
-    '</div>' +
+  '</div>' +
     '</div>' +
     '</li>';
 
-    return taskNode;
+  return taskNode;
 }
 
 $(function () {
@@ -262,7 +262,7 @@ $(function () {
     var hour = $('#task-time-input-hour').val().trim();
     var minute = $('#task-time-input-minute').val().trim();
     var second = $('#task-time-input-second').val().trim();
-    
+
     var endTime = new Date(year + '/' + month + '/' + day + ' ' + hour + ':' + minute + ':' + second).getTime();
     var taskId = $(this).attr('task-id').toString();
     if ($('#remove-time-check input').prop('checked')) {
@@ -283,28 +283,95 @@ function setTaskTimeLeft() {
   if (LIST_CONT_STATE === 1) {
     for (var i = 0; i < TASK_LIST.length; i++) {
       var info = TASK_LIST[i].split(":");
-      var timeString = "";
+      var node = $('#' + info[0] + ' span .task-end-time');
       if (info[1] === "0" || info[1] === "") {
-        timeString = "";
+        node.text("");
       } else {
         var dateStart = new Date();
         var dateEnd = new Date(parseInt(info[1]));
-        timeString = dateStart < dateEnd ? (countdown(new Date(), new Date(parseInt(info[1]))).toString()) : "Time over";
+        var timeString = dateStart < dateEnd ? (countdown(new Date(), new Date(parseInt(info[1]))).toString()) : "Time over";
+        if ($('#' + info[0]).attr('status') === 'true') {
+          node.text("");
+          $('#' + info[0]).css('border', '2px solid rgba(61, 199, 52, 0.43)');
+        } else {
+          if (timeString === "Time over") {
+            node.text(timeString);
+            $('#' + info[0]).css('border', '2px solid rgba(255, 0, 0, 0.43)');
+          } else {
+            node.text(timeString);
+            $('#' + info[0]).css('border', 'none');
+          }
+        }
       }
-      $('#' + info[0] + ' span .task-end-time').text(timeString);
     }
   } else {
     for (var i = 0; i < PROJECT_TASK_LIST.length; i++) {
       var info = PROJECT_TASK_LIST[i].split(":");
-      var timeString = "";
+      var node = $('#' + info[0] + ' span .task-end-time');
       if (info[1] === "0" || info[1] === "") {
-        timeString = "";
+        node.text("");
       } else {
         var dateStart = new Date();
         var dateEnd = new Date(parseInt(info[1]));
-        timeString = dateStart < dateEnd ? (countdown(new Date(), new Date(parseInt(info[1]))).toString()) : "Time over";
+        var timeString = dateStart < dateEnd ? (countdown(new Date(), new Date(parseInt(info[1]))).toString()) : "Time over";
+        if ($('#' + info[0]).attr('status') === 'true') {
+          node.text("");
+          $('#' + info[0]).css('border', '2px solid rgba(61, 199, 52, 0.43)');
+        } else {
+          if (timeString === "Time over") {
+            node.text(timeString);
+            $('#' + info[0]).css('border', '2px solid rgba(255, 0, 0, 0.43)');
+          } else {
+            node.text(timeString);
+            $('#' + info[0]).css('border', 'none');
+          }
+        }
       }
-      $('#' + info[0] + ' span .task-end-time').text(timeString);
     }
   }
+}
+
+/* Attaching click listeners on various options of the task. */
+function attachTaskOptionBtnListener() {
+  $(function () {
+    /* Unbind the previous ones. */
+    $('.delete-task-btn').unbind('click');
+    $('.complete-task-btn').unbind('click');
+    $('.add-time-limit-btn').unbind('click');
+
+    /* Attach new ones. */
+    $('.delete-task-btn').click(function () {
+      // Remove error message if add task modal is open.
+      $('#task-input-error-box').text("").slideUp(300).css('color', 'black');
+      var nodeId = $(this).parent().parent().parent().attr('id');
+      $('#' + nodeId).remove();
+      LIST_CONT_STATE === 1 ? deleteTaskFromStore(SESSION_STORE, nodeId) : deleteProjectTaskFromStore(SESSION_STORE, nodeId);
+    });
+
+    $('.complete-task-btn').click(function () {
+      $('#task-input-error-box').text("").slideUp(300).css('color', 'black');
+      var nodeId = $(this).parent().parent().parent().attr('id');
+      if ($(this).attr('state') === "false") {
+        $(this).attr('state', 'true');
+        $('#' + nodeId).attr('status', 'true');
+        $('#' + nodeId + ' .task-text').css('opacity', '0.5');
+        $(this).html('<span><i class="fa fa-check"></i></span>Undone task');
+        $(this).parent().parent().parent().children('img').fadeIn(300);
+        LIST_CONT_STATE === 1 ? updateTaskCompleteInStore(SESSION_STORE, nodeId, true) : updateProjectTaskCompleteInStore(SESSION_STORE, nodeId, true);
+      } else {
+        $(this).attr('state', 'false');
+        $('#' + nodeId).attr('status', 'false');
+        $('#' + nodeId + ' .task-text').css('opacity', '1');
+        $(this).html('<span><i class="fa fa-check"></i></span>Complete task');
+        $(this).parent().parent().parent().children('img').fadeOut(300);
+        LIST_CONT_STATE === 1 ? updateTaskCompleteInStore(SESSION_STORE, nodeId, false) : updateProjectTaskCompleteInStore(SESSION_STORE, nodeId, false);
+      }
+    });
+
+    $('.add-time-limit-btn').click(function () {
+      var nodeId = $(this).parent().parent().parent().attr('id');
+      $('#close-task-time-limit-modal').attr('task-id', nodeId);
+      $('#close-task-time-limit-modal').attr('task-type', LIST_CONT_STATE === 1 ? 'main' : 'project');
+    });
+  });
 }
