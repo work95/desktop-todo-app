@@ -225,8 +225,10 @@ $(function () {
         // Store the session of the logged in user.
         SESSION_STORE = result.userId;
         $('#user-name-display h2').text(splitName(result.name));
+        $('#task-list-cont').slideDown(300);
         $('#reglog-btn').fadeOut(10);
         $('#sign-out-btn').fadeIn(300);
+        $('#switch-list-cont').css('opacity', 1);
         closeRegLogPane();
         $('#add-task-btn').removeClass('disabled');
         $('#user-name-display h2').addClass('float-header-name');
@@ -282,17 +284,28 @@ $(function () {
 });
 
 function logOut() {
-  SESSION_STORE = "";
+  clearRegLogInputForms();
+  removeLastLoginSession();
+  closeProjectNav();
+  
   $('#user-name-display h2').text("Todo");
   $('#sign-out-btn').fadeOut(10);
   $('#reglog-btn').fadeIn(300);
   $('#task-list-cont ul').html("");
   $('#add-task-btn').addClass('disabled');
-  clearRegLogInputForms();
-  removeLastLoginSession();
   $('#user-name-display h2').removeClass('float-header-name');
   $('header').addClass('purple darken-1');
-  $('header').removeClass('red darken-1');
+  $('header').removeClass('red darken-1');  
+  $('#project-tag-display').fadeOut(300);
+  $('#delete-project-btn').fadeOut(300);
+  $('#switch-list-cont').css('opacity', 0.5);
+  $('#project-task-list-cont').slideUp(300);
+  $('#project-task-list-cont ul').html("");
+  $('#menu-icon').fadeOut(300);
+
+  SESSION_STORE = "";  
+  CURRENT_PROJECT_ID = "";
+  LIST_CONT_STATE = 1;
 }
 
 /* Reset the input forms of the reglog page along with their dropping error message boxes. */
@@ -345,6 +358,7 @@ function loadLastLoginSession() {
   $('header').addClass('red darken-1');
   $('header').removeClass('purple darken-1');
   $('#user-name-display h2').addClass('float-header-name');
+  $('#switch-list-cont').css('opacity', 1);
   loadTaskList(SESSION_STORE);
 }
 
