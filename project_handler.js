@@ -231,17 +231,17 @@ function loadProjects() {
 
 $(function () {
   $('#delete-project-btn').click(function () {
-    deleteProjectFromStore();
+    deleteProjectFromStore(CURRENT_PROJECT_ID);
     $(this).fadeOut(300);
-    $('#project-task-list-cont ul').html("");
     openProjectNav();
+    $('#project-task-list-cont ul').html("");
     $('#project-tag-display').text("").fadeOut(300);
     $('#menu-icon').fadeOut(100);
   });
 });
 
-function deleteProjectFromStore() {
-  var filePath = './data-store/user-store/' + SESSION_STORE + '/project-store-dir/' + CURRENT_PROJECT_ID;
+function deleteProjectFromStore(projectId) {
+  var filePath = './data-store/user-store/' + SESSION_STORE + '/project-store-dir/' + projectId;
   var objectList = fs.readdirSync(filePath);
   for (var i = 0; i < objectList.length; i++) {
     fs.unlinkSync(filePath + '/' + objectList[i]);
@@ -253,17 +253,21 @@ function deleteProjectFromStore() {
   projectList.pop();
 
   for (var i = 0; i < projectList.length; i++) {
-    if (projectList[i] === CURRENT_PROJECT_ID) {
+    if (projectList[i] === projectId) {
       projectList.splice(i, 1);
-    } else {
-      finalList += projectList[i] + '\n';
+      break;
     }
   }
+
+  for (var i = 0; i < projectList.length; i++) {
+    finalList += projectList[i] + '\n';    
+  }
+  
   fs.writeFileSync('./data-store/user-store/' + SESSION_STORE + '/project-store-dir/project_list.txt', finalList);
 
   // Remove project from the loaded list.
   for (var i = 0; i < PROJECT_LIST.length; i++) {
-    if (PROJECT_LIST[i].split(":")[0] === CURRENT_PROJECT_ID) {
+    if (PROJECT_LIST[i].split(":")[0] === projectId) {
       PROJECT_LIST.splice(i, 1);
       break;
     }
