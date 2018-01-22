@@ -8,7 +8,7 @@ function addTask(taskText, taskId) {
   }
 
   var date = new Date(parseInt(taskId.substr(5)));
-  $('#task-list-cont ul').append('<li class="list-group-item" id="' + taskId + '"><img id="task-complete-icon" src="./assets/images/checked.svg" /><span class="task-text">' + taskText + '<br /><span class="task-start-date">' + date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + '</span></span><div class="task-options-cont"><div class="dot-set dropdown" id="dropdownMenu2" data-toggle="dropdown" aria-expanded="false"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div><div id="task-options-menu" class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2"><a class="complete-task-btn" state="false" class="dropdown-item" href="#"><span><i class="fa fa-check"></i></span>Complete Task</a><a class="delete-task-btn" class="dropdown-item" href="#"><span><i class="fa fa-trash-alt"></i></span>Delete Task</a></div></div></li>');
+  $('#task-list-cont ul').append(getTaskTemplate(taskId, taskText, date));
   attachTaskOptionBtnListener();
 
   var taskInfo = taskId + ":" + encodeURIComponent(taskText);
@@ -80,7 +80,7 @@ function loadTaskList(userId) {
       var data = decodeURIComponent(fs.readFileSync('./data-store/user-store/' + userId + '/task-store-dir/' + taskList[i] + '.txt').toString()).split("\n\n");
       TASK_LIST.push(taskList[i] + ":" + encodeURIComponent(data[1]));
       var date = new Date(parseInt(taskList[i].substr(5)));
-      $('#task-list-cont ul').append('<li class="list-group-item" id="' + taskList[i] + '"><img id="task-complete-icon" src="./assets/images/checked.svg" /><span class="task-text">' + data[1] + '<br /><span class="task-start-date">' + date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + '</span></span><div class="task-options-cont"><div class="dot-set dropdown" id="dropdownMenu2" data-toggle="dropdown" aria-expanded="false"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div><div id="task-options-menu" class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2"><a class="complete-task-btn" state="false" class="dropdown-item" href="#"><span><i class="fa fa-check"></i></span>Task Complete</a><a class="delete-task-btn" class="dropdown-item" href="#"><span><i class="fa fa-trash-alt"></i></span>Delete Task</a></div></div></li>');
+      $('#task-list-cont ul').append(getTaskTemplate(taskList[i], data[1], date));
       if (data[0] === null || data[0] === undefined || data[0] === "false") {
         $('#' + taskList[i]).children('img').fadeOut(300);
         $('#' + taskList[i] + ' .task-text').css('opacity', '1');

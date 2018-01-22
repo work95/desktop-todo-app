@@ -1,5 +1,5 @@
 function addProject(projectName, projectId) {
-  for (var i = 0;i < PROJECT_LIST.length; i++) {
+  for (var i = 0; i < PROJECT_LIST.length; i++) {
     if (projectName.toLowerCase() === PROJECT_LIST[i].split(":")[1].toLowerCase()) {
       $('#project-input-error-box').text('Project already added!').slideDown(300);
       return;
@@ -25,7 +25,7 @@ function addProjectTask(taskText, taskId) {
   }
 
   var date = new Date(parseInt(taskId.substr(5)));
-  $('#project-task-list-cont ul').append('<li class="list-group-item" id="' + taskId + '"><img id="task-complete-icon" src="./assets/images/checked.svg" /><span class="task-text">' + taskText + '<br /><span class="task-start-date">' + date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + '</span></span><div class="task-options-cont"><div class="dot-set dropdown" id="dropdownMenu2" data-toggle="dropdown" aria-expanded="false"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div><div id="task-options-menu" class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2"><a class="complete-task-btn" state="false" class="dropdown-item" href="#"><span><i class="fa fa-check"></i></span>Complete Task</a><a class="delete-task-btn" class="dropdown-item" href="#"><span><i class="fa fa-trash-alt"></i></span>Delete Task</a></div></div></li>');
+  $('#project-task-list-cont ul').append(getTaskTemplate(taskId, taskText, date));
   attachProjectTaskOptionBtnListener();
 
   var taskInfo = taskId + ":" + encodeURIComponent(taskText);
@@ -180,7 +180,7 @@ function loadProjectTasks(projectId) {
     var data = decodeURIComponent(fs.readFileSync('./data-store/user-store/' + SESSION_STORE + '/project-store-dir/' + projectId + '/' + projectTaskList[i] + '.txt').toString()).split('\n\n');
     PROJECT_TASK_LIST.push(projectTaskList[i] + ":" + encodeURIComponent(data[1]));
     let date = new Date(parseInt(projectTaskList[i].substr(5)));
-    $('#project-task-list-cont ul').append('<li class="list-group-item" id="' + projectTaskList[i] + '"><img id="task-complete-icon" src="./assets/images/checked.svg" /><span class="task-text">' + data[1] + '<br /><span class="task-start-date">' + date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + '</span></span><div class="task-options-cont"><div class="dot-set dropdown" id="dropdownMenu2" data-toggle="dropdown" aria-expanded="false"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div><div id="task-options-menu" class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2"><a class="complete-task-btn" state="false" class="dropdown-item" href="#"><span><i class="fa fa-check"></i></span>Task Complete</a><a class="delete-task-btn" class="dropdown-item" href="#"><span><i class="fa fa-trash-alt"></i></span>Delete Task</a></div></div></li>');
+    $('#project-task-list-cont ul').append(getTaskTemplate(projectTaskList[i], data[1], date));
     if (data[0] === null || data[0] === undefined || data[0] === "false") {
       $('#' + projectTaskList[i]).children('img').fadeOut(300);
       $('#' + projectTaskList[i] + ' .task-text').css('opacity', '1');
@@ -290,7 +290,7 @@ function deleteProjectFromStore() {
     }
   }
   fs.writeFileSync('./data-store/user-store/' + SESSION_STORE + '/project-store-dir/project_list.txt', finalList);
-  
+
   // Remove project from the loaded list.
   for (var i = 0; i < PROJECT_LIST.length; i++) {
     if (PROJECT_LIST[i].split(":")[0] === CURRENT_PROJECT_ID) {
