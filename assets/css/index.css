@@ -321,11 +321,13 @@ span#menu-icon {
   box-shadow: -2px 4px 10px 1px rgba(0, 0, 0, 0.1);
 }
 
-.task-start-date {
+.task-start-date, .task-end-time {
   font-size: 14px;
   color: rgba(0, 0, 0, 0.5);
   font-family: 'Quicksand-Bold';
 }
+
+.task-end-time { margin-left: 10px; }
 
 #startup-message-screen {
   overflow: auto;
@@ -481,4 +483,34 @@ span#menu-icon {
   background: rgb(175, 26, 16);
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+}
+
+#task-time-limit-cont div {
+  max-width: 400px;
+}
+
+#task-time-limit-cont div .modal-header {
+  font-family: 'Ubuntu-Regular';
+  font-weight: 600;
+  font-size: 20px;
+}
+
+#task-time-limit-cont div .modal-body label {
+  font-size: 17px;
+  font-family: 'Quicksand-Bold';
+  position: relative;
+  top: 8px;
+}
+
+#task-time-limit-cont div .modal-body input {
+  width: 50px;
+  display: inline-block;
+  margin: auto 10px;
+  text-align: center;
+  font-family: 'Ubuntu-Regular';
+}
+
+#task-time-input-day-part input {
+  width: 50px !important; 
+  text-align: left !important; 
 }

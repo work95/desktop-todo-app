@@ -27,6 +27,49 @@
     </div>
   </div>
 
+  <div class="modal fade" id="task-time-limit-cont" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <h5 class="modal-title">What time does the task end?</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <div id="task-time-input-day-part">
+            <label for="task-time-input-day">On which day?</label>
+            <input type="text" id="task-time-input-day" placeholder="DD" />
+            <input type="text" id="task-time-input-month" placeholder="MM" />
+            <input type="text" id="task-time-input-year" placeholder="YYYY" />
+          </div>
+
+          <div id="task-time-input-time-part">
+            <label for="task-time-input-time-cont">At what time?</label>
+            <span id="task-time-input-time-cont">
+              <input type="text" id="task-time-input-hour" />:
+              <input type="text" id="task-time-input-minute" />:
+              <input type="text" id="task-time-input-second" />
+            </span>
+          </div>
+
+          <div id="remove-time-check">
+            <input type="checkbox" id="remove-time-input" />
+            <label for="remove-time-input">Remove time limit</label>
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-unique" task-id="" task-type="" data-dismiss="modal" id="close-task-time-limit-modal">Close</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
   <div id="reglog-page">
     <span id="reglog-close-btn">
       <i class="fa fa-arrow-circle-left"></i>
