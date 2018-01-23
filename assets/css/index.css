@@ -273,6 +273,8 @@ span#menu-icon {
   cursor: not-allowed;
 }
 
+.disable-fade { opacity: 0.5; }
+
 .input-box {
   width: 75%;
   margin: auto;
@@ -495,15 +497,22 @@ span#menu-icon {
   font-size: 20px;
 }
 
-#task-time-limit-cont div .modal-body label {
-  font-size: 17px;
-  font-family: 'Quicksand-Bold';
+#task-time-input-day-part label, #task-time-input-time-part label {
+  font-size: 15px;
+  font-family: 'Ubuntu-Light';
   position: relative;
   top: 8px;
+  margin-right: 10px;
 }
 
-#task-time-limit-cont div .modal-body input {
+#task-time-input-day-part label {
+  margin-right: 7px;
+}
+
+#task-time-input-day-part input, #task-time-input-time-part input {
   width: 50px;
+  font-size: 15px;
+  text-align: center;
   display: inline-block;
   margin: auto 10px;
   text-align: center;
@@ -511,6 +520,18 @@ span#menu-icon {
 }
 
 #task-time-input-day-part input {
-  width: 50px !important; 
-  text-align: left !important; 
+  width: 50px;
 }
+
+#remove-time-check {
+  margin-top: 25px;
+}
+
+#remove-time-check input {
+  position: relative;
+  top: 2px;
+  margin-right: 2px;
+}
+
+#remove-time-check label { font-size: 15px; }
+
