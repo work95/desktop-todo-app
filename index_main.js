@@ -292,10 +292,12 @@ $(function () {
 $(function () {
   setInterval(function () {
     setTaskTimeLeft();
-  }, 1000);
+  }, 2000);
 });
 
 function setTaskTimeLeft() {
+  var units = countdown.YEARS | countdown.MONTHS | countdown.DAYS | countdown.HOURS | countdown.MINUTES | countdown.SECONDS;
+
   if (LIST_CONT_STATE === 1) {
     for (var i = 0; i < TASK_LIST.length; i++) {
       var info = TASK_LIST[i].split(":");
@@ -310,7 +312,7 @@ function setTaskTimeLeft() {
       } else {
         var dateStart = new Date();
         var dateEnd = new Date(parseInt(info[1]));
-        var timeString = dateStart < dateEnd ? (countdown(new Date(), new Date(parseInt(info[1]))).toString()) : "Time over";
+        var timeString = dateStart < dateEnd ? (countdown(new Date(), new Date(parseInt(info[1])), units).toString()) : "Time over";
         if ($('#' + info[0]).attr('status') === 'true') {
           node.text("");
           $('#' + info[0]).css('border', '2px solid rgba(61, 199, 52, 0.43)');
@@ -339,7 +341,7 @@ function setTaskTimeLeft() {
       } else {
         var dateStart = new Date();
         var dateEnd = new Date(parseInt(info[1]));
-        var timeString = dateStart < dateEnd ? (countdown(new Date(), new Date(parseInt(info[1]))).toString()) : "Time over";
+        var timeString = dateStart < dateEnd ? (countdown(new Date(), new Date(parseInt(info[1])), units).toString()) : "Time over";
         if ($('#' + info[0]).attr('status') === 'true') {
           node.text("");
           $('#' + info[0]).css('border', '2px solid rgba(61, 199, 52, 0.43)');
