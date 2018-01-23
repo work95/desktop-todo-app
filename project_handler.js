@@ -159,7 +159,7 @@ function addProjectTaskTimeLimit(taskId, endTime) {
   for (var i = 0; i < PROJECT_TASK_LIST.length; i++) {
     if (PROJECT_TASK_LIST[i].split(":")[0] === taskId) {
       var info = PROJECT_TASK_LIST[i].split(":");
-      PROJECT_TASK_LIST[i] = info[0] + ":" + endTime + info[2];
+      PROJECT_TASK_LIST[i] = info[0] + ":" + endTime + ":" + info[2];
     }
   }
 }

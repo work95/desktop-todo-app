@@ -104,7 +104,7 @@ function addMainTaskTimeLimit(taskId, endTime) {
   for (var i = 0; i < TASK_LIST.length; i++) {
     if (TASK_LIST[i].split(":")[0] === taskId) {
       var info = TASK_LIST[i].split(":");
-      TASK_LIST[i] = info[0] + ":" + endTime + info[2];
+      TASK_LIST[i] = info[0] + ":" + endTime + ":" + info[2];
     }
   }
 }
