@@ -37,22 +37,32 @@ function attachWindowKeyListener() {
       // If the last key code forms 1723 (that means ctrl + enter is pressed together).
       if (keyCombination.match(/^[1][7](13)+$/) !== null) {
         if (OPEN_DROPDOWN_BOX === 1) {
+          if ($('#task-text-input').val() === "") {
+            $('#task-input-error-box').html("No Character").slideDown(300);
+            return;
+          }
           if (LIST_CONT_STATE === 1) {
             addTask($('#task-text-input').val(), 'task_' + new Date().getTime());
           } else {
             addProjectTask($('#task-text-input').val(), 'task_' + new Date().getTime());
           }
         } else if (OPEN_DROPDOWN_BOX === 2) {
+          if ($('#project-text-input').val() === "") {
+            $('#project-input-error-box').html("No Character").slideDown(300);
+            return;
+          }
           addProject($('#project-text-input').val(), 'project_' + new Date().getTime());
         }
       }
   
       if (keyCombination === "1780") {
         OPEN_DROPDOWN_BOX = 2;
+        $('#task-add-input-box').slideUp(10);
         $('#project-add-input-box').slideDown(250);
         $('#project-text-input').focus();
       } else if (keyCombination === "1784") {
         OPEN_DROPDOWN_BOX = 1;
+        $('#project-add-input-box').slideUp(10);
         $('#task-add-input-box').slideDown(250);
         $('#task-text-input').focus();
       }
