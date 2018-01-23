@@ -302,6 +302,11 @@ function setTaskTimeLeft() {
       var node = $('#' + info[0] + ' span .task-end-time');
       if (info[1] === "0" || info[1] === "") {
         node.text("");
+        if ($('#' + info[0]).attr('status') === 'true') {
+          $('#' + info[0]).css('border', '2px solid rgba(61, 199, 52, 0.43)');
+        } else {
+          $('#' + info[0]).css('border', 'none');
+        }
       } else {
         var dateStart = new Date();
         var dateEnd = new Date(parseInt(info[1]));
@@ -326,6 +331,11 @@ function setTaskTimeLeft() {
       var node = $('#' + info[0] + ' span .task-end-time');
       if (info[1] === "0" || info[1] === "") {
         node.text("");
+        if ($('#' + info[0]).attr('status') === 'true') {
+          $('#' + info[0]).css('border', '2px solid rgba(61, 199, 52, 0.43)');
+        } else {
+          $('#' + info[0]).css('border', 'none');
+        }
       } else {
         var dateStart = new Date();
         var dateEnd = new Date(parseInt(info[1]));
