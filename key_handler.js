@@ -58,11 +58,13 @@ function attachWindowKeyListener() {
       if (keyCombination === "1780") {
         OPEN_DROPDOWN_BOX = 2;
         $('#task-add-input-box').slideUp(10);
+        closeProjectNav();
         $('#project-add-input-box').slideDown(250);
         $('#project-text-input').focus();
       } else if (keyCombination === "1784") {
         OPEN_DROPDOWN_BOX = 1;
         $('#project-add-input-box').slideUp(10);
+        closeProjectNav();
         $('#task-add-input-box').slideDown(250);
         $('#task-text-input').focus();
       }
