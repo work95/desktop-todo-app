@@ -148,6 +148,20 @@
     </div>
   </div>
 
+  <div id="notes-pane">
+    <div id="notes-add-input-box" class="input-box">
+      <input type="text" id="notes-text-input" placeholder="Add a note" autofocus />
+      <div id="notes-input-error-box"></div>
+    </div>
+
+      <div id="notes-pane-close-btn">
+      <i class="fa fa-times"></i>
+    </div>
+    <div id="notes-list-cont" class="list-cont">
+      <ul class="list-group"></ul>
+    </div>
+  </div>
+
   <header class="purple darken-1">
     <div>
       <span id="user-name-display">
@@ -155,6 +169,10 @@
       </span>
 
       <span id="header-icon-cont">
+        <span id="notes-icon">
+          <i class="fa fa-sticky-note"></i>
+        </span>
+
         <span id="switch-list-cont">
           <span>Projects</span>
         </span>
@@ -227,6 +245,7 @@
   <script src="./key_handler.js"></script>
   <script src="./task_handler.js"></script>
   <script src="./project_handler.js"></script>
+  <script src="./notes_handler.js"></script>
   <script src="./assets/js/popper.min.js"></script>
   <script src="./assets/js/bootstrap.min.js"></script>
   <script src="./assets/js/mdb.min.js"></script>

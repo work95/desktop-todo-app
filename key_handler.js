@@ -21,8 +21,10 @@ function attachWindowKeyListener() {
         keyCombination = "";
         $('#task-add-input-box').slideUp(250).children('input').val("");
         $('#project-add-input-box').slideUp(250).children('input').val("");
+        $('#notes-add-input-box').slideUp(250).children('input').val("");        
         $('#task-input-error-box').html("");
         $('#project-input-error-box').html("");
+        $('#notes-input-error-box').html("");        
       }
   
       if (e.keyCode === KeyCodes.CONTROL) {
@@ -38,7 +40,7 @@ function attachWindowKeyListener() {
       if (keyCombination.match(/^[1][7](13)+$/) !== null) {
         if (OPEN_DROPDOWN_BOX === 1) {
           if ($('#task-text-input').val() === "") {
-            $('#task-input-error-box').html("No Character").slideDown(300);
+            $('#task-input-error-box').html("Nothing entered").slideDown(300);
             return;
           }
           if (LIST_CONT_STATE === 1) {
@@ -48,10 +50,17 @@ function attachWindowKeyListener() {
           }
         } else if (OPEN_DROPDOWN_BOX === 2) {
           if ($('#project-text-input').val() === "") {
-            $('#project-input-error-box').html("No Character").slideDown(300);
+            $('#project-input-error-box').html("Nothing entered").slideDown(300);
             return;
           }
           addProject($('#project-text-input').val(), 'project_' + new Date().getTime());
+        } else if (OPEN_DROPDOWN_BOX === 3) {
+          if ($('#notes-text-input').val() === "") {
+            $('#notes-input-error-box').html("Nothing entered").slideDown(300);
+            return;
+          } else {
+            addNote($('#notes-text-input').val(), 'note_' + new Date().getTime());
+          }
         }
       }
   
@@ -67,6 +76,11 @@ function attachWindowKeyListener() {
         closeProjectNav();
         $('#task-add-input-box').slideDown(250);
         $('#task-text-input').focus();
+      } else if (keyCombination === "1778") {
+        $('#project-add-input-box').slideUp(10);
+        $('#task-add-input-box').slideUp(10);
+        $('#notes-add-input-box').slideDown(250);
+        OPEN_DROPDOWN_BOX = 3;
       }
     });
   });  

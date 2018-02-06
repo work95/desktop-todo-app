@@ -125,6 +125,12 @@ header div h2 {
   font-size: 25px;
 }
 
+#notes-icon i {
+  color: white;
+  margin-right: -10px;
+  vertical-align: -1px;
+}
+
 #switch-list-cont span {
   color: white;
   cursor: pointer;
@@ -239,8 +245,6 @@ span#menu-icon {
   transition: 0.3s;
 }
 
-
-
 /* When you mouse over the navigation links, change their color */
 .sidenav a:hover,
 .offcanvas a:focus {
@@ -275,7 +279,9 @@ span#menu-icon {
   cursor: not-allowed;
 }
 
-.disable-fade { opacity: 0.5; }
+.disable-fade {
+  opacity: 0.5;
+}
 
 .input-box {
   width: 75%;
@@ -295,7 +301,7 @@ span#menu-icon {
   background-color: rgba(255, 255, 255, 1);
   color: black;
   border-radius: 2px;
-  border: 1px solid rgba(255, 156, 156, 0.24)
+  border: 1px solid rgba(255, 156, 156, 0.24);
 }
 
 .input-box input::placeholder {
@@ -325,13 +331,16 @@ span#menu-icon {
   box-shadow: -2px 4px 10px 1px rgba(0, 0, 0, 0.1);
 }
 
-.task-start-date, .task-end-time {
+.task-start-date,
+.task-end-time, .note-date {
   font-size: 14px;
   color: rgba(0, 0, 0, 0.5);
-  font-family: 'Quicksand-Bold';
+  font-family: "Quicksand-Bold";
 }
 
-.task-end-time { margin-left: 10px; }
+.task-end-time {
+  margin-left: 10px;
+}
 
 #startup-message-screen {
   overflow: auto;
@@ -415,7 +424,7 @@ span#menu-icon {
   }
 }
 
-.task-options-cont {
+.task-options-cont, .note-options-cont {
   position: relative;
   top: 3px;
   float: right;
@@ -494,14 +503,15 @@ span#menu-icon {
 }
 
 #task-time-limit-cont div .modal-header {
-  font-family: 'Ubuntu-Regular';
+  font-family: "Ubuntu-Regular";
   font-weight: 600;
   font-size: 20px;
 }
 
-#task-time-input-day-part label, #task-time-input-time-part label {
+#task-time-input-day-part label,
+#task-time-input-time-part label {
   font-size: 15px;
-  font-family: 'Ubuntu-Light';
+  font-family: "Ubuntu-Light";
   position: relative;
   top: 8px;
   margin-right: 10px;
@@ -511,14 +521,15 @@ span#menu-icon {
   margin-right: 7px;
 }
 
-#task-time-input-day-part input, #task-time-input-time-part input {
+#task-time-input-day-part input,
+#task-time-input-time-part input {
   width: 50px;
   font-size: 15px;
   text-align: center;
   display: inline-block;
   margin: auto 10px;
   text-align: center;
-  font-family: 'Ubuntu-Regular';
+  font-family: "Ubuntu-Regular";
 }
 
 #task-time-input-day-part input {
@@ -535,5 +546,36 @@ span#menu-icon {
   margin-right: 2px;
 }
 
-#remove-time-check label { font-size: 15px; }
+#remove-time-check label {
+  font-size: 15px;
+}
 
+#notes-pane {
+  top: 0px;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+  background-color: rgba(255, 255, 255, 1);
+  overflow: auto;
+
+  display: none;
+}
+
+#notes-pane-close-btn {
+  float: right;
+  margin: 20px 25px;
+}
+
+#notes-pane-close-btn i {
+  color: cyan;
+  font-size: 40px;
+}
+
+#notes-add-input-box {
+  margin-top: 0px;
+}
+
+.delete-note-btn {
+  float: right;
+}
