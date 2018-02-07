@@ -80,6 +80,7 @@ function attachWindowKeyListener() {
         $('#project-add-input-box').slideUp(10);
         $('#task-add-input-box').slideUp(10);
         $('#notes-add-input-box').slideDown(250);
+        $('#notes-text-input').focus();
         OPEN_DROPDOWN_BOX = 3;
       }
     });
