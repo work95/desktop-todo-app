@@ -43,9 +43,10 @@ function portProfile(userId) {
         async.each(projectTaskList, function (projectTaskId, callback) {
           var taskInfo = commonModules.fs.readFileSync('./data-store/user-store/' + userId + '/project-store-dir/' + project + '/' + projectTaskId + '.txt').toString().split('\n\n');
           projects[project]['projectTasks'].push({
-            "taskId": taskInfo[0],
-            "taskText": taskInfo[2],
-            "taskTimeLeft": taskInfo[1]
+            "taskId": projectTaskId,
+            "taskComplete": taskInfo[0],
+            "taskTimeLeft": taskInfo[1],
+            "taskText": taskInfo[2]
           });
           callback(null);
         }, function(err) {
@@ -60,7 +61,11 @@ function portProfile(userId) {
         if (err) {
           console.log('[Error]: ' + err);          
         } else {
-          callback(null, projects);
+          let projectList = [];
+          for (let a in projects) {
+            projectList.push(projects[a]);
+          }
+          callback(null, projectList);
         }
       });
     },
@@ -73,9 +78,10 @@ function portProfile(userId) {
       async.each(taskList, function (taskId, callback) {
         var taskInfo = commonModules.fs.readFileSync('./data-store/user-store/' + userId + '/task-store-dir/' + taskId + '.txt').toString().split('\n\n');
         tasks.push({
-          "taskId": taskInfo[0],
-          "taskText": taskInfo[2],
-          "tasktimeLeft": taskInfo[1]
+          "taskId": taskId,
+          "taskComplete": taskInfo[0],
+          "taskTimeLeft": taskInfo[1],
+          "taskText": taskInfo[2]
         });
         callback(null);
       }, function (err) {
@@ -114,7 +120,8 @@ function portProfile(userId) {
       callback(null, {
         "userId": userId,
         "userName": userInfo[0],
-        "userEmail": userInfo[1]
+        "userEmail": userInfo[1],
+        "userPass": userInfo[2]
       });
     }
 
@@ -123,7 +130,7 @@ function portProfile(userId) {
       console.log('[Error]: ' + err);
     } else {
       console.log('Profile ported sucessfully');
-
+      
     }
   });
 }
