@@ -130,7 +130,7 @@ function portProfile(userId) {
       console.log('[Error]: ' + err);
     } else {
       console.log('Profile ported sucessfully');
-      
+
     }
   });
 }
@@ -138,11 +138,104 @@ function portProfile(userId) {
 /* 
  * Fetch the user's info from a tasking server.
  */
-function getProfile(userId) {}
+function getProfile(userEmail, callback) {
+  var options = {
+    uri: 'http://localhost:7910/getUser',
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json'
+    },
+    body: JSON.stringify({
+      "userEmail": userEmail
+    })
+  };
+
+  request(options, function (err, response, body) {
+    if (err) {
+      console.log(err);
+    } else {
+      callback(body);
+    }
+  });
+}
 
 
 /* 
  * Used for parsing JSON based details and create 
  * the desired directory structure.
  */
-function setupProfile(userInfo) {}
+function setupProfile(userInfo) {
+  if (userInfo === null || userInfo === undefined) {
+    return;
+  }
+
+  let userId = userInfo['userInfo']['userId'];
+
+  if (!commonModules.fs.existsSync('./data-store')) {
+    commonModules.fs.mkdirSync('./data-store/');
+  }
+  
+  commonModules.fs.writeFileSync('./data-store/last_login.txt', userId);
+  
+  if (!commonModules.fs.existsSync('./data-store/user-store/')) {
+    commonModules.fs.mkdirSync('./data-store/user-store/');
+  }
+
+  commonModules.fs.appendFileSync('./data-store/user-store/user_list.txt', userInfo['userInfo']['userEmail'] + ":" + userId + ',');
+  
+  if (!commonModules.fs.existsSync('./data-store/user-store/' + userId)) {
+    commonModules.fs.mkdirSync('./data-store/user-store/' + userId);
+  }
+
+  commonModules.fs.writeFileSync('./data-store/user-store/' + userId + '/user_info.txt', userInfo['userInfo']['userName'] + '\n' + userInfo['userInfo']['userEmail'] + '\n' + userInfo['userInfo']['userPass']);
+  
+  if (!commonModules.fs.existsSync('./data-store/user-store/' + userId + '/task-store-dir/')) {
+    commonModules.fs.mkdirSync('./data-store/user-store/' + userId + '/task-store-dir/');
+  }
+
+  if (!commonModules.fs.existsSync('./data-store/user-store/' + userId + '/project-store-dir/')) {
+    commonModules.fs.mkdirSync('./data-store/user-store/' + userId + '/project-store-dir/');
+  }
+
+  if (!commonModules.fs.existsSync('./data-store/user-store/' + userId + '/note-store-dir/')) {
+    commonModules.fs.mkdirSync('./data-store/user-store/' + userId + '/note-store-dir/');
+  }
+
+
+  if (userInfo['projects'].length > 0) {
+    commonModules.fs.writeFileSync('./data-store/user-store/' + userId + '/project-store-dir/' + '/project_list.txt', "");
+    for (let i = 0; i < userInfo['projects'].length; i++) {
+      let projectId = userInfo['projects'][i]['projectId'];
+      if (!commonModules.fs.existsSync('./data-store/user-store/' + userId + '/project-store-dir/' + projectId)) {
+        commonModules.fs.mkdirSync('./data-store/user-store/' + userId + '/project-store-dir/' + projectId);
+      }
+      commonModules.fs.writeFileSync('./data-store/user-store/' + userId + '/project-store-dir/' + projectId + '/project_info.txt', projectId + ":" + userInfo['projects'][i]['projectName']);
+      commonModules.fs.appendFileSync('./data-store/user-store/' + userId + '/project-store-dir/' + '/project_list.txt', projectId + '\n');
+      
+      commonModules.fs.writeFileSync('./data-store/user-store/' + userId + '/project-store-dir/' + projectId + '/project_task_list.txt', "");
+      for (let j = 0; j < userInfo['projects'][i]['projectTasks'].length; j++) {
+        var taskInfo = userInfo['projects'][i]['projectTasks'][j];
+        commonModules.fs.appendFileSync('./data-store/user-store/' + userId + '/project-store-dir/' + projectId + '/project_task_list.txt', taskInfo['taskId'] + '\n');
+        commonModules.fs.writeFileSync('./data-store/user-store/' + userId + '/project-store-dir/' + projectId + '/' + taskInfo['taskId'] + '.txt', taskInfo['taskComplete'] + '\n\n' + taskInfo['taskTimeLeft'] + '\n\n' + taskInfo['taskText']);
+      }
+    }
+  }
+
+  if (userInfo['simpleTasks'].length > 0) {
+    commonModules.fs.writeFileSync('./data-store/user-store/' + userId + '/task-store-dir/task_list.txt', "");
+    for (let i = 0; i < userInfo['simpleTasks'].length; i++) {
+      let taskInfo = userInfo['simpleTasks'][i];
+      commonModules.fs.appendFileSync('./data-store/user-store/' + userId + '/task-store-dir/task_list.txt', taskInfo['taskId'] + '\n');
+      commonModules.fs.writeFileSync('./data-store/user-store/' + userId + '/task-store-dir/' + taskInfo['taskId'] + '.txt', taskInfo['taskComplete'] + '\n\n' + taskInfo['taskTimeLeft'] + '\n\n' + taskInfo['taskText']);
+    }
+  }
+
+  if (userInfo['notes'].length > 0) {
+    commonModules.fs.writeFileSync('./data-store/user-store/' + userId + '/note-store-dir/note_list.txt', "");
+    for (let i = 0; i < userInfo['notes'].length; i++) {
+      let noteInfo = userInfo['notes'][i];
+      commonModules.fs.appendFileSync('./data-store/user-store/' + userId + '/note-store-dir/note_list.txt', noteInfo['noteId'] + '\n');
+      commonModules.fs.writeFileSync('./data-store/user-store/' + userId + '/note-store-dir/' + noteInfo['noteId'] + '.txt', noteInfo['noteText']);
+    }
+  }
+}
