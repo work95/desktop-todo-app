@@ -1,10 +1,9 @@
-var async = require('async');
-var bodyParser = require('body-parser');
-var express = require('express');
-var http = require('http');
-var fs = require('fs');
-
-var commonModules = require('./common_modules');
+const async = require('async');
+const bodyParser = require('body-parser');
+const express = require('express');
+const http = require('http');
+const fs = require('fs');
+const logger = require('tracer').colorConsole();
 
 var app = express();
 
@@ -14,11 +13,19 @@ app.use(bodyParser.json());
 
 var server = http.createServer(app);
 server.listen(7910, function () {
+
   'use strict';
-  commonModules.logger.info("SERVER RUNNING AT 7910");
+  logger.info("SERVER RUNNING AT 7910");
 });
 
-/* Complete profile (all tasks (project, normal), notes). */
+app.get('/poll', function (req, res) {
+  res.send({
+    "activity": "up",
+    "systemType": "station"
+  });
+});
+
+/* Store the profile in the server's directory. */
 app.post('/portProfile', function (req, res) {
   var profile = req.body;
   fs.writeFileSync('./user_' + profile['userInfo']['userId'] + '.txt', JSON.stringify(profile));
@@ -27,10 +34,12 @@ app.post('/portProfile', function (req, res) {
   res.sendStatus(200);
 });
 
+/* Fetch the profile's information. */
 app.post('/getProfile', function (req, res) {
   res.send(fs.readFileSync('./user_' + req.body.userId + '.txt').toString());
 });
 
+/* Check if the user exists or not. */
 app.post('/getUser', function (req, res) {
   var userList = fs.readFileSync('./user_list.txt').toString().split('\n');
   userList.pop();
