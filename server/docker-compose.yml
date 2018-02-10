@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+
+  tasking-server:
+    build: .
+    container_name: "tasking-server"
+    ports:
+      - 7910:7910
+    restart: always
