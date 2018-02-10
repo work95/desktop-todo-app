@@ -1,6 +1,7 @@
 const electron = require('electron');
 const currentWindow = electron.remote.getCurrentWindow();
 
+const async = require('async');
 const fs = require('fs');
 const logger = require('tracer').colorConsole();
 const countdown = require('countdown');
@@ -9,6 +10,11 @@ const logging = require('./logging');
 
 window.$ = window.jQuery = require('./assets/js/jquery-3.2.1.min.js');
 
+/* Server to connect to for storage. */
+var TASKING_SERVER_URL = "";
+
+/* Whether there is a connection to any server. */
+var CONNECTION_STATE = false;
 
 /* What user ID to assign to next arriving user */
 var NEXT_USER_ID = 0;
@@ -70,7 +76,7 @@ function attachAddTaskBtnListener() {
       $('#task-add-input-box').slideDown(250);
       $('#task-text-input').focus();
     });
-  });  
+  });
 }
 
 /* For centering the absolute positioned elements. */
@@ -210,7 +216,7 @@ function attachTaskListSwitchListener() {
         $('#menu-icon').fadeOut(300);
       }
     });
-  });    
+  });
 }
 
 var menu_icon_state = 0;
@@ -263,7 +269,7 @@ function getTaskTemplate(taskId, taskText, date, endTime) {
     '<a class="add-time-limit-btn" task-id="" class="dropdown-item" data-toggle="modal" data-target="#task-time-limit-cont" href="#">' +
     '<span><i class="fa fa-clock"></i></span>Add Time Limit' +
     '</a>'
-    '</div>' +
+  '</div>' +
     '</div>' +
     '</li>';
 
@@ -402,4 +408,65 @@ function attachTaskOptionBtnListener() {
       $('#close-task-time-limit-modal').attr('task-type', LIST_CONT_STATE === 1 ? 'main' : 'project');
     });
   });
+}
+
+function connectToServer() {
+  $('#connection-tracker-cont').fadeIn(100);
+
+  let servers = [
+    'http://127.0.0.1:7910/poll', 'http://192.168.1.2:7910/poll', 'http://192.168.1.3:7910/poll', 'http://192.168.1.4:7910/poll', 
+    'http://192.168.1.5:7910/poll', 'http://192.168.1.6:7910/poll', 'http://192.168.1.7:7910/poll', 'http://192.168.1.8:7910/poll'
+  ];
+  let availableServer = [];
+
+  async.every(servers, function (serverUrl, callback) {
+    sendRequest(serverUrl, function (response) {
+      if (response.status) {
+        availableServer.push(response.url);
+      }
+
+      callback(null, true);
+    });
+  }, function (err, response) {
+    $('#connection-tracker-cont div').fadeOut(10);
+    $('#connection-tracking-icon').fadeIn(0);
+    if (availableServer.length > 0) {
+      CONNECTION_STATE = true;
+      TASKING_SERVER_URL = availableServer[0];
+      $('#connection-tracking-icon i').addClass('fa fa-check');
+      $('#connection-tracking-message').text('Connected.')
+    } else {
+      $('#connection-tracking-icon i').addClass('fa fa-times');
+      $('#connection-tracking-message').text('No active server available.');
+    }
+    setTimeout(function () {
+      $('#connection-tracker-cont').fadeOut(500);
+    }, 4000);
+  });
+}
+
+function sendRequest(url, callback) {
+  let xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4) {
+      if (xhr.status === 200) {
+        let response = JSON.parse(xhr.responseText);
+        if (response.activity === 'up') {
+          callback({
+            "status": true,
+            "url": url,
+            "systemType": response.systemType
+          });
+        } else {
+          callback({ "status": false });
+        }
+      } else {
+        callback({ "status": false });
+      }
+    }
+  };
+
+  xhr.open('GET', url, true);
+  xhr.timeout = 5000;
+  xhr.send(null);
 }
