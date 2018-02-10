@@ -44,7 +44,7 @@ body {
 }
 
 #connection-tracker-cont {
-  background-color: rgb(150, 9, 94);
+  background-color: rgb(251, 95, 36);
   color: white;
   padding: 10px 30px;
   position: fixed;
@@ -79,8 +79,26 @@ body {
   display: none;
 }
 
-#manual-connection-add::placeholder {
+#manual-connection-add-btn {
+  margin-left: 0px;
+  background-color: #942c04;
+}
+
+#manual-connection-add input {
   color: white;
+}
+
+#manual-connection-add input::placeholder {
+  font-family: 'Ubuntu-Regular';
+  color: rgba(255, 255, 255, 0.5);
+}
+
+#manual-connection-error-badge {
+  color: white;
+  padding: 10px;
+  font-size: 15px;
+  
+  display: none;
 }
 
 .loader {
@@ -118,7 +136,7 @@ body {
 }
 
 .loader:after {
-  background: rgb(150, 9, 94);
+  background: rgb(251, 95, 36);
   width: 90%;
   height: 90%;
   border-radius: 50%;
