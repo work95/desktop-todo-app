@@ -434,15 +434,15 @@ function connectToServer() {
       CONNECTION_STATE = true;
       TASKING_SERVER_URL = availableServer[0];
       $('#connection-tracking-icon i').addClass('fa fa-check');
-      $('#connection-tracking-message').text('Connected.')
+      $('#connection-tracking-message').text('Connected.');
+      setTimeout(function () {
+        $('#connection-tracker-cont').fadeOut(500);
+      }, 4000);
     } else {
       $('#connection-tracking-icon i').addClass('fa fa-times');
       $('#connection-tracking-message').text('No active server available.');
       $('#manual-connection-add').slideDown(300);
     }
-    // setTimeout(function () {
-    //   $('#connection-tracker-cont').fadeOut(500);
-    // }, 4000);
   });
 }
 
@@ -471,3 +471,40 @@ function sendRequest(url, callback) {
   xhr.timeout = 5000;
   xhr.send(null);
 }
+
+$(function () {
+  $('#manual-connection-add-btn').click(function () {
+    let url = $('#manual-connection-add input').val().trim();
+    // Add URL regex check.
+    if (url.length < 1) {
+      $('#manual-connection-error-badge').fadeIn(100);
+      $('#manual-connection-error-badge').text("Nothing entered");
+      return;
+    }
+    $('#manual-connection-error-badge').fadeOut(100);
+    $('#connection-tracker-cont div').fadeIn(10);
+    $('#manual-connection-add').slideUp(300);
+    $('#connection-tracking-icon i').removeClass('fa fa-times');
+    $('#connection-tracking-icon').fadeOut(0);
+    $('#connection-tracking-message').text('Checking for the server at: ' + url);
+    sendRequest(url, function (response) {
+      if (response.status) {
+        CONNECTION_STATE = true;
+        TASKING_SERVER_URL = url;
+        $('#connection-tracking-icon i').addClass('fa fa-check');
+        $('#connection-tracking-icon').fadeIn(10);
+        $('#connection-tracking-message').text('Connected.');
+        $('#manual-connection-add').slideUp(100);
+        setTimeout(function () {
+          $('#connection-tracker-cont').fadeOut(500);
+        }, 4000);
+      } else {
+        $('#connection-tracking-icon i').addClass('fa fa-times');
+        $('#connection-tracking-icon').fadeIn(10);
+        $('#connection-tracking-message').text('Server did not respond');
+        $('#manual-connection-add').slideDown(300);
+      }
+      $('#connection-tracker-cont .loader').fadeOut(10);        
+    });
+  });
+});
