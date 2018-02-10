@@ -74,6 +74,15 @@ body {
   vertical-align: middle;
 }
 
+#manual-connection-add {
+  margin-top: 10px;
+  display: none;
+}
+
+#manual-connection-add::placeholder {
+  color: white;
+}
+
 .loader {
   margin-right: 20px;
   vertical-align: middle;
