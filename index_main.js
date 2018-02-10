@@ -438,10 +438,11 @@ function connectToServer() {
     } else {
       $('#connection-tracking-icon i').addClass('fa fa-times');
       $('#connection-tracking-message').text('No active server available.');
+      $('#manual-connection-add').slideDown(300);
     }
-    setTimeout(function () {
-      $('#connection-tracker-cont').fadeOut(500);
-    }, 4000);
+    // setTimeout(function () {
+    //   $('#connection-tracker-cont').fadeOut(500);
+    // }, 4000);
   });
 }
 
