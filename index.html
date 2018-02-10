@@ -14,6 +14,14 @@
 </head>
 
 <body>
+  <div id="connection-tracker-cont">
+    <div class="loader">Loading...</div>
+    <span id="connection-tracking-icon">
+      <i class=""></i>
+    </span>
+    <span id="connection-tracking-message">Checking for available servers...</span>
+  </div>
+
   <div id="loading-screen">
     <div class="outer">
       <div class="middle">
@@ -41,16 +49,20 @@
         <div class="modal-body">
           <div id="task-time-input-day-part">
             <label for="task-time-input-day">On which day?</label>
-            <input type="text" id="task-time-input-day" placeholder="DD" /><span class="disable-fade">/</span>
-            <input type="text" id="task-time-input-month" placeholder="MM" /><span class="disable-fade">/</span>
+            <input type="text" id="task-time-input-day" placeholder="DD" />
+            <span class="disable-fade">/</span>
+            <input type="text" id="task-time-input-month" placeholder="MM" />
+            <span class="disable-fade">/</span>
             <input type="text" id="task-time-input-year" placeholder="YYYY" />
           </div>
 
           <div id="task-time-input-time-part">
             <label for="task-time-input-time-cont">At what time?</label>
             <span id="task-time-input-time-cont">
-              <input type="text" id="task-time-input-hour" /><span class="disable-fade">:</span>
-              <input type="text" id="task-time-input-minute" /><span class="disable-fade">:</span>
+              <input type="text" id="task-time-input-hour" />
+              <span class="disable-fade">:</span>
+              <input type="text" id="task-time-input-minute" />
+              <span class="disable-fade">:</span>
               <input type="text" id="task-time-input-second" />
             </span>
           </div>
@@ -154,7 +166,7 @@
       <div id="notes-input-error-box"></div>
     </div>
 
-      <div id="notes-pane-close-btn">
+    <div id="notes-pane-close-btn">
       <i class="fa fa-times"></i>
     </div>
     <div id="notes-list-cont" class="list-cont">
@@ -252,6 +264,7 @@
   <script>
     $(window).on('load', function () {
       removeLoadingScreen();
+      connectToServer();
       if (loadLastLoginSession() === null) {
         $('#startup-message-screen').fadeIn(1000);
         return;

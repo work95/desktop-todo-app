@@ -43,6 +43,107 @@ body {
   padding: 0px;
 }
 
+#connection-tracker-cont {
+  background-color: rgb(150, 9, 94);
+  color: white;
+  padding: 10px 30px;
+  position: fixed;
+  bottom: 30px;
+  left: 30px;
+  z-index: 999;
+  font-family: 'Roboto-Regular';
+  border-radius: 2px;
+  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+
+  display: none;
+}
+
+#connection-tracking-icon {
+  margin-right: 20px;
+  display: none; 
+}
+
+#connection-tracking-icon i { 
+  color: white; 
+  font-size: 25px;
+  vertical-align: middle;
+}
+
+#connection-tracking-message {
+  vertical-align: middle;
+}
+
+.loader {
+  margin-right: 20px;
+  vertical-align: middle;
+  display: inline-block;
+  font-size: 10px;
+  text-indent: -9999em;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #ffffff;
+  background: -moz-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+  background: -webkit-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+  background: -o-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+  background: -ms-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+  background: linear-gradient(to right, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+  position: relative;
+  -webkit-animation: load3 0.7s infinite linear;
+  animation: load3 0.7s infinite linear;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+.loader:before {
+  width: 50%;
+  height: 50%;
+  background: #ffffff;
+  border-radius: 100% 0 0 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  content: '';
+}
+
+.loader:after {
+  background: rgb(150, 9, 94);
+  width: 90%;
+  height: 90%;
+  border-radius: 50%;
+  content: '';
+  margin: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+@-webkit-keyframes load3 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes load3 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
 #loading-screen {
   position: absolute;
   vertical-align: middle;
