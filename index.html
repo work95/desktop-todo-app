@@ -16,17 +16,22 @@
 <body>
   <div id="connection-tracker-cont">
 
+    <span id="connection-tracker-cont-close-btn">
+      <i class="fa fa-angle-down"></i>
+    </span>
+
     <div class="loader">Loading...</div>
     <span id="connection-tracking-icon">
       <i class=""></i>
     </span>
 
     <span id="connection-tracking-message">Checking for available servers...</span>
+    <div id="local-storage-message">Using local storage for now</div>
+    <div class="btn" id="try-another-server-link">Want to try another server</div>
 
     <div id="manual-connection-add">
       <input type="text" placeholder="Try another server (Server's URL)" autofocus />
-      <button id="manual-connection-add-btn" class="btn">Try server
-      </button>
+      <button id="manual-connection-add-btn" class="btn">Try server</button>
       <span id="manual-connection-error-badge" class="badge">Nothing added</span>
     </div>
 

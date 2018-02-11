@@ -439,12 +439,30 @@ function connectToServer() {
         $('#connection-tracker-cont').fadeOut(500);
       }, 4000);
     } else {
+      $('#connection-tracker-cont-close-btn').fadeIn(100);
       $('#connection-tracking-icon i').addClass('fa fa-times');
       $('#connection-tracking-message').text('No active server available.');
-      $('#manual-connection-add').slideDown(300);
+      $('#local-storage-message').slideDown(300);
+      $('#try-another-server-link').slideDown(300);
     }
   });
 }
+
+$(function () {
+  $('#connection-tracker-cont-close-btn').click(function () {
+    $('#connection-tracker-cont').fadeOut(100);
+    $('#manual-connection-add input').val("");
+    $('#manual-connection-error-badge').fadeOut(0);
+  });
+});
+
+$(function () {
+  $('#try-another-server-link').click(function () {
+    $('#manual-connection-add').slideDown(300);
+    $(this).fadeOut(100);
+    $('#local-storage-message').fadeOut(100);
+  });
+});
 
 function sendRequest(url, callback) {
   let xhr = new XMLHttpRequest();
@@ -481,8 +499,9 @@ $(function () {
       $('#manual-connection-error-badge').text("Nothing entered");
       return;
     }
+    $('#connection-tracker-cont-close-btn').fadeOut(0);
     $('#manual-connection-error-badge').fadeOut(100);
-    $('#connection-tracker-cont div').fadeIn(10);
+    $('#connection-tracker-cont .loader').fadeIn(10);
     $('#manual-connection-add').slideUp(300);
     $('#connection-tracking-icon i').removeClass('fa fa-times');
     $('#connection-tracking-icon').fadeOut(0);
@@ -499,6 +518,7 @@ $(function () {
           $('#connection-tracker-cont').fadeOut(500);
         }, 4000);
       } else {
+        $('#connection-tracker-cont-close-btn').fadeIn(100);
         $('#connection-tracking-icon i').addClass('fa fa-times');
         $('#connection-tracking-icon').fadeIn(10);
         $('#connection-tracking-message').text('Server did not respond');

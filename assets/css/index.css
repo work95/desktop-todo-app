@@ -43,6 +43,17 @@ body {
   padding: 0px;
 }
 
+#connection-tracker-cont-close-btn {
+  position: absolute;
+  right: 10px;
+  top: 0px;
+  color: white;
+
+  display: none;
+}
+
+/* #connection-tracker-cont-close-btn i { color: black; } */
+
 #connection-tracker-cont {
   background-color: rgb(251, 95, 36);
   color: white;
@@ -99,6 +110,26 @@ body {
   font-size: 15px;
   
   display: none;
+}
+
+#local-storage-message {
+  color: rgba(0, 0, 0, 0.9);
+  font-family: 'Ubuntu-Regular';
+  margin-top: 20px;
+  font-size: 17px;
+}
+
+#local-storage-message, #try-another-server-link {
+  display: none;
+}
+
+#try-another-server-link {
+  padding: 10px;
+  margin-left: 0px;
+  font-size: 14px;
+  text-transform: capitalize;
+  font-family: 'Ubuntu-Regular';
+  background-color: rgba(39, 24, 6, 0.7);
 }
 
 .loader {
