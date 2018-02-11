@@ -112,53 +112,55 @@ function loginUser(email, password, callback) {
       // Get the users from the user list.
       var userList = data.toString().split(',');
       userList.pop();
-      for (var i = 0; i < userList.length; i++)  {
+      if (userList.length > 0) {
+        for (var i = 0; i < userList.length; i++)  {
 
-        // Split the user's email from the ID.
-        var userInfo = userList[i].split(":");
-        if (userInfo[0] === email) {
-          var userId = userInfo[1]
-          // Read the user's information to fetch the password.
-          fs.readFile('./data-store/user-store/' + userInfo[1] + '/user_info.txt', function (err, data) {
-            if (err) {
-              logging.logError('reglog_handler.js (113): ' + err);
-              callback({
-                "status": null
-              });
-            } else {
-              // Compare the passwords.
-              var completeInfo = data.toString().split("\n");
-              if (password === completeInfo[2]) {
-                // On success, return the name and ID of the user.
+          // Split the user's email from the ID.
+          var userInfo = userList[i].split(":");
+          if (userInfo[0] === email) {
+            var userId = userInfo[1]
+            // Read the user's information to fetch the password.
+            fs.readFile('./data-store/user-store/' + userInfo[1] + '/user_info.txt', function (err, data) {
+              if (err) {
+                logging.logError('reglog_handler.js (113): ' + err);
                 callback({
-                  "status": true,
-                  "name": completeInfo[0],
-                  "userId": userId
+                  "status": null
                 });
-
               } else {
-                // On failure, return a false status.
-                callback({
-                  "status": false,
-                  "error": "WRONG_PASSWORD"
-                });
-              }
-            }
-          });
-        } else {
-          // Can't find the user in record.
-          callback({
-            "status": false,
-            "error": "NO_SUCH_USER"
-          });
-        }
-      }
+                // Compare the passwords.
+                var completeInfo = data.toString().split("\n");
+                if (password === completeInfo[2]) {
+                  // On success, return the name and ID of the user.
+                  callback({
+                    "status": true,
+                    "name": completeInfo[0],
+                    "userId": userId
+                  });
 
-      // No users registered in record.
-      callback({
-        "status": false,
-        "error": "NO_SUCH_USER"
-      });
+                } else {
+                  // On failure, return a false status.
+                  callback({
+                    "status": false,
+                    "error": "WRONG_PASSWORD"
+                  });
+                }
+              }
+            });
+          } else {
+            // Can't find the user in record.
+            callback({
+              "status": false,
+              "error": "NO_SUCH_USER"
+            });
+          }
+        }
+      } else {
+        // No users registered in record.
+        callback({
+          "status": false,
+          "error": "NO_SUCH_USER"
+        });
+      }
     }
   });
 }
@@ -241,7 +243,7 @@ $(function () {
         loadTaskList(SESSION_STORE);
         loadProjects();
         addLastLoginSession(SESSION_STORE);
-        attachTaskListSwitchListener();        
+        attachTaskListSwitchListener();
         attachWindowKeyListener();
         attachAddTaskBtnListener();
       }
