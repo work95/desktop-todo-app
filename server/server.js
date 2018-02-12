@@ -82,11 +82,14 @@ app.post('/getUser', function (req, res) {
     }
   }, function (err, result) {
     if (userId === "") {
-      res.sendStatus(404);
+      res.send({
+        "status": false
+      });
     } else {
-      res.send(JSON.stringify({
+      res.send({
+        "status": true,
         "userId": userId
-      }));
+      });
     }
   });
 });
