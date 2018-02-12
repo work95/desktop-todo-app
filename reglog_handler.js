@@ -165,6 +165,49 @@ function loginUser(email, password, callback) {
   });
 }
 
+function searchUser(email, callback) {
+  if (email !== null || email !== undefined || email !== "") {
+    async.parallel({
+      online: function (callback) {
+        if (CONNECTION_STATE) {
+          sendRequest(TASKING_SERVER_URL + '/getUser', function (response) {
+            callback(null, response);
+          });
+        } else {
+          callback(null, {
+            "status": false
+          });
+        }
+      }, 
+
+      offline: function (callback) {
+        var userList = fs.readFileSync('./data-store/user-store/user_list.txt').toString().split(',');
+        for (let i = 0; i < userList.length; i++) {
+          let userInfo = userList[i].split(":");
+          if (userInfo[0] === email) {
+            callback(null, {
+              "status": true,
+              "userId": userInfo[1]
+            });
+          } else {
+            callback(null, {
+              "status": false
+            });
+          }
+        }
+      }
+    }, function (err, response) {
+      if (response['online']['status']) {
+        callback(response['online']);
+      } else if (response['offline']['status']) {
+        callback(response['offline']);
+      } else {
+        callback({ 'status': false });
+      }
+    });
+  }
+}
+
 /* Register button click listener. */
 $(function () {
   $('#register-btn').click(function () {
@@ -291,6 +334,35 @@ $(function () {
     logOut();
     $(window).unbind('keydown');  
     $('#add-task-btn').unbind('click');  
+  });
+});
+
+$(function () {
+  $('#check-email-btn').click(function () {
+    let email = $('#login-email-cont input').val().trim();
+
+    if (email.length < 1) {
+      $('#log-email-error').text("Email not entered").slideDown(200);
+      return;
+    } else if (email.match(/[\d\w]+[@][\d\w]+.(com|co[.]in)/ig) === null) {
+      $('#log-email-error').text('Email pattern incorrect').slideDown(200);
+      return;
+    } else {
+      $('#log-email-error').text("").slideUp(200);
+    }
+
+    searchUser(email, function (response) {
+      if (response.status) {
+        $('#email-tag').text(response.email).fadeIn(100);
+        $('#check-email-btn').fadeOut(100);
+        $('#login-btn').fadeIn(300).css('display', 'inline-block');
+        $('#login-email-cont').fadeOut(100);
+        $('#login-pass-cont').fadeIn(300);
+        $('#login-btn-badge').text('').fadeOut(0);
+      } else {
+        $('#login-btn-badge').text('No user found. Sign up now.').fadeIn(100);
+      }
+    });
   });
 });
 
