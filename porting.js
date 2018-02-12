@@ -18,6 +18,10 @@ var commonModules = require('./common_modules');
 
 /* Create a serialized format of the user's info. */
 function portProfile(userId) {
+  if (!CONNECTION_STATE) {
+    return;
+  }
+
   async.parallel({
 
     // Create a JSON of the projects (details + tasks).
@@ -116,12 +120,18 @@ function portProfile(userId) {
 
     // JSON for user's info.
     userInfo: function (callback) {
-      var userInfo = commonModules.fs.readFileSync('./data-store/user-store/' + userId + '/user_info.txt').toString().split('\n');
+      let userInfo = commonModules.fs.readFileSync('./data-store/user-store/' + userId + '/user_info.txt').toString().split('\n');
       callback(null, {
         "userId": userId,
         "userName": userInfo[0],
         "userEmail": userInfo[1],
         "userPass": userInfo[2]
+      });
+    },
+
+    logTime: function(callback) {
+      callback(null, {
+        "portingTime": new Date().getTime().toString()
       });
     }
 
@@ -130,7 +140,9 @@ function portProfile(userId) {
       console.log('[Error]: ' + err);
     } else {
       console.log('Profile ported sucessfully');
-
+      sendRequest('http://localhost:7910/portProfile', 'POST', JSON.stringify({"profile": result}), function (response) {
+        console.log(response);
+      });
     }
   });
 }
@@ -138,27 +150,11 @@ function portProfile(userId) {
 /* 
  * Fetch the user's info from a tasking server.
  */
-function getProfile(userEmail, callback) {
-  var options = {
-    uri: 'http://localhost:7910/getUser',
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json'
-    },
-    body: JSON.stringify({
-      "userEmail": userEmail
-    })
-  };
-
-  request(options, function (err, response, body) {
-    if (err) {
-      console.log(err);
-    } else {
-      callback(body);
-    }
+function getProfile(url, body, userEmail, callback) {
+  sendRequest('http://localhost:7910/getProfile', 'POST', JSON.stringify({ "userEmail": userEmail }), function (response) {
+    console.log(response);
   });
 }
-
 
 /* 
  * Used for parsing JSON based details and create 
@@ -239,3 +235,27 @@ function setupProfile(userInfo) {
     }
   }
 }
+
+function sendRequest(url, method, body, callback) {
+  let options = {
+    uri: url,
+    method: method,
+    headers: {
+      'content-type': 'application/json'
+    },
+    body: body
+  };
+
+  request(options, function (err, response, body) {
+    if (err) {
+      console.log(err);
+    } else {
+      callback(body);
+    }
+  });
+}
+
+
+module.exports.portProfile = portProfile;
+module.exports.getProfile = getProfile;
+module.exports.setupProfile = setupProfile;
