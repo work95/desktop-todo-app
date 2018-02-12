@@ -85,7 +85,7 @@ function centerAbsElementVertically(elementId) {
   // In case elementId is passed as #<elementId>, take the substring from position 1.
   elementId = (elementId.charAt(0) === "#") ? elementId.substr(1) : elementId;
 
-  var elementHeight = Math.round(($(window).innerHeight() / 2) - ($('#' + elementId).innerHeight() / 2));
+  let elementHeight = Math.round(($(window).innerHeight() / 2) - ($('#' + elementId).innerHeight() / 2));
   if (elementHeight < 0) { return; }
   $('#' + elementId).css('margin-top', (elementHeight.toString() + '.px'));
 }
@@ -103,7 +103,7 @@ function loadSpinner(state, elementId) {
 
   // Check if the elementId is containing '#' as prefix or not.
   elementId = elementId.charAt(0) === "#" ? elementId.substr(1) : elementId;
-  var node = $('#' + elementId);
+  let node = $('#' + elementId);
 
   if (state) {
     // Load the spinner and loading title below it.
@@ -117,10 +117,10 @@ function loadSpinner(state, elementId) {
 }
 
 function validateRegistrationForm() {
-  var name = $('#orangeForm-name').val().trim();
-  var email = $('#orangeForm-email').val().trim();
-  var password = $('#orangeForm-pass').val().trim();
-  var errorFlag = 0;
+  let name = $('#orangeForm-name').val().trim();
+  let email = $('#orangeForm-email').val().trim();
+  let password = $('#orangeForm-pass').val().trim();
+  let errorFlag = 0;
 
   if (name.length < 1) {
     errorFlag++;
@@ -158,9 +158,9 @@ function validateRegistrationForm() {
 }
 
 function validateLoginForm() {
-  var email = $('#defaultForm-email').val().trim();
-  var password = $('#defaultForm-pass').val().trim();
-  var errorFlag = 0;
+  let email = $('#defaultForm-email').val().trim();
+  let password = $('#defaultForm-pass').val().trim();
+  let errorFlag = 0;
 
   if (email.length < 1) {
     errorFlag++;
@@ -247,7 +247,7 @@ function showMainTaskListCont() {
 }
 
 function getTaskTemplate(taskId, taskText, date, endTime) {
-  var taskNode = '<li class="list-group-item" id="' + taskId + '" status="false">' +
+  let taskNode = '<li class="list-group-item" id="' + taskId + '" status="false">' +
     '<img id="task-complete-icon" src="./assets/images/checked.svg" />' +
     '<span class="task-text">' + taskText + '<br />' +
     '<span class="task-start-date">' + date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + '</span>' +
@@ -278,15 +278,15 @@ function getTaskTemplate(taskId, taskText, date, endTime) {
 
 $(function () {
   $('#close-task-time-limit-modal').click(function () {
-    var day = $('#task-time-input-day').val().trim();
-    var month = $('#task-time-input-month').val().trim();
-    var year = $('#task-time-input-year').val().trim();
-    var hour = $('#task-time-input-hour').val().trim();
-    var minute = $('#task-time-input-minute').val().trim();
-    var second = $('#task-time-input-second').val().trim();
+    let day = $('#task-time-input-day').val().trim();
+    let month = $('#task-time-input-month').val().trim();
+    let year = $('#task-time-input-year').val().trim();
+    let hour = $('#task-time-input-hour').val().trim();
+    let minute = $('#task-time-input-minute').val().trim();
+    let second = $('#task-time-input-second').val().trim();
 
-    var endTime = new Date(year + '/' + month + '/' + day + ' ' + hour + ':' + minute + ':' + second).getTime();
-    var taskId = $(this).attr('task-id').toString();
+    let endTime = new Date(year + '/' + month + '/' + day + ' ' + hour + ':' + minute + ':' + second).getTime();
+    let taskId = $(this).attr('task-id').toString();
     if ($('#remove-time-check input').prop('checked')) {
       endTime = 0;
     }
@@ -302,12 +302,12 @@ $(function () {
 });
 
 function setTaskTimeLeft() {
-  var units = countdown.YEARS | countdown.MONTHS | countdown.DAYS | countdown.HOURS | countdown.MINUTES | countdown.SECONDS;
+  let units = countdown.YEARS | countdown.MONTHS | countdown.DAYS | countdown.HOURS | countdown.MINUTES | countdown.SECONDS;
 
   if (LIST_CONT_STATE === 1) {
-    for (var i = 0; i < TASK_LIST.length; i++) {
-      var info = TASK_LIST[i].split(":");
-      var node = $('#' + info[0] + ' span .task-end-time');
+    for (let i = 0; i < TASK_LIST.length; i++) {
+      let info = TASK_LIST[i].split(":");
+      let node = $('#' + info[0] + ' span .task-end-time');
       if (info[1] === "0" || info[1] === "") {
         node.text("");
         if ($('#' + info[0]).attr('status') === 'true') {
@@ -316,9 +316,9 @@ function setTaskTimeLeft() {
           $('#' + info[0]).css('border', 'none');
         }
       } else {
-        var dateStart = new Date();
-        var dateEnd = new Date(parseInt(info[1]));
-        var timeString = dateStart < dateEnd ? (countdown(new Date(), new Date(parseInt(info[1])), units).toString()) : "Time over";
+        let dateStart = new Date();
+        let dateEnd = new Date(parseInt(info[1]));
+        let timeString = dateStart < dateEnd ? (countdown(new Date(), new Date(parseInt(info[1])), units).toString()) : "Time over";
         if ($('#' + info[0]).attr('status') === 'true') {
           node.text("");
           $('#' + info[0]).css('border', '2px solid rgba(61, 199, 52, 0.43)');
@@ -334,9 +334,9 @@ function setTaskTimeLeft() {
       }
     }
   } else {
-    for (var i = 0; i < PROJECT_TASK_LIST.length; i++) {
-      var info = PROJECT_TASK_LIST[i].split(":");
-      var node = $('#' + info[0] + ' span .task-end-time');
+    for (let i = 0; i < PROJECT_TASK_LIST.length; i++) {
+      let info = PROJECT_TASK_LIST[i].split(":");
+      let node = $('#' + info[0] + ' span .task-end-time');
       if (info[1] === "0" || info[1] === "") {
         node.text("");
         if ($('#' + info[0]).attr('status') === 'true') {
@@ -345,9 +345,9 @@ function setTaskTimeLeft() {
           $('#' + info[0]).css('border', 'none');
         }
       } else {
-        var dateStart = new Date();
-        var dateEnd = new Date(parseInt(info[1]));
-        var timeString = dateStart < dateEnd ? (countdown(new Date(), new Date(parseInt(info[1])), units).toString()) : "Time over";
+        let dateStart = new Date();
+        let dateEnd = new Date(parseInt(info[1]));
+        let timeString = dateStart < dateEnd ? (countdown(new Date(), new Date(parseInt(info[1])), units).toString()) : "Time over";
         if ($('#' + info[0]).attr('status') === 'true') {
           node.text("");
           $('#' + info[0]).css('border', '2px solid rgba(61, 199, 52, 0.43)');
@@ -377,14 +377,14 @@ function attachTaskOptionBtnListener() {
     $('.delete-task-btn').click(function () {
       // Remove error message if add task modal is open.
       $('#task-input-error-box').text("").slideUp(300).css('color', 'black');
-      var nodeId = $(this).parent().parent().parent().attr('id');
+      let nodeId = $(this).parent().parent().parent().attr('id');
       $('#' + nodeId).remove();
       LIST_CONT_STATE === 1 ? deleteTaskFromStore(SESSION_STORE, nodeId) : deleteProjectTaskFromStore(SESSION_STORE, nodeId);
     });
 
     $('.complete-task-btn').click(function () {
       $('#task-input-error-box').text("").slideUp(300).css('color', 'black');
-      var nodeId = $(this).parent().parent().parent().attr('id');
+      let nodeId = $(this).parent().parent().parent().attr('id');
       if ($(this).attr('state') === "false") {
         $(this).attr('state', 'true');
         $('#' + nodeId).attr('status', 'true');
@@ -403,7 +403,7 @@ function attachTaskOptionBtnListener() {
     });
 
     $('.add-time-limit-btn').click(function () {
-      var nodeId = $(this).parent().parent().parent().attr('id');
+      let nodeId = $(this).parent().parent().parent().attr('id');
       $('#close-task-time-limit-modal').attr('task-id', nodeId);
       $('#close-task-time-limit-modal').attr('task-type', LIST_CONT_STATE === 1 ? 'main' : 'project');
     });
