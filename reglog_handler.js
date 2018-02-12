@@ -165,7 +165,7 @@ function loginUser(email, password, callback) {
   });
 }
 
-function searchUser(email, callback) {
+function searchUser(email, mainCallback) {
   if (email !== null || email !== undefined || email !== "") {
     async.parallel({
       online: function (callback) {
@@ -182,6 +182,7 @@ function searchUser(email, callback) {
 
       offline: function (callback) {
         var userList = fs.readFileSync('./data-store/user-store/user_list.txt').toString().split(',');
+        userList.pop();
         for (let i = 0; i < userList.length; i++) {
           let userInfo = userList[i].split(":");
           if (userInfo[0] === email) {
@@ -196,13 +197,13 @@ function searchUser(email, callback) {
           }
         }
       }
-    }, function (err, response) {
-      if (response['online']['status']) {
-        callback(response['online']);
-      } else if (response['offline']['status']) {
-        callback(response['offline']);
+    }, function (err, result) {
+      if (result['online']['status']) {
+        mainCallback(result['online']);
+      } else if (result['offline']['status']) {
+        mainCallback(result['offline']);
       } else {
-        callback({ 'status': false });
+        mainCallback({ 'status': false });
       }
     });
   }
@@ -276,7 +277,8 @@ $(function () {
         $('#task-list-cont').slideDown(300);
         $('#reglog-btn').fadeOut(10);
         $('#sign-out-btn').fadeIn(300);
-        $('#switch-list-cont').css('opacity', 1);
+        $('#switch-list-cont').css('opacity', 1);;
+        
         closeRegLogPane();
         $('#add-task-btn').removeClass('disabled');
         $('#user-name-display h2').addClass('float-header-name');
@@ -312,7 +314,13 @@ $(function () {
 /* Close the reglog pane. */
 function closeRegLogPane() {
   document.getElementById("reglog-page").style.width = "0";
+  $('#email-tag').text('');
+  $('#email-tag-cont').fadeOut(100);
+  $('#login-pass-cont').fadeOut(100);
+  $('#login-email-cont').fadeIn(100);
+  $('#check-email-btn').fadeIn(100).css('display', 'inline-block');
   $('#tab-cont').fadeOut(200);
+  $('#login-btn').fadeOut(100);
   clearRegLogInputForms();
 }
 
@@ -353,7 +361,8 @@ $(function () {
 
     searchUser(email, function (response) {
       if (response.status) {
-        $('#email-tag').text(response.email).fadeIn(100);
+        $('#email-tag').text(email);
+        $('#email-tag-cont').fadeIn(100);
         $('#check-email-btn').fadeOut(100);
         $('#login-btn').fadeIn(300).css('display', 'inline-block');
         $('#login-email-cont').fadeOut(100);
@@ -363,6 +372,17 @@ $(function () {
         $('#login-btn-badge').text('No user found. Sign up now.').fadeIn(100);
       }
     });
+  });
+});
+
+$(function () {
+  $('#change-login-email').click(function () {
+    $('#email-tag').text('');
+    $('#email-tag-cont').fadeOut(100);
+    $('#login-pass-cont').fadeOut(100);
+    $('#login-email-cont').fadeIn(100);
+    $('#check-email-btn').fadeIn(100).css('display', 'inline-block');
+    $('#login-btn').fadeOut(100);
   });
 });
 
