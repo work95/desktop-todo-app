@@ -2,52 +2,51 @@ const porting = require('./porting');
 
 /* To add the task in the list. */
 function addTask(taskText, taskId) {
-  for (var i = 0; i < TASK_LIST.length; i++) {
+  for (let i = 0; i < TASK_LIST.length; i++) {
     if (encodeURIComponent(taskText).toLowerCase() === TASK_LIST[i].split(":")[2].toLowerCase()) {
       $('#task-input-error-box').text('Task already added!').slideDown(300);
       return;
     }
   }
 
-  var date = new Date(parseInt(taskId.substr(5)));
+  let date = new Date(parseInt(taskId.substr(5)));
   $('#task-list-cont ul').append(getTaskTemplate(taskId, taskText, date));
   attachTaskOptionBtnListener();
 
-  var taskInfo = taskId + ":0:" + encodeURIComponent(taskText);
+  let taskInfo = taskId + ":0:" + encodeURIComponent(taskText);
   TASK_LIST.push(taskInfo);
   addTaskInStore(SESSION_STORE, taskInfo);
 }
 
 /* Add the task in record. */
 function addTaskInStore(userId, taskInfo) {
-  var filePath = './data-store/user-store/' + userId + '/task-store-dir/';
+  let filePath = './data-store/user-store/' + userId + '/task-store-dir/';
   if (!fs.existsSync(filePath)) {
     fs.mkdirSync(filePath);
   }
-  var info = taskInfo.split(":");
+  let info = taskInfo.split(":");
   fs.appendFileSync(filePath + '/' + 'task_list.txt', info[0] + '\n');
   fs.writeFileSync(filePath + '/' + info[0] + '.txt', 'false\n\n' + '0\n\n' + info[2]);
   porting.portProfile(SESSION_STORE);
 }
 
 function updateTaskCompleteInStore(userId, taskId, state) {
-  var filePath = './data-store/user-store/' + userId + '/task-store-dir/';
-  var taskInfo = fs.readFileSync(filePath + '/' + taskId + '.txt').toString().split("\n\n");
+  let filePath = './data-store/user-store/' + userId + '/task-store-dir/';
+  let taskInfo = fs.readFileSync(filePath + '/' + taskId + '.txt').toString().split("\n\n");
   fs.writeFileSync(filePath + '/' + taskId + '.txt', state + '\n\n' + taskInfo[1] + '\n\n' + taskInfo[2]);
   porting.portProfile(SESSION_STORE);
 }
 
 /* Delete the task from the record. */
 function deleteTaskFromStore(userId, taskId) {
-  console.log(taskId);
-  var filePathA = './data-store/user-store/' + userId + '/task-store-dir';
-  var filePathB = filePathA + '/task_list.txt';
+  let filePathA = './data-store/user-store/' + userId + '/task-store-dir';
+  let filePathB = filePathA + '/task_list.txt';
 
   if (!fs.existsSync(filePathB)) {
     return;
   } else {
-    var finalList = "";
-    var list = fs.readFileSync(filePathB).toString().split("\n");
+    let finalList = "";
+    let list = fs.readFileSync(filePathB).toString().split("\n");
     list.pop();
 
     for (let i = 0; i < list.length; i++) {
@@ -64,7 +63,7 @@ function deleteTaskFromStore(userId, taskId) {
     fs.writeFileSync(filePathB, finalList);
     fs.unlinkSync(filePathA + '/' + taskId + '.txt');
 
-    for (var i = 0; i < TASK_LIST.length; i++) {
+    for (let i = 0; i < TASK_LIST.length; i++) {
       if (TASK_LIST[i].split(":")[0] === taskId) {
         TASK_LIST.splice(i, 1);
         break;
@@ -77,18 +76,18 @@ function deleteTaskFromStore(userId, taskId) {
 /* Load the task list. */
 function loadTaskList(userId) {
   $('#task-list-cont ul').html('');
-  var filePath = './data-store/user-store/' + userId + '/task-store-dir/task_list.txt';
+  let filePath = './data-store/user-store/' + userId + '/task-store-dir/task_list.txt';
   if (!fs.existsSync(filePath)) {
     return;
   } else {
-    var taskList = fs.readFileSync(filePath).toString().split("\n");
+    let taskList = fs.readFileSync(filePath).toString().split("\n");
     taskList.pop();
     TASK_LIST = [];
  
-    for (var i = 0; i < taskList.length; i++) {
-      var data = decodeURIComponent(fs.readFileSync('./data-store/user-store/' + userId + '/task-store-dir/' + taskList[i] + '.txt').toString()).split("\n\n");
+    for (let i = 0; i < taskList.length; i++) {
+      let data = decodeURIComponent(fs.readFileSync('./data-store/user-store/' + userId + '/task-store-dir/' + taskList[i] + '.txt').toString()).split("\n\n");
       TASK_LIST.push(taskList[i] + ":" + data[1] + ":" + encodeURIComponent(data[2]));
-      var date = new Date(parseInt(taskList[i].substr(5)));
+      let date = new Date(parseInt(taskList[i].substr(5)));
       $('#task-list-cont ul').append(getTaskTemplate(taskList[i], data[2], date));
       if (data[0] === null || data[0] === undefined || data[0] === "false") {
         $('#' + taskList[i]).children('img').fadeOut(300);
@@ -107,12 +106,12 @@ function loadTaskList(userId) {
 }
 
 function addMainTaskTimeLimit(taskId, endTime) {
-  var filePath = './data-store/user-store/' + SESSION_STORE + '/task-store-dir/';
-  var taskInfo = fs.readFileSync(filePath + '/' + taskId + '.txt').toString().split("\n\n");
+  let filePath = './data-store/user-store/' + SESSION_STORE + '/task-store-dir/';
+  let taskInfo = fs.readFileSync(filePath + '/' + taskId + '.txt').toString().split("\n\n");
   fs.writeFileSync(filePath + '/' + taskId + '.txt', taskInfo[0] + '\n\n' + endTime + '\n\n' + taskInfo[2]);
-  for (var i = 0; i < TASK_LIST.length; i++) {
+  for (let i = 0; i < TASK_LIST.length; i++) {
     if (TASK_LIST[i].split(":")[0] === taskId) {
-      var info = TASK_LIST[i].split(":");
+      let info = TASK_LIST[i].split(":");
       TASK_LIST[i] = info[0] + ":" + endTime + ":" + info[2];
     }
   }
