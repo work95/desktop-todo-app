@@ -1,3 +1,5 @@
+const porting = require('./porting');
+
 /* To add the task in the list. */
 function addTask(taskText, taskId) {
   for (var i = 0; i < TASK_LIST.length; i++) {
@@ -25,12 +27,14 @@ function addTaskInStore(userId, taskInfo) {
   var info = taskInfo.split(":");
   fs.appendFileSync(filePath + '/' + 'task_list.txt', info[0] + '\n');
   fs.writeFileSync(filePath + '/' + info[0] + '.txt', 'false\n\n' + '0\n\n' + info[2]);
+  porting.portProfile(SESSION_STORE);
 }
 
 function updateTaskCompleteInStore(userId, taskId, state) {
   var filePath = './data-store/user-store/' + userId + '/task-store-dir/';
   var taskInfo = fs.readFileSync(filePath + '/' + taskId + '.txt').toString().split("\n\n");
   fs.writeFileSync(filePath + '/' + taskId + '.txt', state + '\n\n' + taskInfo[1] + '\n\n' + taskInfo[2]);
+  porting.portProfile(SESSION_STORE);
 }
 
 /* Delete the task from the record. */
@@ -63,6 +67,7 @@ function deleteTaskFromStore(userId, taskId) {
       }
     }
   }
+  porting.portProfile(SESSION_STORE);
 }
 
 /* Load the task list. */
@@ -107,6 +112,7 @@ function addMainTaskTimeLimit(taskId, endTime) {
       TASK_LIST[i] = info[0] + ":" + endTime + ":" + info[2];
     }
   }
+  porting.portProfile(SESSION_STORE);
 }
 
 /* To hide the error message below the input form when a key is pressed again. */
