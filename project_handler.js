@@ -1,5 +1,5 @@
 function addProject(projectName, projectId) {
-  for (var i = 0; i < PROJECT_LIST.length; i++) {
+  for (let i = 0; i < PROJECT_LIST.length; i++) {
     if (projectName.toLowerCase() === PROJECT_LIST[i].split(":")[1].toLowerCase()) {
       $('#project-input-error-box').text('Project already added!').slideDown(300);
       return;
@@ -7,7 +7,7 @@ function addProject(projectName, projectId) {
   }
 
   $('#project-list-cont').append('<a href="#" class="project-item" project-id="' + projectId + '">' + projectName + '</a>')
-  var projectInfo = projectId + ":" + projectName;
+  let projectInfo = projectId + ":" + projectName;
   PROJECT_LIST.push(projectInfo);
   addProjectInStore(SESSION_STORE, projectInfo);
   attachProjectLinkListener();
@@ -17,38 +17,38 @@ function addProject(projectName, projectId) {
 }
 
 function addProjectTask(taskText, taskId) {
-  for (var i = 0; i < PROJECT_TASK_LIST.length; i++) {
+  for (let i = 0; i < PROJECT_TASK_LIST.length; i++) {
     if (encodeURIComponent(taskText).toLowerCase() === PROJECT_TASK_LIST[i].split(":")[2].toLowerCase()) {
       $('#task-input-error-box').text('Task already added!').slideDown(300);
       return;
     }
   }
 
-  var date = new Date(parseInt(taskId.substr(5)));
+  let date = new Date(parseInt(taskId.substr(5)));
   $('#project-task-list-cont ul').append(getTaskTemplate(taskId, taskText, date));
   attachTaskOptionBtnListener();
 
-  var taskInfo = taskId + ":0:" + encodeURIComponent(taskText);
+  let taskInfo = taskId + ":0:" + encodeURIComponent(taskText);
   PROJECT_TASK_LIST.push(taskInfo);
   addProjectTaskInStore(SESSION_STORE, taskInfo);
 }
 
 function addProjectTaskInStore(userId, taskInfo) {
-  var filePath = './data-store/user-store/' + userId + '/project-store-dir/';
+  let filePath = './data-store/user-store/' + userId + '/project-store-dir/';
   if (!fs.existsSync(filePath)) {
     fs.mkdirSync(filePath);
   }
-  var info = taskInfo.split(":");
+  let info = taskInfo.split(":");
   fs.appendFileSync(filePath + '/' + CURRENT_PROJECT_ID + '/project_task_list.txt', info[0] + '\n');
   fs.writeFileSync(filePath + '/' + CURRENT_PROJECT_ID + '/' + info[0] + '.txt', 'false\n\n' + '0\n\n' + info[2]);
 }
 
 function addProjectInStore(userId, projectInfo) {
-  var filePath = './data-store/user-store/' + userId + '/project-store-dir/';
+  let filePath = './data-store/user-store/' + userId + '/project-store-dir/';
   if (!fs.existsSync(filePath)) {
     fs.mkdirSync(filePath);
   }
-  var info = projectInfo.split(":");
+  let info = projectInfo.split(":");
   fs.appendFileSync(filePath + '/' + 'project_list.txt', info[0] + '\n');
   fs.mkdirSync(filePath + '/' + info[0]);
   fs.writeFileSync(filePath + '/' + info[0] + '/project_info.txt', projectInfo);
@@ -75,8 +75,8 @@ function attachProjectLinkListener() {
   $(function () {
     $('.project-item').unbind('click');
     $('.project-item').click(function () {
-      var projectId = $(this).attr('project-id').toString();
-      var projectInfo = fs.readFileSync('./data-store/user-store/' + SESSION_STORE + '/project-store-dir/' + projectId + '/project_info.txt').toString().split(":");
+      let projectId = $(this).attr('project-id').toString();
+      let projectInfo = fs.readFileSync('./data-store/user-store/' + SESSION_STORE + '/project-store-dir/' + projectId + '/project_info.txt').toString().split(":");
       $('#delete-project-btn').fadeIn(300);
       loadProjectTasks(projectId);
       CURRENT_PROJECT_ID = projectId;
@@ -87,21 +87,21 @@ function attachProjectLinkListener() {
 }
 
 function updateProjectTaskCompleteInStore(userId, taskId, state) {
-  var filePath = './data-store/user-store/' + SESSION_STORE + '/project-store-dir/' + CURRENT_PROJECT_ID + '/' + taskId + '.txt';
-  var taskInfo = fs.readFileSync(filePath).toString().split("\n\n");
+  let filePath = './data-store/user-store/' + SESSION_STORE + '/project-store-dir/' + CURRENT_PROJECT_ID + '/' + taskId + '.txt';
+  let taskInfo = fs.readFileSync(filePath).toString().split("\n\n");
   fs.writeFileSync(filePath, state + '\n\n' + taskInfo[1] + '\n\n' + taskInfo[2]);
 }
 
 function deleteProjectTaskFromStore(userId, taskId) {
-  var filePath = './data-store/user-store/' + SESSION_STORE + '/project-store-dir/' + CURRENT_PROJECT_ID + '/project_task_list.txt';
+  let filePath = './data-store/user-store/' + SESSION_STORE + '/project-store-dir/' + CURRENT_PROJECT_ID + '/project_task_list.txt';
   if (!fs.existsSync(filePath)) {
     return null;
   } else {
-    var list = fs.readFileSync(filePath).toString().split("\n");
+    let list = fs.readFileSync(filePath).toString().split("\n");
     list.pop();
-    var finalList = "";
+    let finalList = "";
 
-    for (var i = 0; i < list.length; i++) {
+    for (let i = 0; i < list.length; i++) {
       if (list[i].split(":")[0] === taskId) {
         list.splice(i, 1);
         break;
@@ -115,7 +115,7 @@ function deleteProjectTaskFromStore(userId, taskId) {
     fs.writeFileSync(filePath, finalList);
     fs.unlinkSync('./data-store/user-store/' + SESSION_STORE + '/project-store-dir/' + CURRENT_PROJECT_ID + '/' + taskId + '.txt');
 
-    for (var i = 0; i < PROJECT_TASK_LIST.length; i++) {
+    for (let i = 0; i < PROJECT_TASK_LIST.length; i++) {
       if (PROJECT_TASK_LIST[i].split(":")[0] === taskId) {
         PROJECT_TASK_LIST.splice(i, 1);
         break;
@@ -126,17 +126,17 @@ function deleteProjectTaskFromStore(userId, taskId) {
 
 function loadProjectTasks(projectId) {
   $('#project-task-list-cont ul').html('');
-  var filePath = './data-store/user-store/' + SESSION_STORE + '/project-store-dir/' + projectId + '/project_task_list.txt';
+  let filePath = './data-store/user-store/' + SESSION_STORE + '/project-store-dir/' + projectId + '/project_task_list.txt';
   if (!fs.existsSync(filePath)) {
     fs.writeFileSync(filePath, "");
     return null;
   }
-  var projectTaskList = fs.readFileSync(filePath).toString().split("\n");
+  let projectTaskList = fs.readFileSync(filePath).toString().split("\n");
   projectTaskList.pop();
   PROJECT_TASK_LIST = [];
 
-  for (var i = 0; i < projectTaskList.length; i++) {
-    var data = decodeURIComponent(fs.readFileSync('./data-store/user-store/' + SESSION_STORE + '/project-store-dir/' + projectId + '/' + projectTaskList[i] + '.txt').toString()).split('\n\n');
+  for (let i = 0; i < projectTaskList.length; i++) {
+    let data = decodeURIComponent(fs.readFileSync('./data-store/user-store/' + SESSION_STORE + '/project-store-dir/' + projectId + '/' + projectTaskList[i] + '.txt').toString()).split('\n\n');
     PROJECT_TASK_LIST.push(projectTaskList[i] + ":" + data[1] + ":" + encodeURIComponent(data[2]));
     let date = new Date(parseInt(projectTaskList[i].substr(5)));
     $('#project-task-list-cont ul').append(getTaskTemplate(projectTaskList[i], data[2], date));
@@ -156,12 +156,12 @@ function loadProjectTasks(projectId) {
 }
 
 function addProjectTaskTimeLimit(taskId, endTime) {
-  var filePath = './data-store/user-store/' + SESSION_STORE + '/project-store-dir/' + CURRENT_PROJECT_ID + '/' + taskId + '.txt';
-  var taskInfo = fs.readFileSync(filePath).toString().split("\n\n");
+  let filePath = './data-store/user-store/' + SESSION_STORE + '/project-store-dir/' + CURRENT_PROJECT_ID + '/' + taskId + '.txt';
+  let taskInfo = fs.readFileSync(filePath).toString().split("\n\n");
   fs.writeFileSync(filePath, taskInfo[0] + '\n\n' + endTime + '\n\n' + taskInfo[2]);
-  for (var i = 0; i < PROJECT_TASK_LIST.length; i++) {
+  for (let i = 0; i < PROJECT_TASK_LIST.length; i++) {
     if (PROJECT_TASK_LIST[i].split(":")[0] === taskId) {
-      var info = PROJECT_TASK_LIST[i].split(":");
+      let info = PROJECT_TASK_LIST[i].split(":");
       PROJECT_TASK_LIST[i] = info[0] + ":" + endTime + ":" + info[2];
     }
   }
@@ -169,8 +169,8 @@ function addProjectTaskTimeLimit(taskId, endTime) {
 
 function openProjectNav() {
   $('#project-list-cont .project-item').remove();
-  var data = loadProjects();
-  var node = $('#project-pane-message-box');
+  let data = loadProjects();
+  let node = $('#project-pane-message-box');
   document.getElementById("side-nav").style.width = "250px";
   $('#menu-icon').fadeOut(300);
   menu_icon_state = 0;
@@ -187,8 +187,8 @@ function openProjectNav() {
       $(node).fadeOut(0);
       $(node).children('span').text('');
       $('#project-pane-message-btn').fadeOut(0);
-      for (var i = 0; i < data.length; i++) {
-        var info = fs.readFileSync('./data-store/user-store/' + SESSION_STORE + '/project-store-dir/' + data[i] + '/project_info.txt').toString().split(':');
+      for (let i = 0; i < data.length; i++) {
+        let info = fs.readFileSync('./data-store/user-store/' + SESSION_STORE + '/project-store-dir/' + data[i] + '/project_info.txt').toString().split(':');
         $('#project-list-cont').append('<a href="#" class="project-item" project-id="' + info[0] + '">' + info[1] + '</a>');
       }
       attachProjectLinkListener();
@@ -216,7 +216,7 @@ $(function () {
 });
 
 function loadProjects() {
-  var filePath = './data-store/user-store/' + SESSION_STORE + '/project-store-dir/';
+  let filePath = './data-store/user-store/' + SESSION_STORE + '/project-store-dir/';
   if (!fs.existsSync(filePath)) {
     fs.mkdirSync(filePath);
     fs.writeFileSync(filePath + '/project_list.txt', "");
@@ -226,7 +226,7 @@ function loadProjects() {
     return [];
   }
 
-  var projectList = fs.readFileSync(filePath + '/project_list.txt').toString().split('\n');
+  let projectList = fs.readFileSync(filePath + '/project_list.txt').toString().split('\n');
   projectList.pop();
 
   return projectList;
@@ -244,32 +244,32 @@ $(function () {
 });
 
 function deleteProjectFromStore(projectId) {
-  var filePath = './data-store/user-store/' + SESSION_STORE + '/project-store-dir/' + projectId;
-  var objectList = fs.readdirSync(filePath);
-  for (var i = 0; i < objectList.length; i++) {
+  let filePath = './data-store/user-store/' + SESSION_STORE + '/project-store-dir/' + projectId;
+  let objectList = fs.readdirSync(filePath);
+  for (let i = 0; i < objectList.length; i++) {
     fs.unlinkSync(filePath + '/' + objectList[i]);
   }
   fs.rmdirSync(filePath);
 
-  var finalList = "";
-  var projectList = fs.readFileSync('./data-store/user-store/' + SESSION_STORE + '/project-store-dir/project_list.txt').toString().split('\n');
+  let finalList = "";
+  let projectList = fs.readFileSync('./data-store/user-store/' + SESSION_STORE + '/project-store-dir/project_list.txt').toString().split('\n');
   projectList.pop();
 
-  for (var i = 0; i < projectList.length; i++) {
+  for (let i = 0; i < projectList.length; i++) {
     if (projectList[i] === projectId) {
       projectList.splice(i, 1);
       break;
     }
   }
 
-  for (var i = 0; i < projectList.length; i++) {
+  for (let i = 0; i < projectList.length; i++) {
     finalList += projectList[i] + '\n';    
   }
   
   fs.writeFileSync('./data-store/user-store/' + SESSION_STORE + '/project-store-dir/project_list.txt', finalList);
 
   // Remove project from the loaded list.
-  for (var i = 0; i < PROJECT_LIST.length; i++) {
+  for (let i = 0; i < PROJECT_LIST.length; i++) {
     if (PROJECT_LIST[i].split(":")[0] === projectId) {
       PROJECT_LIST.splice(i, 1);
       break;
