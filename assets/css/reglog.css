@@ -96,5 +96,18 @@
 #login-btn-badge {
   padding: 8px; 
   font-size: 16px; 
-  font-family: 'Quicksand-Light';
+  font-family: 'Roboto-Regular';
+}
+
+#email-tag {
+  display: none;
+}
+
+#login-btn {
+  display: none;
+}
+
+#login-pass-cont {
+
+  display: none;
 }
