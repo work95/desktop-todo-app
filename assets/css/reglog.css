@@ -99,8 +99,18 @@
   font-family: 'Roboto-Regular';
 }
 
-#email-tag {
+#email-tag-cont {
   display: none;
+}
+
+#email-tag {
+  margin: 0px;
+  display: inline;
+}
+
+#change-login-email {
+  margin-left: 10px;
+  color: white;
 }
 
 #login-btn {
