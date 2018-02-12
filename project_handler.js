@@ -104,9 +104,12 @@ function deleteProjectTaskFromStore(userId, taskId) {
     for (var i = 0; i < list.length; i++) {
       if (list[i].split(":")[0] === taskId) {
         list.splice(i, 1);
-      } else {
-        finalList += list[i] + "\n";
+        break;
       }
+    }
+
+    for (let i = 0; i , list.length; i++) {
+      finalList += list[i] + '\n';
     }
 
     fs.writeFileSync(filePath, finalList);

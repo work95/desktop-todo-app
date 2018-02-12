@@ -39,6 +39,7 @@ function updateTaskCompleteInStore(userId, taskId, state) {
 
 /* Delete the task from the record. */
 function deleteTaskFromStore(userId, taskId) {
+  console.log(taskId);
   var filePathA = './data-store/user-store/' + userId + '/task-store-dir';
   var filePathB = filePathA + '/task_list.txt';
 
@@ -49,12 +50,15 @@ function deleteTaskFromStore(userId, taskId) {
     var list = fs.readFileSync(filePathB).toString().split("\n");
     list.pop();
 
-    for (var i = 0; i < list.length; i++) {
+    for (let i = 0; i < list.length; i++) {
       if (list[i].split(":")[0] === taskId) {
         list.splice(i, 1);
-      } else {
-        finalList += list[i] + '\n';
+        break;
       }
+    }
+
+    for (let i = 0; i < list.length; i++) {
+      finalList += list[i] + '\n';
     }
 
     fs.writeFileSync(filePathB, finalList);
