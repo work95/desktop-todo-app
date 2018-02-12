@@ -32,8 +32,8 @@ function registerUser(name, email, password, callback) {
         "status": "null"
       });
     } else {
-      var userList = data.toString().split(',').pop();
-      for (var i = 0; i < userList.length; i++) {
+      let userList = data.toString().split(',').pop();
+      for (let i = 0; i < userList.length; i++) {
         if (email === userList[i].split(":")[0]) {
           callback({
             "status": false,
@@ -45,7 +45,7 @@ function registerUser(name, email, password, callback) {
   });
 
   /* Enter the new user in the user list. */
-  var file = fs.appendFile(USER_LIST_FILE_PATH, (email + ":" + NEXT_USER_ID) + ",", function (err) {
+  let file = fs.appendFile(USER_LIST_FILE_PATH, (email + ":" + NEXT_USER_ID) + ",", function (err) {
     if (err) {
       logging.logError('reglog_handler.js (40): ' + err);
       callback({
@@ -58,7 +58,7 @@ function registerUser(name, email, password, callback) {
       fs.mkdirSync('./data-store/user-store/' + NEXT_USER_ID);
     
       // Add a file for user information.
-      var userInfo = name + "\n" + email + "\n" + password;
+      let userInfo = name + "\n" + email + "\n" + password;
       fs.appendFile('./data-store/user-store/' + NEXT_USER_ID + '/user_info.txt', userInfo, function (err) {
         if (err) {
           logging.logError('reglog_handler.js (53): ' + err);
@@ -110,15 +110,15 @@ function loginUser(email, password, callback) {
       });
     } else {
       // Get the users from the user list.
-      var userList = data.toString().split(',');
+      let userList = data.toString().split(',');
       userList.pop();
       if (userList.length > 0) {
-        for (var i = 0; i < userList.length; i++)  {
+        for (let i = 0; i < userList.length; i++)  {
 
           // Split the user's email from the ID.
-          var userInfo = userList[i].split(":");
+          let userInfo = userList[i].split(":");
           if (userInfo[0] === email) {
-            var userId = userInfo[1]
+            let userId = userInfo[1]
             // Read the user's information to fetch the password.
             fs.readFile('./data-store/user-store/' + userInfo[1] + '/user_info.txt', function (err, data) {
               if (err) {
@@ -128,7 +128,7 @@ function loginUser(email, password, callback) {
                 });
               } else {
                 // Compare the passwords.
-                var completeInfo = data.toString().split("\n");
+                let completeInfo = data.toString().split("\n");
                 if (password === completeInfo[2]) {
                   // On success, return the name and ID of the user.
                   callback({
@@ -180,7 +180,7 @@ $(function () {
         logging.logError('reglog_handler.js (167): ' + err);
         $('#reg-btn-badge').text("Internal Error. Try after sometime.").fadeIn(300);
       } else if (!result.status) {
-        var message = '';
+        let message = '';
         if (result.error === "USER_PRESENT") {
           message = 'User already registered';
         }
@@ -218,7 +218,7 @@ $(function () {
         logging.logError('reglog_handler.js (202): ' + err);
         $('#login-btn-badge').text("Internal Error. Try after sometime.").fadeIn(300);
       } else if (!result.status) {
-        var message = '';
+        let message = '';
         if (result.error === "WRONG_PASSWORD") {
           message = 'Email or password mismatch';
         } else {
@@ -274,10 +274,10 @@ function closeRegLogPane() {
 }
 
 /* For handling the tabs. */
-var activeTab = "pane2";
+let activeTab = "pane2";
 $(function () {
   $('.nav-item').click(function () {
-    var tabId = $(this).children('a').attr('ref');
+    let tabId = $(this).children('a').attr('ref');
     if (activeTab === tabId) { return; }
     $('#' + activeTab).fadeOut(10);
     $('#' + tabId).fadeIn(10);
@@ -335,7 +335,7 @@ function clearRegLogInputForms() {
 }
 
 function addLastLoginSession(sessionId) {
-  var filePath = './data-store/last_login.txt';
+  let filePath = './data-store/last_login.txt';
   if (!fs.existsSync(filePath)) {
     fs.writeFileSync(filePath, "");
   }
@@ -343,7 +343,7 @@ function addLastLoginSession(sessionId) {
 }
 
 function removeLastLoginSession() {
-  var filePath = './data-store/last_login.txt';
+  let filePath = './data-store/last_login.txt';
   if (!fs.existsSync(filePath)) {
     fs.writeFileSync(filePath, "");
     return;
@@ -352,7 +352,7 @@ function removeLastLoginSession() {
 }
 
 function loadLastLoginSession() {
-  var filePath = './data-store/last_login.txt';
+  let filePath = './data-store/last_login.txt';
   if (!fs.existsSync(filePath)) {
     fs.writeFileSync(filePath, "");
     return null;
@@ -378,9 +378,9 @@ function loadLastLoginSession() {
 }
 
 function splitName(name) {
-  var separate = name.split(" ");
-  var shortName = "";
-  for (var i = 0; i < separate.length; i++) {
+  let separate = name.split(" ");
+  let shortName = "";
+  for (let i = 0; i < separate.length; i++) {
     if (separate[i] === "undefined" || separate[i] === "") {
     } else {
       shortName += separate[i][0];

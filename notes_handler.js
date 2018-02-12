@@ -2,17 +2,17 @@ var NOTES_LIST = [];
 var NOTES_LIST_CONT_STATE = 0;
 
 function addNote(noteText, noteId) {
-  for (var i = 0; i < NOTES_LIST.length; i++) {
+  for (let i = 0; i < NOTES_LIST.length; i++) {
     if (encodeURIComponent(noteText).toLowerCase() === NOTES_LIST[i].split(":")[1].toLowerCase()) {
       $('#notes-input-error-box').text('Note already added!').slideDown(300);
       return;
     }
   }
  
-  var date = new Date(parseInt(noteId.substr(5)));
+  let date = new Date(parseInt(noteId.substr(5)));
   $('#notes-list-cont ul').append(getNoteTemplate(noteId, noteText, date));
 
-  var noteInfo = noteId + ":" + encodeURIComponent(noteText);
+  let noteInfo = noteId + ":" + encodeURIComponent(noteText);
   NOTES_LIST.push(noteInfo);
   addNoteInStore(SESSION_STORE, noteInfo);
   attachNoteOptionBtnListener();
@@ -20,11 +20,11 @@ function addNote(noteText, noteId) {
 
 /* Add the note in record. */
 function addNoteInStore(userId, noteInfo) {
-  var filePath = './data-store/user-store/' + userId + '/note-store-dir/';
+  let filePath = './data-store/user-store/' + userId + '/note-store-dir/';
   if (!fs.existsSync(filePath)) {
     fs.mkdirSync(filePath);
   }
-  var info = noteInfo.split(":");
+  let info = noteInfo.split(":");
   fs.appendFileSync(filePath + '/' + 'note_list.txt', info[0] + '\n');
   fs.writeFileSync(filePath + '/' + info[0] + '.txt', info[1]);
 }
@@ -32,18 +32,18 @@ function addNoteInStore(userId, noteInfo) {
 /* Load the notes list. */
 function loadNotesList(userId) {
   $('#notes-list-cont ul').html('');
-  var filePath = './data-store/user-store/' + userId + '/note-store-dir/note_list.txt';
+  let filePath = './data-store/user-store/' + userId + '/note-store-dir/note_list.txt';
   if (!fs.existsSync(filePath)) {
     return;
   } else {
-    var notesList = fs.readFileSync(filePath).toString().split("\n");
+    let notesList = fs.readFileSync(filePath).toString().split("\n");
     notesList.pop();
     NOTES_LIST = [];
  
-    for (var i = 0; i < notesList.length; i++) {
-      var data = decodeURIComponent(fs.readFileSync('./data-store/user-store/' + userId + '/note-store-dir/' + notesList[i] + '.txt').toString());
+    for (let i = 0; i < notesList.length; i++) {
+      let data = decodeURIComponent(fs.readFileSync('./data-store/user-store/' + userId + '/note-store-dir/' + notesList[i] + '.txt').toString());
       NOTES_LIST.push(notesList[i] + ":" + encodeURIComponent(data));
-      var date = new Date(parseInt(notesList[i].substr(5)));
+      let date = new Date(parseInt(notesList[i].substr(5)));
       $('#notes-list-cont ul').append(getNoteTemplate(notesList[i], data, date));
     }
   }
@@ -52,17 +52,17 @@ function loadNotesList(userId) {
 
 /* Delete the task from the record. */
 function deleteNoteFromStore(userId, noteId) {
-  var filePathA = './data-store/user-store/' + userId + '/note-store-dir';
-  var filePathB = filePathA + '/note_list.txt';
+  let filePathA = './data-store/user-store/' + userId + '/note-store-dir';
+  let filePathB = filePathA + '/note_list.txt';
 
   if (!fs.existsSync(filePathB)) {
     return;
   } else {
-    var finalList = "";
-    var list = fs.readFileSync(filePathB).toString().split("\n");
+    let finalList = "";
+    let list = fs.readFileSync(filePathB).toString().split("\n");
     list.pop();
 
-    for (var i = 0; i < list.length; i++) {
+    for (let i = 0; i < list.length; i++) {
       if (list[i].split(":")[0] === noteId) {
         list.splice(i, 1);
       } else {
@@ -73,7 +73,7 @@ function deleteNoteFromStore(userId, noteId) {
     fs.writeFileSync(filePathB, finalList);
     fs.unlinkSync(filePathA + '/' + noteId + '.txt');
 
-    for (var i = 0; i < NOTES_LIST.length; i++) {
+    for (let i = 0; i < NOTES_LIST.length; i++) {
       if (NOTES_LIST[i].split(":")[0] === noteId) {
         NOTES_LIST.splice(i, 1);
         break;
@@ -83,7 +83,7 @@ function deleteNoteFromStore(userId, noteId) {
 }
 
 function getNoteTemplate(noteId, noteText, date) {
-  var noteNode = '<li class="list-group-item" id="' + noteId + '">' + 
+  let noteNode = '<li class="list-group-item" id="' + noteId + '">' + 
     '<span class="note-text">' + noteText + '<br />' + 
     '<span class="note-date">' + date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + '</span>' + 
     '</span>' + 
@@ -135,7 +135,7 @@ function attachNoteOptionBtnListener() {
     $('.delete-note-btn').click(function () {
       // Remove error message if add task modal is open.
       $('#note-input-error-box').text("").slideUp(300).css('color', 'black');
-      var nodeId = $(this).parent().attr('id');
+      let nodeId = $(this).parent().attr('id');
       $('#' + nodeId).remove();
       deleteNoteFromStore(SESSION_STORE, nodeId);
     });

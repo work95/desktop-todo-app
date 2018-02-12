@@ -26,12 +26,12 @@ function portProfile(userId) {
 
     // Create a JSON of the projects (details + tasks).
     projects: function (callback) {
-      var filePath = './data-store/user-store/' + userId + '/project-store-dir/project_list.txt';
-      var projectList = commonModules.fs.readFileSync(filePath).toString().split('\n');
+      let filePath = './data-store/user-store/' + userId + '/project-store-dir/project_list.txt';
+      let projectList = commonModules.fs.readFileSync(filePath).toString().split('\n');
       projectList.pop();
-      var projectInfo = [];
-      var projectTasks = [];
-      var projects = [];
+      let projectInfo = [];
+      let projectTasks = [];
+      let projects = [];
 
       async.each(projectList, function (project, callback) {
         projectInfo = commonModules.fs.readFileSync('./data-store/user-store/' + userId + '/project-store-dir/' + project + '/project_info.txt').toString().trim().split(':');
@@ -41,11 +41,11 @@ function portProfile(userId) {
           "projectTasks": []
         };
 
-        var projectTaskList = commonModules.fs.readFileSync('./data-store/user-store/' + userId + '/project-store-dir/' + project + '/project_task_list.txt').toString().split('\n');
+        let projectTaskList = commonModules.fs.readFileSync('./data-store/user-store/' + userId + '/project-store-dir/' + project + '/project_task_list.txt').toString().split('\n');
         projectTaskList.pop();
 
         async.each(projectTaskList, function (projectTaskId, callback) {
-          var taskInfo = commonModules.fs.readFileSync('./data-store/user-store/' + userId + '/project-store-dir/' + project + '/' + projectTaskId + '.txt').toString().split('\n\n');
+          let taskInfo = commonModules.fs.readFileSync('./data-store/user-store/' + userId + '/project-store-dir/' + project + '/' + projectTaskId + '.txt').toString().split('\n\n');
           projects[project]['projectTasks'].push({
             "taskId": projectTaskId,
             "taskComplete": taskInfo[0],
@@ -76,11 +76,11 @@ function portProfile(userId) {
 
     // JSON for normal tasks.
     simpleTasks: function (callback) {
-      var tasks = [];
-      var taskList = commonModules.fs.readFileSync('./data-store/user-store/' + userId + '/task-store-dir/task_list.txt').toString().split('\n');
+      let tasks = [];
+      let taskList = commonModules.fs.readFileSync('./data-store/user-store/' + userId + '/task-store-dir/task_list.txt').toString().split('\n');
       taskList.pop();
       async.each(taskList, function (taskId, callback) {
-        var taskInfo = commonModules.fs.readFileSync('./data-store/user-store/' + userId + '/task-store-dir/' + taskId + '.txt').toString().split('\n\n');
+        let taskInfo = commonModules.fs.readFileSync('./data-store/user-store/' + userId + '/task-store-dir/' + taskId + '.txt').toString().split('\n\n');
         tasks.push({
           "taskId": taskId,
           "taskComplete": taskInfo[0],
@@ -99,11 +99,11 @@ function portProfile(userId) {
 
     // JSON for notes.
     notes: function (callback) {
-      var notes = [];
-      var noteList = commonModules.fs.readFileSync('./data-store/user-store/' + userId + '/note-store-dir/note_list.txt').toString().split('\n');
+      let notes = [];
+      let noteList = commonModules.fs.readFileSync('./data-store/user-store/' + userId + '/note-store-dir/note_list.txt').toString().split('\n');
       noteList.pop();
       async.each(noteList, function (noteId, callback) {
-        var noteInfo = commonModules.fs.readFileSync('./data-store/user-store/' + userId + '/note-store-dir/' + noteId + '.txt').toString().trim();
+        let noteInfo = commonModules.fs.readFileSync('./data-store/user-store/' + userId + '/note-store-dir/' + noteId + '.txt').toString().trim();
         notes.push({
           "noteId": noteId,
           "noteText": noteInfo
@@ -210,7 +210,7 @@ function setupProfile(userInfo) {
       
       commonModules.fs.writeFileSync('./data-store/user-store/' + userId + '/project-store-dir/' + projectId + '/project_task_list.txt', "");
       for (let j = 0; j < userInfo['projects'][i]['projectTasks'].length; j++) {
-        var taskInfo = userInfo['projects'][i]['projectTasks'][j];
+        let taskInfo = userInfo['projects'][i]['projectTasks'][j];
         commonModules.fs.appendFileSync('./data-store/user-store/' + userId + '/project-store-dir/' + projectId + '/project_task_list.txt', taskInfo['taskId'] + '\n');
         commonModules.fs.writeFileSync('./data-store/user-store/' + userId + '/project-store-dir/' + projectId + '/' + taskInfo['taskId'] + '.txt', taskInfo['taskComplete'] + '\n\n' + taskInfo['taskTimeLeft'] + '\n\n' + taskInfo['taskText']);
       }

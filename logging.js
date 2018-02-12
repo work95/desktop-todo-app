@@ -1,4 +1,4 @@
-var fs = require('fs');
+const fs = require('fs');
 
 function logError(message) {
 
@@ -7,8 +7,8 @@ function logError(message) {
     fs.mkdirSync('./logs/');
   }
   
-  var date = new Date();
-  var dateFile = (date.getMonth() + 1) + "-" + date.getDate() + "-" + date.getFullYear();
+  let date = new Date();
+  let dateFile = (date.getMonth() + 1) + "-" + date.getDate() + "-" + date.getFullYear();
 
   message = '[' + new Date() + ']:  ' + message;
   fs.appendFileSync('./logs/' + dateFile + '.txt', message + '\n');
