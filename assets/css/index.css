@@ -276,17 +276,15 @@ header div h2 {
   margin-right: 30px;
 }
 
-#header-icon-cont span {
-  margin-left: 30px;
-}
+#header-icon-cont span { margin-left: 30px; }
+#header-icon-cont span i { font-size: 25px; }
 
-#header-icon-cont span i {
-  font-size: 25px;
-}
+#perform-sync { color: white; }
+#perform-sync i { font-size: 22px !important; }
 
 #notes-icon i {
   color: white;
-  margin-right: -10px;
+  margin-right: -25px;
   vertical-align: -1px;
 }
 
