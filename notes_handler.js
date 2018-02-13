@@ -1,3 +1,5 @@
+const porting = require('./porting');
+
 var NOTES_LIST = [];
 var NOTES_LIST_CONT_STATE = 0;
 
@@ -27,6 +29,7 @@ function addNoteInStore(userId, noteInfo) {
   let info = noteInfo.split(":");
   fs.appendFileSync(filePath + '/' + 'note_list.txt', info[0] + '\n');
   fs.writeFileSync(filePath + '/' + info[0] + '.txt', info[1]);
+  porting.portProfile(SESSION_STORE);
 }
 
 /* Load the notes list. */
@@ -80,6 +83,7 @@ function deleteNoteFromStore(userId, noteId) {
       }
     }
   }
+  porting.portProfile(SESSION_STORE);
 }
 
 function getNoteTemplate(noteId, noteText, date) {
