@@ -549,11 +549,14 @@ $(function () {
       } else {
         // If profile information is received, then set it up.
         porting.setupProfile(JSON.parse(result.data));
+        loadTaskList(SESSION_STORE);
+        if (CURRENT_PROJECT_ID !== "") { loadProjectTasks(CURRENT_PROJECT_ID); }
+        loadNotesList(SESSION_STORE);
       }
 
       // Stop the rotating icon.
       $('#perform-sync i').removeClass('sync-rotate');
-      $('#perform-sync').removeClass('disabled');      
+      $('#perform-sync').removeClass('disabled');
     });
   });
 });
