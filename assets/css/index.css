@@ -282,9 +282,23 @@ header div h2 {
 #perform-sync { color: white; }
 #perform-sync i { font-size: 22px !important; }
 
+.sync-rotate {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+#notes-icon { margin-right: -32px; }
+
 #notes-icon i {
   color: white;
-  margin-right: -25px;
   vertical-align: -1px;
 }
 
