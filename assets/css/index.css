@@ -670,6 +670,11 @@ span#menu-icon {
   display: none;
 }
 
+#task-complete-icon i {
+  color: #ff3f00;
+  font-size: 30px;
+}
+
 ::-webkit-scrollbar {
   width: 7px;
 }

@@ -146,12 +146,12 @@ function loadProjectTasks(projectId) {
     let date = new Date(parseInt(projectTaskList[i].substr(5)));
     $('#project-task-list-cont ul').append(getTaskTemplate(projectTaskList[i], data[2], date));
     if (data[0] === null || data[0] === undefined || data[0] === "false") {
-      $('#' + projectTaskList[i]).children('img').fadeOut(300);
+      $('#' + projectTaskList[i] + ' #task-complete-icon').fadeOut(300);
       $('#' + projectTaskList[i]).attr('status', 'false');
       $('#' + projectTaskList[i] + ' .task-text').css('opacity', '1');
       $('#' + projectTaskList[i] + ' div div ' + '.complete-task-btn').attr('state', 'false').html('<span><i class="fa fa-check"></i></span>Complete task');;
     } else {
-      $('#' + projectTaskList[i]).children('img').fadeIn(300);
+      $('#' + projectTaskList[i] + ' #task-complete-icon').fadeIn(300);
       $('#' + projectTaskList[i]).attr('status', 'true');
       $('#' + projectTaskList[i] + ' .task-text').css('opacity', '0.5');
       $('#' + projectTaskList[i] + ' div div ' + '.complete-task-btn').attr('state', 'true').html('<span><i class="fa fa-check"></i></span>Undone task');

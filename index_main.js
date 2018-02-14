@@ -249,7 +249,7 @@ function showMainTaskListCont() {
 
 function getTaskTemplate(taskId, taskText, date, endTime) {
   let taskNode = '<li class="list-group-item" id="' + taskId + '" status="false">' +
-    '<img id="task-complete-icon" src="./assets/images/checked.svg" />' +
+    '<span id="task-complete-icon"><i class="fa fa-check"></i></span>' +
     '<span class="task-text">' + taskText + '<br />' +
     '<span class="task-start-date">' + date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + '</span>' +
     '<span class="task-end-time"></span>' +
@@ -391,14 +391,14 @@ function attachTaskOptionBtnListener() {
         $('#' + nodeId).attr('status', 'true');
         $('#' + nodeId + ' .task-text').css('opacity', '0.5');
         $(this).html('<span><i class="fa fa-check"></i></span>Undone task');
-        $(this).parent().parent().parent().children('img').fadeIn(300);
+        $(this).parent().parent().parent().children('span#task-complete-icon').fadeIn(300);
         LIST_CONT_STATE === 1 ? updateTaskCompleteInStore(SESSION_STORE, nodeId, true) : updateProjectTaskCompleteInStore(SESSION_STORE, nodeId, true);
       } else {
         $(this).attr('state', 'false');
         $('#' + nodeId).attr('status', 'false');
         $('#' + nodeId + ' .task-text').css('opacity', '1');
         $(this).html('<span><i class="fa fa-check"></i></span>Complete task');
-        $(this).parent().parent().parent().children('img').fadeOut(300);
+        $(this).parent().parent().parent().children('span#task-complete-icon').fadeOut(300);
         LIST_CONT_STATE === 1 ? updateTaskCompleteInStore(SESSION_STORE, nodeId, false) : updateProjectTaskCompleteInStore(SESSION_STORE, nodeId, false);
       }
     });

@@ -88,12 +88,12 @@ function loadTaskList(userId) {
       let date = new Date(parseInt(taskList[i].substr(5)));
       $('#task-list-cont ul').append(getTaskTemplate(taskList[i], data[2], date));
       if (data[0] === null || data[0] === undefined || data[0] === "false") {
-        $('#' + taskList[i]).children('img').fadeOut(300);
+        $('#' + taskList[i] + ' #task-complete-icon').fadeOut(300);
         $('#' + taskList[i]).attr('status', 'false');
         $('#' + taskList[i] + ' .task-text').css('opacity', '1');
         $('#' + taskList[i] + ' div div ' + '.complete-task-btn').attr('state', 'false').html('<span><i class="fa fa-check"></i></span>Complete task');;
       } else {
-        $('#' + taskList[i]).children('img').fadeIn(300);
+        $('#' + taskList[i] + ' #task-complete-icon').fadeIn(300);
         $('#' + taskList[i]).attr('status', 'true');
         $('#' + taskList[i] + ' .task-text').css('opacity', '0.5');
         $('#' + taskList[i] + ' div div ' + '.complete-task-btn').attr('state', 'true').html('<span><i class="fa fa-check"></i></span>Undone task');
