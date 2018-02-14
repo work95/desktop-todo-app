@@ -25,49 +25,75 @@ function portProfile(userId, mainCallback) {
     // Create a JSON of the projects (details + tasks).
     projects: function (callback) {
       let filePath = './data-store/user-store/' + userId + '/project-store-dir/project_list.txt';
-      let projectList = fs.readFileSync(filePath).toString().split('\n');
-      projectList.pop();
-      let projectInfo = [];
-      let projectTasks = [];
-      let projects = [];
-
-      async.each(projectList, function (project, callback) {
-        projectInfo = fs.readFileSync('./data-store/user-store/' + userId + '/project-store-dir/' + project + '/project_info.txt').toString().trim().split(':');
-        projects[projectInfo[0]] = {
-          "projectId": projectInfo[0],
-          "projectName": projectInfo[1],
-          "projectTasks": []
-        };
-
-        let projectTaskList = fs.readFileSync('./data-store/user-store/' + userId + '/project-store-dir/' + project + '/project_task_list.txt').toString().split('\n');
-        projectTaskList.pop();
-
-        async.each(projectTaskList, function (projectTaskId, callback) {
-          let taskInfo = fs.readFileSync('./data-store/user-store/' + userId + '/project-store-dir/' + project + '/' + projectTaskId + '.txt').toString().split('\n\n');
-          projects[project]['projectTasks'].push({
-            "taskId": projectTaskId,
-            "taskComplete": taskInfo[0],
-            "taskTimeLeft": taskInfo[1],
-            "taskText": taskInfo[2]
-          });
-          callback(null);
-        }, function(err) {
-          if (err) {
-            console.log('[Error]: ' + err);
-          }
-        });
-
-        callback(null);
-
-      }, function (err) {        
+      let projectList = [];
+      fs.readFile(filePath, function (err, data) {
         if (err) {
-          console.log('[Error]: ' + err);          
+          logging.logError('[Error] porting.js (31): ' + err);
         } else {
-          let projectList = [];
-          for (let a in projects) {
-            projectList.push(projects[a]);
-          }
-          callback(null, projectList);
+          projectList = data.toString().split('\n');
+          projectList.pop();
+
+          let projectInfo = [];
+          let projectTasks = [];
+          let projects = [];
+          async.each(projectList, function (project, callback) {
+            fs.readFile('./data-store/user-store/' + userId + '/project-store-dir/' + project + '/project_info.txt', function (err, data) {
+              if (err) {
+                logging.logError('[Error] porting.js (42): ' + err);
+              } else {
+                projectInfo = data.toString().trim().split(':');
+                projects[projectInfo[0]] = {
+                  "projectId": projectInfo[0],
+                  "projectName": projectInfo[1],
+                  "projectTasks": []
+                };
+        
+                let projectTaskList = [];
+                fs.readFile('./data-store/user-store/' + userId + '/project-store-dir/' + project + '/project_task_list.txt', function (err, data) {
+                  if (err) {
+                    logging.logError('[Error] porting.js (54): ' + err);
+                  } else {
+                    projectTaskList = data.toString().split('\n');
+                    projectTaskList.pop();
+                    async.each(projectTaskList, function (projectTaskId, callback) {
+                      let taskInfo = [];
+                      fs.readFile('./data-store/user-store/' + userId + '/project-store-dir/' + project + '/' + projectTaskId + '.txt', function (err, data) {
+                        if (err) {
+                          logging.logError('[Error] porting.js (62): ' + err);
+                        } else {
+                          taskInfo = data.toString().split('\n\n');
+                          projects[project]['projectTasks'].push({
+                            "taskId": projectTaskId,
+                            "taskComplete": taskInfo[0],
+                            "taskTimeLeft": taskInfo[1],
+                            "taskText": taskInfo[2]
+                          });
+                          callback(null);
+                        }
+                      });
+                    }, function(err) {
+                      if (err) {
+                        logging.logError('[Error] porting;.js (76): ' + err)
+                      } else {
+                        callback(null);
+                      }
+                    });
+                  }
+                });
+              }
+            });
+          }, function (err) {        
+            if (err) {
+              logging.logError('[Error] porting;.js (87): ' + err)
+            } else {
+              let projectList = [];
+              for (let a in projects) {
+                projectList.push(projects[a]);
+              }
+              callback(null, projectList);
+            }
+          });
+
         }
       });
     },
@@ -75,22 +101,36 @@ function portProfile(userId, mainCallback) {
     // JSON for normal tasks.
     simpleTasks: function (callback) {
       let tasks = [];
-      let taskList = fs.readFileSync('./data-store/user-store/' + userId + '/task-store-dir/task_list.txt').toString().split('\n');
-      taskList.pop();
-      async.each(taskList, function (taskId, callback) {
-        let taskInfo = fs.readFileSync('./data-store/user-store/' + userId + '/task-store-dir/' + taskId + '.txt').toString().split('\n\n');
-        tasks.push({
-          "taskId": taskId,
-          "taskComplete": taskInfo[0],
-          "taskTimeLeft": taskInfo[1],
-          "taskText": taskInfo[2]
-        });
-        callback(null);
-      }, function (err) {
+      let taskList = [];
+      fs.readFile('./data-store/user-store/' + userId + '/task-store-dir/task_list.txt', function (err, data) {
         if (err) {
-          console.log('[Error]: ' + err);
-        } else{
-          callback(null, tasks);
+          logging.logError('[Error] porting.js (107): ' + err);
+        } else {
+          taskList = data.toString().split('\n');
+          taskList.pop();
+          async.each(taskList, function (taskId, callback) {
+            let taskInfo = [];
+            fs.readFile('./data-store/user-store/' + userId + '/task-store-dir/' + taskId + '.txt', function (err, data) {
+              if (err) {
+                logging.logError('[Error] porting.js (111): ' + err);
+              } else {
+                taskInfo = data.toString().split('\n\n');
+                tasks.push({
+                  "taskId": taskId,
+                  "taskComplete": taskInfo[0],
+                  "taskTimeLeft": taskInfo[1],
+                  "taskText": taskInfo[2]
+                });
+                callback(null);
+              }
+            });
+          }, function (err) {
+            if (err) {
+              console.log('[Error]: ' + err);
+            } else{
+              callback(null, tasks);
+            }
+          });
         }
       });
     },
@@ -101,12 +141,19 @@ function portProfile(userId, mainCallback) {
       let noteList = fs.readFileSync('./data-store/user-store/' + userId + '/note-store-dir/note_list.txt').toString().split('\n');
       noteList.pop();
       async.each(noteList, function (noteId, callback) {
-        let noteInfo = fs.readFileSync('./data-store/user-store/' + userId + '/note-store-dir/' + noteId + '.txt').toString().trim();
-        notes.push({
-          "noteId": noteId,
-          "noteText": noteInfo
+        let noteInfo = "";
+        fs.readFile('./data-store/user-store/' + userId + '/note-store-dir/' + noteId + '.txt', function (err, data) {
+          if (err) {
+            logging.logError('[Error] porting.js (107): ' + err);
+          } else {
+            noteInfo = data.toString().trim();
+            notes.push({
+              "noteId": noteId,
+              "noteText": noteInfo
+            });
+            callback(null);
+          }
         });
-        callback(null);
       }, function (err) {
         if (err) {
           console.log('[Error]: ' + err);
@@ -118,12 +165,19 @@ function portProfile(userId, mainCallback) {
 
     // JSON for user's info.
     userInfo: function (callback) {
-      let userInfo = fs.readFileSync('./data-store/user-store/' + userId + '/user_info.txt').toString().split('\n');
-      callback(null, {
-        "userId": userId,
-        "userName": userInfo[0],
-        "userEmail": userInfo[1],
-        "userPass": userInfo[2]
+      let userInfo = [];
+      fs.readFile('./data-store/user-store/' + userId + '/user_info.txt', function (err, data) {
+        if (err) {
+          logging.logError('[Error] porting.js (123): ' + err);
+        } else {
+          userInfo = data.toString().split('\n');
+          callback(null, {
+            "userId": userId,
+            "userName": userInfo[0],
+            "userEmail": userInfo[1],
+            "userPass": userInfo[2]
+          });
+        }
       });
     },
 
@@ -138,6 +192,7 @@ function portProfile(userId, mainCallback) {
       console.log('[Error]: ' + err);
     } else {
       console.log('Profile ported sucessfully');
+      console.log(result);
       sendRequest((TASKING_SERVER_URL + 'portProfile'), 'POST', JSON.stringify({ "profile": result }), function (response) {
         console.log(response);
       });
