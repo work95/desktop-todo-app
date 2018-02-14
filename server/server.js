@@ -32,6 +32,7 @@ app.get('/poll', function (req, res) {
 app.post('/portProfile', function (req, res) {
 
   'use strict';
+  console.log(req.body);
   let profile = req.body['profile'];
   if (!fs.existsSync('./user_list.txt')) {
     fs.writeFileSync('./user_list.txt', "");
@@ -49,6 +50,7 @@ app.post('/portProfile', function (req, res) {
   if (!userPresent) {
     fs.appendFileSync('./user_list.txt', profile['userInfo']['userId'] + '\n');
   }
+
   fs.writeFileSync('./user_' + profile['userInfo']['userId'] + '.txt', JSON.stringify(profile));
 
   // SYNC with other servers.
@@ -61,7 +63,15 @@ app.post('/portProfile', function (req, res) {
 app.post('/getProfile', function (req, res) {
 
   'use strict';
-  res.send(fs.readFileSync('./user_' + req.body.userId + '.txt').toString());
+  if (!fs.existsSync('./user_' + req.body.userId + '.txt')) {
+    res.send({ "status": false });
+    return;
+  }
+
+  res.send({
+    "status": true,
+    "data": fs.readFileSync('./user_' + req.body.userId + '.txt').toString()
+  });
 });
 
 /* Check if the user exists or not. */
