@@ -12,6 +12,12 @@ function logError(message) {
 
   message = '[' + new Date() + ']:  ' + message;
   fs.appendFileSync('./logs/' + dateFile + '.txt', message + '\n');
+  
+  $('#log-error-cont').fadeIn();
+  setTimeout(function () {
+    $('#log-error-cont').addClass('fadeOutRight');
+    $('#log-error-cont').fadeOut();
+  }, 5000);
 }
 
 module.exports.logError = logError;
