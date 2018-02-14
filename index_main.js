@@ -1,12 +1,13 @@
-const electron = require('electron');
-const currentWindow = electron.remote.getCurrentWindow();
-
 const async = require('async');
+const countdown = require('countdown');
+const electron = require('electron');
 const fs = require('fs');
 const logger = require('tracer').colorConsole();
-const countdown = require('countdown');
 
 const logging = require('./logging');
+const porting = require('./porting');
+
+const currentWindow = electron.remote.getCurrentWindow();
 
 window.$ = window.jQuery = require('./assets/js/jquery-3.2.1.min.js');
 
@@ -414,15 +415,15 @@ function connectToServer() {
   $('#connection-tracker-cont').fadeIn(100);
 
   let servers = [
-    'http://127.0.0.1:7910/poll', 'http://192.168.1.2:7910/poll', 'http://192.168.1.3:7910/poll', 'http://192.168.1.4:7910/poll', 
-    'http://192.168.1.5:7910/poll', 'http://192.168.1.6:7910/poll', 'http://192.168.1.7:7910/poll', 'http://192.168.1.8:7910/poll'
+    'http://127.0.0.1:7910/', 'http://192.168.1.2:7910/', 'http://192.168.1.3:7910/', 'http://192.168.1.4:7910/', 
+    'http://192.168.1.5:7910/', 'http://192.168.1.6:7910/', 'http://192.168.1.7:7910/', 'http://192.168.1.8:7910/'
   ];
   let availableServer = [];
 
   async.every(servers, function (serverUrl, callback) {
-    sendRequest(serverUrl, function (response) {
+    sendRequest((serverUrl + 'poll'), function (response) {
       if (response.status) {
-        availableServer.push(response.url);
+        availableServer.push(serverUrl);
       }
 
       callback(null, true);
@@ -438,12 +439,14 @@ function connectToServer() {
       setTimeout(function () {
         $('#connection-tracker-cont').fadeOut(500);
       }, 4000);
+      $('#perform-sync').removeClass('disabled');
     } else {
       $('#connection-tracker-cont-close-btn').fadeIn(100);
       $('#connection-tracking-icon i').addClass('fa fa-times');
       $('#connection-tracking-message').text('No active server available.');
       $('#local-storage-message').slideDown(300);
       $('#try-another-server-link').slideDown(300);
+      $('#perform-sync').addClass('disabled');      
     }
   });
 }
@@ -517,14 +520,40 @@ $(function () {
         setTimeout(function () {
           $('#connection-tracker-cont').fadeOut(500);
         }, 4000);
+        $('#perform-sync').removeClass('disabled');
       } else {
         $('#connection-tracker-cont-close-btn').fadeIn(100);
         $('#connection-tracking-icon i').addClass('fa fa-times');
         $('#connection-tracking-icon').fadeIn(10);
         $('#connection-tracking-message').text('Server did not respond');
         $('#manual-connection-add').slideDown(300);
+        $('#perform-sync').addClass('disabled');        
       }
       $('#connection-tracker-cont .loader').fadeOut(10);        
+    });
+  });
+});
+
+$(function () {
+  $('#perform-sync').click(function () {
+    $(this).addClass('disabled');
+    if (TASKING_SERVER_URL === "") {
+      return;
+    }
+    $('#perform-sync i').addClass('sync-rotate');
+
+    // Get the profile information from the server.
+    porting.getProfile(SESSION_STORE, function (result) {
+      if (!result.status) {
+        // No such user exists.
+      } else {
+        // If profile information is received, then set it up.
+        porting.setupProfile(JSON.parse(result.data));
+      }
+
+      // Stop the rotating icon.
+      $('#perform-sync i').removeClass('sync-rotate');
+      $('#perform-sync').removeClass('disabled');      
     });
   });
 });
