@@ -111,7 +111,7 @@ function deleteProjectTaskFromStore(userId, taskId) {
       }
     }
 
-    for (let i = 0; i , list.length; i++) {
+    for (let i = 0; i < list.length; i++) {
       finalList += list[i] + '\n';
     }
 
