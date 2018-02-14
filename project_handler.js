@@ -1,5 +1,3 @@
-const porting = require('./porting');
-
 function addProject(projectName, projectId) {
   for (let i = 0; i < PROJECT_LIST.length; i++) {
     if (projectName.toLowerCase() === PROJECT_LIST[i].split(":")[1].toLowerCase()) {
@@ -43,7 +41,7 @@ function addProjectTaskInStore(userId, taskInfo) {
   let info = taskInfo.split(":");
   fs.appendFileSync(filePath + '/' + CURRENT_PROJECT_ID + '/project_task_list.txt', info[0] + '\n');
   fs.writeFileSync(filePath + '/' + CURRENT_PROJECT_ID + '/' + info[0] + '.txt', 'false\n\n' + '0\n\n' + info[2]);
-  porting.portProfile(SESSION_STORE);
+  porting.portProfile(SESSION_STORE, null);
 }
 
 function addProjectInStore(userId, projectInfo) {
@@ -55,7 +53,7 @@ function addProjectInStore(userId, projectInfo) {
   fs.appendFileSync(filePath + '/' + 'project_list.txt', info[0] + '\n');
   fs.mkdirSync(filePath + '/' + info[0]);
   fs.writeFileSync(filePath + '/' + info[0] + '/project_info.txt', projectInfo);
-  porting.portProfile(SESSION_STORE);
+  porting.portProfile(SESSION_STORE, null);
 }
 
 /* To hide the error message below the input form when a key is pressed again. */
@@ -94,7 +92,7 @@ function updateProjectTaskCompleteInStore(userId, taskId, state) {
   let filePath = './data-store/user-store/' + SESSION_STORE + '/project-store-dir/' + CURRENT_PROJECT_ID + '/' + taskId + '.txt';
   let taskInfo = fs.readFileSync(filePath).toString().split("\n\n");
   fs.writeFileSync(filePath, state + '\n\n' + taskInfo[1] + '\n\n' + taskInfo[2]);
-  porting.portProfile(SESSION_STORE);
+  porting.portProfile(SESSION_STORE, null);
 }
 
 function deleteProjectTaskFromStore(userId, taskId) {
@@ -128,7 +126,7 @@ function deleteProjectTaskFromStore(userId, taskId) {
     }
   }
 
-  porting.portProfile(SESSION_STORE);
+  porting.portProfile(SESSION_STORE, null);
 }
 
 function loadProjectTasks(projectId) {
@@ -172,7 +170,7 @@ function addProjectTaskTimeLimit(taskId, endTime) {
       PROJECT_TASK_LIST[i] = info[0] + ":" + endTime + ":" + info[2];
     }
   }
-  porting.portProfile(SESSION_STORE);
+  porting.portProfile(SESSION_STORE, null);
 }
 
 function openProjectNav() {
@@ -285,7 +283,7 @@ function deleteProjectFromStore(projectId) {
   }
 
   CURRENT_PROJECT_ID = "";
-  porting.portProfile(SESSION_STORE);
+  porting.portProfile(SESSION_STORE, null);
 }
 
 function showProjectTaskListCont(projectName) {
