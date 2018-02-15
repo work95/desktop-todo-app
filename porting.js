@@ -26,10 +26,11 @@ function portProfile(userId, mainCallback) {
     projects: function (callback) {
       let filePath = './data-store/user-store/' + userId + '/project-store-dir/project_list.txt';
       let projectList = [];
-      if (fs.exists(filePath)) {
+      if (fs.existsSync(filePath)) {
         fs.readFile(filePath, function (err, data) {
           if (err) {
-            logging.logError('[Error] porting.js (31): ' + err);
+            logging.logError('[Error] porting.js (32): ' + err);
+            callback(null, {"status": false});
           } else {
             projectList = data.toString().split('\n');
             projectList.pop();
@@ -38,10 +39,10 @@ function portProfile(userId, mainCallback) {
             let projectTasks = [];
             let projects = [];
             async.each(projectList, function (project, callback) {
-              if (fs.exists('./data-store/user-store/' + userId + '/project-store-dir/' + project + '/project_info.txt')) {
+              if (fs.existsSync('./data-store/user-store/' + userId + '/project-store-dir/' + project + '/project_info.txt')) {
                 fs.readFile('./data-store/user-store/' + userId + '/project-store-dir/' + project + '/project_info.txt', function (err, data) {
                   if (err) {
-                    logging.logError('[Error] porting.js (42): ' + err);
+                    logging.logError('[Error] porting.js (45): ' + err);
                   } else {
                     projectInfo = data.toString().trim().split(':');
                     projects[projectInfo[0]] = {
@@ -51,10 +52,10 @@ function portProfile(userId, mainCallback) {
                     };
             
                     let projectTaskList = [];
-                    if (fs.exists('/data-store/user-store/' + userId + '/project-store-dir/' + project + '/project_task_list.txt')) {
+                    if (fs.existsSync('./data-store/user-store/' + userId + '/project-store-dir/' + project + '/project_task_list.txt')) {
                       fs.readFile('./data-store/user-store/' + userId + '/project-store-dir/' + project + '/project_task_list.txt', function (err, data) {
                         if (err) {
-                          logging.logError('[Error] porting.js (54): ' + err);
+                          logging.logError('[Error] porting.js (58): ' + err);
                         } else {
                           projectTaskList = data.toString().split('\n');
                           projectTaskList.pop();
@@ -62,7 +63,8 @@ function portProfile(userId, mainCallback) {
                             let taskInfo = [];
                             fs.readFile('./data-store/user-store/' + userId + '/project-store-dir/' + project + '/' + projectTaskId + '.txt', function (err, data) {
                               if (err) {
-                                logging.logError('[Error] porting.js (62): ' + err);
+                                logging.logError('[Error] porting.js (66): ' + err);
+                                callback(null, {"status": false});                                
                               } else {
                                 taskInfo = data.toString().split('\n\n');
                                 projects[project]['projectTasks'].push({
@@ -76,7 +78,8 @@ function portProfile(userId, mainCallback) {
                             });
                           }, function(err) {
                             if (err) {
-                              logging.logError('[Error] porting;.js (76): ' + err)
+                              logging.logError('[Error] porting.js (81): ' + err);
+                              callback(null, {"status": false});                              
                             } else {
                               callback(null);
                             }
@@ -89,7 +92,8 @@ function portProfile(userId, mainCallback) {
               }
             }, function (err) {        
               if (err) {
-                logging.logError('[Error] porting;.js (87): ' + err)
+                logging.logError('[Error] porting.js (95): ' + err);
+                callback(null, {"status": false});                
               } else {
                 let projectList = [];
                 for (let a in projects) {
@@ -101,6 +105,8 @@ function portProfile(userId, mainCallback) {
   
           }
         });
+      } else {
+        callback(null, null);
       }
     },
 
@@ -108,10 +114,11 @@ function portProfile(userId, mainCallback) {
     simpleTasks: function (callback) {
       let tasks = [];
       let taskList = [];
-      if (fs.exists('./data-store/user-store/' + userId + '/task-store-dir/task_list.txt')) {
+      if (fs.existsSync('./data-store/user-store/' + userId + '/task-store-dir/task_list.txt')) {
         fs.readFile('./data-store/user-store/' + userId + '/task-store-dir/task_list.txt', function (err, data) {
           if (err) {
-            logging.logError('[Error] porting.js (107): ' + err);
+            logging.logError('[Error] porting.js (120): ' + err);
+            callback(null, {"status": false});            
           } else {
             taskList = data.toString().split('\n');
             taskList.pop();
@@ -119,7 +126,8 @@ function portProfile(userId, mainCallback) {
               let taskInfo = [];
               fs.readFile('./data-store/user-store/' + userId + '/task-store-dir/' + taskId + '.txt', function (err, data) {
                 if (err) {
-                  logging.logError('[Error] porting.js (111): ' + err);
+                  logging.logError('[Error] porting.js (129): ' + err);
+                  callback(null, {"status": false});                  
                 } else {
                   taskInfo = data.toString().split('\n\n');
                   tasks.push({
@@ -133,13 +141,16 @@ function portProfile(userId, mainCallback) {
               });
             }, function (err) {
               if (err) {
-                console.log('[Error]: ' + err);
-              } else{
+                logging.logError('[Error] porting.js (144): ' + err);
+                callback(null, {"status": false});
+              } else {
                 callback(null, tasks);
               }
             });
           }
         });
+      } else {
+        callback(null, null);
       }
     },
 
@@ -147,10 +158,11 @@ function portProfile(userId, mainCallback) {
     notes: function (callback) {
       let notes = [];
       let noteList = [];
-      if (fs.exists('./data-store/user-store/' + userId + '/note-store-dir/note_list.txt')) {
+      if (fs.existsSync('./data-store/user-store/' + userId + '/note-store-dir/note_list.txt')) {
         fs.readFile('./data-store/user-store/' + userId + '/note-store-dir/note_list.txt', function (err, data) {
           if (err) {
-            logging.logError('[Error] porting.js (151): ' + err);
+            logging.logError('[Error] porting.js (164): ' + err);
+            callback(null, {"status": false});            
           } else {
             noteList = data.toString().split('\n');
             noteList.pop();
@@ -158,7 +170,8 @@ function portProfile(userId, mainCallback) {
               let noteInfo = "";
               fs.readFile('./data-store/user-store/' + userId + '/note-store-dir/' + noteId + '.txt', function (err, data) {
                 if (err) {
-                  logging.logError('[Error] porting.js (107): ' + err);
+                  logging.logError('[Error] porting.js (173): ' + err);
+                  callback(null, {"status": false});                  
                 } else {
                   noteInfo = data.toString().trim();
                   notes.push({
@@ -170,23 +183,27 @@ function portProfile(userId, mainCallback) {
               });
             }, function (err) {
               if (err) {
-                console.log('[Error]: ' + err);
+                logging.logError('[Error] porting.js (186): ' + err);
+                callback(null, {"status": false});                
               } else {
                 callback(null, notes);
               }
             });
           }
         });
+      } else {
+        callback(null, null);
       }
     },
 
     // JSON for user's info.
     userInfo: function (callback) {
       let userInfo = [];
-      if (fs.exists('./data-store/user-store/' + userId + '/user_info.txt')) {
+      if (fs.existsSync('./data-store/user-store/' + userId + '/user_info.txt')) {
         fs.readFile('./data-store/user-store/' + userId + '/user_info.txt', function (err, data) {
           if (err) {
-            logging.logError('[Error] porting.js (123): ' + err);
+            logging.logError('[Error] porting.js (205): ' + err);
+            callback(null, {"status": false});            
           } else {
             userInfo = data.toString().split('\n');
             callback(null, {
@@ -197,6 +214,8 @@ function portProfile(userId, mainCallback) {
             });
           }
         });
+      } else {
+        callback(null, null);
       }
     },
 
@@ -207,10 +226,9 @@ function portProfile(userId, mainCallback) {
     }
 
   }, function (err, result) {
-    if(err) {
-      console.log('[Error]: ' + err);
+    if (err) {
+      logger.logError('[Error] porting.js (230): ' + err);
     } else {
-      console.log('Profile ported sucessfully');
       sendRequest((TASKING_SERVER_URL + 'portProfile'), 'POST', JSON.stringify({ "profile": result }), function (response) {
         console.log(response);
       });
