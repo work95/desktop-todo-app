@@ -100,16 +100,24 @@ function getNoteTemplate(noteId, noteText, date) {
   return noteNode;
 }
 
+function showNotesListCont() {
+  $('#notes-pane').slideDown(300);
+  loadNotesList(SESSION_STORE);
+}
+
+function closeNotesListCont() {
+  $('#notes-list-cont ul').html('');
+  $('#notes-pane').slideUp(300);
+  showMainTaskListCont();
+}
 
 $(function () {
   $('#notes-icon').click(function () {
-    $('#notes-pane').slideDown(300);
-    loadNotesList(SESSION_STORE);
+    showNotesListCont();
   });
 
   $('#notes-pane-close-btn').click(function () {
-    $('#notes-list-cont ul').html('');
-    $('#notes-pane').slideUp(300);
+    closeNotesListCont();
   });
 });
 
