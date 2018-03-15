@@ -66,9 +66,12 @@ function deleteNoteFromStore(userId, noteId) {
     for (let i = 0; i < list.length; i++) {
       if (list[i].split(":")[0] === noteId) {
         list.splice(i, 1);
-      } else {
-        finalList += list[i] + '\n';
+        break;
       }
+    }
+    
+    for (let i = 0; i < list.length; i++) {
+        finalList += list[i] + '\n';
     }
 
     fs.writeFileSync(filePathB, finalList);
