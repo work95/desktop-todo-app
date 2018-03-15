@@ -270,7 +270,7 @@ function getTaskTemplate(taskId, taskText, date, endTime) {
     '<a class="add-time-limit-btn" task-id="" class="dropdown-item" data-toggle="modal" data-target="#task-time-limit-cont" href="#">' +
     '<span><i class="fa fa-clock"></i></span>Add Time Limit' +
     '</a>'
-  '</div>' +
+    '</div>' +
     '</div>' +
     '</li>';
 

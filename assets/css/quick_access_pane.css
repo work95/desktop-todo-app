@@ -1,0 +1,126 @@
+#quick-access-cont {
+  background-color: rgba(255, 255, 255, 1);
+  top: 0px;
+  z-index: 10000;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: none;
+}
+
+#quick-access-nav {
+	position: fixed;
+	top: 0px;
+	width: 100%;
+	padding: 2px;
+	z-index: 10001;
+	text-align: center;
+	background-color: #fff;
+	box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.1);
+}
+
+#quick-access-nav-item-project {
+	border: 0px;
+	-webkit-appearance: none;
+}
+
+#quick-display-list {
+	background-color: #fff;
+	margin-top: 50px;
+}
+
+
+#quick-nav-project-list {
+	position: absolute;
+	box-shadow: 5px 6px 12px 0px rgba(0, 0, 0, 0.1);
+	font-size: 16px;
+	font-family: 'Ubuntu-Regular';
+	border: none;
+}
+
+#quick-nav-project-list {
+	z-index: 99999;
+}
+
+.quick-access-nav-items {
+	color: white;
+	padding: 10px;
+	font-family: 'Ubuntu-Regular';
+}
+
+#expand-back i {
+	color: #9f105c;
+	font-size: 25px;
+	vertical-align: middle;
+	margin-bottom: 6px;
+	margin-left: 4px;
+}
+
+#quick-display-list .list-group .list-group-item {
+	margin-bottom: 10px;
+}
+
+#quick-add-menu {
+  right: 0px;
+  bottom: 0px;
+	padding: 10px;
+  position: fixed;
+  display: inline-block;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: rgba(255, 255, 255, 1);
+}
+
+#quick-display-list .list-group .list-group-item {
+	box-shadow: -2px 4px 10px 1px rgba(0, 0, 0, 0.1);
+	border: none;
+}
+
+#quick-add-menu i {
+	float: right;
+}
+
+.quick-add-input-cont {
+	width: 89%;
+	position: absolute;
+	bottom: 0px;
+	display: none;
+}
+
+.quick-add-input-cont input {
+	width: 88%;
+	margin-right: 4px;
+	border: 1px outset rgba(0, 0, 0, 0.1);
+	padding: 1px;
+	box-shadow: 1px 4px 13px 0px rgba(0, 0, 0, 0.3);
+}
+
+.quick-add-input-cont input {
+	font-family: 'Ubuntu-Regular';
+	font-size: 15px;
+}
+
+.quick-add-inpt-cont input::placeholder {
+	font-family: 'Ubuntu-Regular';
+	font-size: 15px;
+}
+
+#quick-access-dropdown-list {
+	display: inline-block;
+	position: absolute;
+	bottom: 40px;
+	right: 0px;
+	color: white;
+	background-color: #e66a00;
+	box-shadow: 2px 3px 13px 0px rgba(0, 0, 0, 0.1);
+	font-family: 'Ubuntu-Regular';
+	cursor: pointer;
+	border-radius: 2px;
+	padding: 5px 10px;
+
+	display: none;
+}
+
+#quick-access-dropdown-item:hover {
+	background-color: rgba(230, 106, 0, 0.6);
+}
+

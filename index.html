@@ -11,9 +11,50 @@
   <link rel="stylesheet" href="./assets/css/fontawesome-all.min.css" />
   <link rel="stylesheet" href="./assets/css/index.css" />
   <link rel="stylesheet" href="./assets/css/reglog.css" />
+  <link rel="stylesheet" href="./assets/css/quick_access_pane.css" />
 </head>
 
 <body>
+
+  <!-- Quick access view. -->
+  <div id="quick-access-cont">
+    <div id="quick-access-nav">
+      <span class="quick-access-nav-items btn btn-unique" id="quick-access-nav-item-task">Tasks</span>
+      <span class="quick-access-nav-items btn btn-unique" id="quick-access-nav-item-note">Notes</span>
+      <span class="quick-access-nav-items btn btn-unique dropdown-toggle" id="quick-access-nav-item-project" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Projects</span>
+
+      <div class="dropdown-menu" id="quick-nav-project-list"></div>
+
+      <span id="expand-back">
+        <i class="fa fa-external-link-alt"></i>
+      </span>
+    </div>
+
+    <div id="quick-display-list">
+      <ul class="list-group"></ul>
+    </div>
+
+    <div id="quick-add-menu">
+      <i class="fa fa-plus"></i>
+    </div>
+
+    <div id="quick-access-dropdown-list">
+      <div id="quick-add-task-link" class="quick-access-dropdown-item">Add Task</div>
+      <div id="quick-add-note-link" class="quick-access-dropdown-item">Add Note</div>
+    </div>
+
+    <div id="quick-add-task" class="quick-add-input-cont">
+      <input type="text" id="quick-add-task-input" placeholder="Your Task." />
+      <span id="quick-add-task-tick"><i class="fa fa-check"></i></span>
+    </div>
+
+    <div id="quick-add-note" class="quick-add-input-cont">
+      <input type="text" id="quick-add-note-input" placeholder="Your Note." />
+      <span id="quick-add-note-tick"><i class="fa fa-check"></i></span>
+    </div>
+  </div>
+
+
   <div id="connection-tracker-cont">
 
     <span id="connection-tracker-cont-close-btn">
@@ -206,6 +247,10 @@
       </span>
 
       <span id="header-icon-cont">
+        <span id="quick-access-btn">
+          <i class="fa fa-external-link-square-alt"></i>
+        </span>
+
         <span id="perform-sync" class="disabled">
           <i class="fa fa-sync-alt"></i>
         </span>
@@ -287,6 +332,7 @@
   <script src="./task_handler.js"></script>
   <script src="./project_handler.js"></script>
   <script src="./notes_handler.js"></script>
+  <script src="./quick_access_handler.js"></script>
   <script src="./assets/js/popper.min.js"></script>
   <script src="./assets/js/bootstrap.min.js"></script>
   <script src="./assets/js/mdb.min.js"></script>
