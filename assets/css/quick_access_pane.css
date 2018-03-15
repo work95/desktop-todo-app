@@ -26,7 +26,7 @@
 
 #quick-display-list {
 	background-color: #fff;
-	margin-top: 50px;
+	margin-top: 51px;
 }
 
 
@@ -49,10 +49,10 @@
 }
 
 #expand-back i {
-	color: #9f105c;
-	font-size: 25px;
+	color: rgba(120, 222, 47, 1);
+	font-size: 28px;
 	vertical-align: middle;
-	margin-bottom: 6px;
+	margin-bottom: 1px;
 	margin-left: 4px;
 }
 
@@ -67,22 +67,26 @@
   position: fixed;
   display: inline-block;
   border: 1px solid rgba(0, 0, 0, 0.1);
-  background-color: rgba(255, 255, 255, 1);
+  background-color: #000;
+}
+
+#quick-add-menu i {
+	float: right;
+	color: white;
 }
 
 #quick-display-list .list-group .list-group-item {
 	box-shadow: -2px 4px 10px 1px rgba(0, 0, 0, 0.1);
 	border: none;
-}
-
-#quick-add-menu i {
-	float: right;
+	font-family: 'Ubuntu-Medium';
+	font-size: 14px;
 }
 
 .quick-add-input-cont {
-	width: 89%;
-	position: absolute;
+	width: 92%;
+	position: fixed;
 	bottom: 0px;
+	background-color: rgba(0, 0, 0, 0.9);
 	display: none;
 }
 
@@ -91,10 +95,8 @@
 	margin-right: 4px;
 	border: 1px outset rgba(0, 0, 0, 0.1);
 	padding: 1px;
+	color: #fff;
 	box-shadow: 1px 4px 13px 0px rgba(0, 0, 0, 0.3);
-}
-
-.quick-add-input-cont input {
 	font-family: 'Ubuntu-Regular';
 	font-size: 15px;
 }
@@ -102,6 +104,11 @@
 .quick-add-inpt-cont input::placeholder {
 	font-family: 'Ubuntu-Regular';
 	font-size: 15px;
+	color: white;
+}
+
+#quick-add-task-tick, #quick-add-note-tick {
+	color: white;
 }
 
 #quick-access-dropdown-list {
