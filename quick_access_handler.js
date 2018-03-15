@@ -25,7 +25,8 @@ function loadQuickProjectList() {
   $(node).children('a.quick-project-select').click(function () {
     let projectId = $(this).attr('id').trim();
     loadQuickProjectTasks(projectId);
-    LIST_CONT_STATE = 0;
+    CURRENT_PROJECT_ID = projectId;
+    LIST_CONT_STATE = 2;
   });
 }
 
@@ -37,6 +38,21 @@ $(function () {
     currentWindow.setSize(800, 600);
     currentWindow.center(true);
     $('#quick-access-cont').slideUp(300);
+    $('#quick-display-list ul').html('');
+    switch (LIST_CONT_STATE) {
+      case 1:
+      showMainTaskListCont();
+      break;
+      
+      case 2:
+      showProjectTaskListCont(CURRENT_PROJECT_ID);
+      break;
+
+      case 3:
+      showNotesListCont();
+      break;
+
+    }
   });
 });
 
@@ -49,6 +65,7 @@ $(function () {
 $(function () {
   $('#quick-add-task-link').click(function () {
     $('#quick-add-note').fadeOut(0);
+    $('#quick-access-dropdown-list').fadeOut(0);
     $('#quick-add-task').fadeIn(200);
   });
 });
@@ -56,6 +73,7 @@ $(function () {
 $(function () {
   $('#quick-add-note-link').click(function () {
     $('#quick-add-task').fadeOut(0);
+    $('#quick-access-dropdown-list').fadeOut(0);
     $('#quick-add-note').fadeIn(200);
   });
 });
@@ -177,5 +195,6 @@ function loadQuickNoteList() {
 $(function () {
   $('#quick-access-nav-item-note').click(function () {
     loadQuickNoteList();
+    LIST_CONT_STATE = 3;
   });
 });
