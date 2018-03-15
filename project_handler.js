@@ -13,7 +13,7 @@ function addProject(projectName, projectId) {
   attachProjectLinkListener();
 
   CURRENT_PROJECT_ID = projectId;
-  showProjectTaskListCont(projectName);
+  showNewProjectTaskListCont(projectName);
 }
 
 function addProjectTask(taskText, taskId) {
@@ -286,7 +286,7 @@ function deleteProjectFromStore(projectId) {
   porting.portProfile(SESSION_STORE, null);
 }
 
-function showProjectTaskListCont(projectName) {
+function showNewProjectTaskListCont(projectName) {
   $('#project-add-input-box').slideUp(250).children('input').val("");
   $('#project-input-error-box').html("");
   $('#delete-project-btn').fadeIn(300);
