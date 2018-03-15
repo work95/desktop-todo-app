@@ -247,6 +247,18 @@ function showMainTaskListCont() {
   LIST_CONT_STATE = 1;
 }
 
+function showProjectTaskListCont(projectId) {
+  let filePath = './data-store/user-store/' + SESSION_STORE + '/project-store-dir/';
+  let projectInfo = fs.readFileSync(filePath + '/' + projectId + '/project_info.txt').toString().split(':');
+  $('#switch-list-cont').css('opacity', 0.5);
+  $('#task-list-cont').slideUp(300);
+  $('#project-task-list-cont').fadeIn(300);
+  loadProjectTasks(projectId);
+  $('#menu-icon').fadeIn(100);
+  $('#project-tag-display').text(projectInfo[1]).fadeIn(100);  
+  LIST_CONT_STATE = 2;
+}
+
 function getTaskTemplate(taskId, taskText, date, endTime) {
   let taskNode = '<li class="list-group-item" id="' + taskId + '" status="false">' +
     '<span id="task-complete-icon"><i class="fa fa-check"></i></span>' +
