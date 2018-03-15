@@ -58,6 +58,7 @@ $(function () {
 
 $(function () {
   $('#quick-add-menu').click(function () {
+    $('#quick-add-note, #quick-add-task').fadeOut(100);
     $('#quick-access-dropdown-list').fadeToggle(200);
   });
 });
