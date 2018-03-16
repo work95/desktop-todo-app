@@ -570,5 +570,59 @@ $(function () {
       $('#perform-sync i').removeClass('sync-rotate');
       $('#perform-sync').removeClass('disabled');
     });
+
   });
 });
+
+function getTaskInfo(taskId) {
+  let filePath = './data-store/user-store/' + SESSION_STORE + '/project-store-dir/';
+  if (!fs.existsSync(filePath)) {
+    ;
+  } else {
+    let projectList = loadProjects();
+
+    for (let j = 0; j < projectList.length; j++) {
+      let projectTaskList = fs.readFileSync(filePath + '/' + projectList[j] + '/project_task_list.txt').toString().split("\n");
+      let projectInfo = fs.readFileSync(filePath + '/' + projectList[j] + '/project_info.txt').toString().split(":");
+      projectTaskList.pop();
+
+      for (let i = 0; i < projectTaskList.length; i++) {
+        let data = decodeURIComponent(fs.readFileSync('./data-store/user-store/' + SESSION_STORE + '/project-store-dir/' + projectList[j] + '/' + projectTaskList[i] + '.txt').toString()).split('\n\n');
+        if (taskId === projectTaskList[i]) {
+          return {
+            "type": "project",
+            "projectId": projectList[j],
+            "projectName": projectInfo[1],
+            "taskId": projectTaskList[i],
+            "taskTimeLeft": data[1],
+            "taskText": data[2],
+            "isComplete": data[0]
+          };
+
+        }
+      }
+    }
+  }
+
+  filePath = './data-store/user-store/' + SESSION_STORE + '/task-store-dir/task_list.txt';
+  if (!fs.existsSync(filePath)) {
+    ;
+  } else {
+    let taskList = fs.readFileSync(filePath).toString().split("\n");
+    taskList.pop();
+
+    for (let i = 0; i < taskList.length; i++) {
+      let data = decodeURIComponent(fs.readFileSync('./data-store/user-store/' + SESSION_STORE + '/task-store-dir/' + taskList[i] + '.txt').toString()).split("\n\n");
+      if (taskId === taskList[i]) {
+        return {
+          "type": "simple",
+          "taskId": taskList[i],
+          "taskTimeLeft": data[1],
+          "taskText": data[2],
+          "isComplete": data[0]
+        };
+
+      }
+    }
+  }
+}
