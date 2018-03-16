@@ -82,15 +82,6 @@ function checkNotification() {
 
   // Show notification in the pane also.
   showNotificationInPane(priority);
-
-  let screenSize = electron.screen.getPrimaryDisplay().size;
-  ipcRenderer.send('notification-open',
-    screenSize.width - 320,
-    50,
-    getTimeLeftString(timeSmallest),
-    (decodeURIComponent(priority.split(":")[2]).substr(0, 50) + "...")
-  );
-
 }
 
 function getTimeLeftString(taskTimeLeft) {
@@ -134,6 +125,14 @@ function showNotificationInPane(taskNotificationInfo) {
 
   $('#notification-pane ul').append(getNotificationTemplate(taskInfo));
   SHOWN_NOTIFICATIONS.push(taskInfo['taskId']);
+
+  let screenSize = electron.screen.getPrimaryDisplay().size;
+  ipcRenderer.send('notification-open',
+    screenSize.width - 320,
+    50,
+    getTimeLeftString(timeSmallest),
+    (decodeURIComponent(priority.split(":")[2]).substr(0, 50) + "...")
+  );
 }
 
 
