@@ -9,7 +9,7 @@ var NOTIFICATION_COUNT = 0;
 setInterval(function () {
   initializeNotificationSystem();
   checkNotification();
-}, 2000);    // In every 1 minute.
+}, 60000);    // In every 1 minute.
 
 function initializeNotificationSystem() {
   let filePath = './data-store/user-store/' + SESSION_STORE + '/project-store-dir/';
