@@ -104,11 +104,8 @@ function getTimeLeftString(taskTimeLeft) {
 }
 
 function showNotificationInPane(taskNotificationInfo) {
-  console.log(taskNotificationInfo.split(":")[0]);
   let info = getTaskInfo(taskNotificationInfo.split(":")[0]);
   let taskInfo = {};
-
-  console.log(info);
 
   if (info['type'] === "project") {
     taskInfo['type'] = "pt";
