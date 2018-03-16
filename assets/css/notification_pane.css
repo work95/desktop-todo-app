@@ -33,15 +33,15 @@
 }
 
 #notification-pane .list-group .list-group-item div small {
-	font-family: 'Roboto-Regular';
+	font-family: 'Ubuntu-Medium';
 }
 
 #notification-pane .list-group .list-group-item p {
-	font-family: 'Ubuntu-Regular';
-	font-size: 16px;
+	font-family: 'Ubuntu-Medium';
+	font-size: 15px;
 	margin-top: 10px;
 }
 
 #notification-pane .list-group .list-group-item small {
-	font-family: 'Roboto-Regular';
+	font-family: 'Ubuntu-Medium';
 }

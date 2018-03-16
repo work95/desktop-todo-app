@@ -4,7 +4,7 @@ var NOTIF_TASK_LIST = [];
 var NOTIF_PROJECT_TASK_LIST = [];
 
 var SHOWN_NOTIFICATIONS = [];
-
+var NOTIFICATION_COUNT = 0;
 
 setInterval(function () {
   initializeNotificationSystem();
@@ -103,24 +103,27 @@ function showNotificationInPane(taskNotificationInfo) {
     taskInfo['projectId'] = info['projectId'];
     taskInfo['projectName'] = info['projectName'];
     taskInfo['heading'] = info['projectName'];
-    let date = new Date(parseInt(info['taskId'].split("_")[1]));
-    taskInfo['taskDate'] = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + "";
-    taskInfo['timeLeft'] = getTimeLeftString(info['taskTimeLeft']);
-    taskInfo['taskText'] = info['taskText'];
 
   } else if (info['type'] === "simple") {
     taskInfo['type'] = "t";
     taskInfo['heading'] = "Simple Task";
-    let date = new Date(parseInt(info['taskId'].split("_")[1]));
-    taskInfo['taskDate'] = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + "";
-    taskInfo['timeLeft'] = getTimeLeftString(info['taskTimeLeft']);
-    taskInfo['taskText'] = info['taskText'];
   }
 
+  let date = new Date(parseInt(info['taskId'].split("_")[1]));
+  taskInfo['taskDate'] = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + "";
+  taskInfo['timeLeft'] = getTimeLeftString(info['taskTimeLeft']);
+  taskInfo['taskText'] = info['taskText'];
+  
   for (let i = 0; i < SHOWN_NOTIFICATIONS.length; i++) {
     if (SHOWN_NOTIFICATIONS[i] === taskInfo['taskId']) {
       return;
     }
+  }
+
+  NOTIFICATION_COUNT++;
+
+  if (NOTIFICATION_COUNT > 0) {
+    $('#notification-count-badge').fadeIn(200).text(NOTIFICATION_COUNT);
   }
 
   $('#notification-pane ul').append(getNotificationTemplate(taskInfo));
@@ -152,6 +155,8 @@ function getNotificationTemplate(taskInfo) {
 
 $(function () {
   $('#notification-icon').click(function () {
+    NOTIFICATION_COUNT = 0;
+    $('#notification-count-badge').fadeOut(200).text(NOTIFICATION_COUNT);
     showNotificationPane();
   });
 });

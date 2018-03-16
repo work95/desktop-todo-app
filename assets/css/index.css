@@ -296,10 +296,17 @@ header div h2 {
 #header-icon-cont span { margin-left: 30px; }
 #header-icon-cont span i { font-size: 25px; }
 
+#notification-count-badge {
+  margin-left: 0px !important;
+  position: relative;
+  top: -16px;
+  left: -8px;
+
+  display: none;
+}
+
 #notification-icon i { color: white; }
-
 #quick-access-btn i { color: white; }
-
 #perform-sync { color: white; }
 #perform-sync i { font-size: 22px !important; }
 
