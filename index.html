@@ -12,9 +12,17 @@
   <link rel="stylesheet" href="./assets/css/index.css" />
   <link rel="stylesheet" href="./assets/css/reglog.css" />
   <link rel="stylesheet" href="./assets/css/quick_access_pane.css" />
+  <link rel="stylesheet" href="./assets/css/notification_pane.css" />
 </head>
 
 <body>
+
+  <div id="notification-pane">
+    <span id="notification-pane-close-btn">
+      <i class="fa fa-times"></i>
+    </span>
+    <ul class="list-group"></ul>
+  </div>
 
   <!-- Quick access view. -->
   <div id="quick-access-cont">
@@ -247,6 +255,11 @@
       </span>
 
       <span id="header-icon-cont">
+
+        <span id="notification-icon">
+          <i class="fa fa-bell"></i>
+        </span>
+
         <span id="quick-access-btn">
           <i class="fa fa-external-link-square-alt"></i>
         </span>
@@ -326,28 +339,29 @@
 
   </article>
 
-  <script src="./index_main.js"></script>
-  <script src="./reglog_handler.js"></script>
-  <script src="./key_handler.js"></script>
-  <script src="./task_handler.js"></script>
-  <script src="./project_handler.js"></script>
-  <script src="./notes_handler.js"></script>
-  <script src="./quick_access_handler.js"></script>
-  <script src="./assets/js/popper.min.js"></script>
-  <script src="./assets/js/bootstrap.min.js"></script>
-  <script src="./assets/js/mdb.min.js"></script>
-  <script>
-    $(window).on('load', function () {
-      removeLoadingScreen();
-      connectToServer();
-      if (loadLastLoginSession() === null) {
-        $('#startup-message-screen').fadeIn(1000);
-        return;
-      } else {
-        closeRegLogPane();
-      }
-    });
-  </script>
+<script src="./index_main.js"></script>
+<script src="./reglog_handler.js"></script>
+<script src="./key_handler.js"></script>
+<script src="./task_handler.js"></script>
+<script src="./project_handler.js"></script>
+<script src="./notes_handler.js"></script>
+<script src="./quick_access_handler.js"></script>
+<script src="./notification_handler.js"></script>
+<script src="./assets/js/popper.min.js"></script>
+<script src="./assets/js/bootstrap.min.js"></script>
+<script src="./assets/js/mdb.min.js"></script>
+<script>
+  $(window).on('load', function () {
+    removeLoadingScreen();
+    connectToServer();
+    if (loadLastLoginSession() === null) {
+      $('#startup-message-screen').fadeIn(1000);
+      return;
+    } else {
+      closeRegLogPane();
+    }
+  });
+</script>
 
 </body>
 
