@@ -9,7 +9,7 @@ var SHOWN_NOTIFICATIONS = [];
 setInterval(function () {
   initializeNotificationSystem();
   checkNotification();
-}, 60000);    // In every 1 minute.
+}, 2000);    // In every 1 minute.
 
 function initializeNotificationSystem() {
   let filePath = './data-store/user-store/' + SESSION_STORE + '/project-store-dir/';
@@ -130,8 +130,8 @@ function showNotificationInPane(taskNotificationInfo) {
   ipcRenderer.send('notification-open',
     screenSize.width - 320,
     50,
-    getTimeLeftString(timeSmallest),
-    (decodeURIComponent(priority.split(":")[2]).substr(0, 50) + "...")
+    taskInfo['timeLeft'],
+    (decodeURIComponent(taskInfo['taskText'].substr(0, 50) + "..."))
   );
 }
 
