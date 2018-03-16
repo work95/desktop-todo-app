@@ -1,10 +1,11 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const url = require('url');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
+let notificationWindow;
 
 function createWindow () {
   // Create the browser window.
@@ -14,7 +15,7 @@ function createWindow () {
     minWidth: 500,
     minHeight: 400,
     webPreferences: {
-      devTools: false
+      devTools: true
     }
   });
 
@@ -31,6 +32,37 @@ function createWindow () {
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
     win = null
+  });
+}
+
+function createNotificationWindow(x, y) {
+
+  notificationWindow = new BrowserWindow({
+    width: 400,
+    height: 100,
+    parent: 'top',
+    webPreferences: {
+      devTools: true
+    },
+    alwaysOnTop: true,
+    resizable: false,
+    toolbar: false,
+    frame: false,
+    x: x,
+    y: y
+  });
+
+  notificationWindow.loadURL(url.format({
+    pathname: path.join(__dirname, 'index_notification.html'),
+    protocol: 'file:',
+    slashes: true
+  }));
+  
+  notificationWindow.on('closed', () => {
+    // Dereference the window object, usually you would store windows
+    // in an array if your app supports multi windows, this is the time
+    // when you should delete the corresponding element.
+    notificationWindow = null
   });
 }
 
@@ -54,6 +86,20 @@ app.on('activate', () => {
   if (win === null) {
     createWindow()
   }
+
+  if (notificationWindow === null) {
+    createNotificationWindow(1600 - 300, 900 - 300);
+  }
+});
+
+/* Listen to channel (notification-open) for, when to open the notification window. */
+ipcMain.on('notification-open', (event, arg1, arg2, arg3, arg4) => {
+  // arg1 => x; arg2 => y; arg3 => task time left; arg4 => task text.
+  if (notificationWindow === undefined || notificationWindow === null) {
+    createNotificationWindow(arg1, arg2);
+  }
+  notificationWindow.webContents.executeJavaScript('createNotificationUi("' + arg3 + '", "' + arg4 + '");');
+
 });
 
 // In this file you can include the rest of your app's specific main process
