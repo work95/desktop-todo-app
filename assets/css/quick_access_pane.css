@@ -113,7 +113,7 @@
 
 #quick-access-dropdown-list {
 	display: inline-block;
-	position: absolute;
+	position: fixed;
 	bottom: 40px;
 	right: 0px;
 	color: white;
@@ -130,4 +130,3 @@
 #quick-access-dropdown-item:hover {
 	background-color: rgba(230, 106, 0, 0.6);
 }
-
