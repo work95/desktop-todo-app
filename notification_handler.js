@@ -51,14 +51,20 @@ function checkNotification() {
   for (let i = 0; i < NOTIF_PROJECT_TASK_LIST.length; i++) {
     let info = NOTIF_PROJECT_TASK_LIST[i].split(":");
     if (parseInt(info[1]) > 0) {
-      taskTemp.push(NOTIF_PROJECT_TASK_LIST[i]);
+      // Don't include the tasks that are already notified of.
+      if (SHOWN_NOTIFICATIONS[i] !== info[0]) {
+        taskTemp.push(NOTIF_PROJECT_TASK_LIST[i]);
+      }
     }
   }
 
   for (let i = 0; i < NOTIF_TASK_LIST.length; i++) {
     let info = NOTIF_TASK_LIST[i].split(":");
     if (parseInt(info[1]) > 0) {
-      taskTemp.push(NOTIF_TASK_LIST[i]);
+      // Don't include the tasks that are already notified of.
+      if (SHOWN_NOTIFICATIONS[i] !== info[0]) {
+        taskTemp.push(NOTIF_TASK_LIST[i]);
+      }
     }
   }
 
@@ -113,9 +119,9 @@ function showNotificationInPane(taskNotificationInfo) {
   taskInfo['taskDate'] = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + "";
   taskInfo['timeLeft'] = getTimeLeftString(info['taskTimeLeft']);
   taskInfo['taskText'] = info['taskText'];
-  
+
   for (let i = 0; i < SHOWN_NOTIFICATIONS.length; i++) {
-    if (SHOWN_NOTIFICATIONS[i] === taskInfo['taskId']) {
+    if (SHOWN_NOTIFICATIONS[i] === info['taskId']) {
       return;
     }
   }
@@ -127,7 +133,7 @@ function showNotificationInPane(taskNotificationInfo) {
   }
 
   $('#notification-pane ul').append(getNotificationTemplate(taskInfo));
-  SHOWN_NOTIFICATIONS.push(taskInfo['taskId']);
+  SHOWN_NOTIFICATIONS.push(info['taskId']);
 
   let screenSize = electron.screen.getPrimaryDisplay().size;
   ipcRenderer.send('notification-open',
