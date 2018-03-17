@@ -8,7 +8,6 @@ var NOTIFICATION_COUNT = 0;
 
 setInterval(function () {
   initializeNotificationSystem();
-  checkNotification();
 }, 60000);    // In every 1 minute.
 
 function initializeNotificationSystem() {
@@ -43,6 +42,8 @@ function initializeNotificationSystem() {
       NOTIF_TASK_LIST.push(taskList[i] + ":" + data[1] + ":" + encodeURIComponent(data[2]));
     }
   }
+
+  checkNotification();
 }
 
 function checkNotification() {
@@ -51,20 +52,20 @@ function checkNotification() {
   for (let i = 0; i < NOTIF_PROJECT_TASK_LIST.length; i++) {
     let info = NOTIF_PROJECT_TASK_LIST[i].split(":");
     if (parseInt(info[1]) > 0) {
-      // Don't include the tasks that are already notified of.
-      if (SHOWN_NOTIFICATIONS[i] !== info[0]) {
-        taskTemp.push(NOTIF_PROJECT_TASK_LIST[i]);
+      if (!isTaskNotified(info[0])) {
+        taskTemp.push(NOTIF_PROJECT_TASK_LIST[i]);        
       }
+
     }
   }
 
   for (let i = 0; i < NOTIF_TASK_LIST.length; i++) {
     let info = NOTIF_TASK_LIST[i].split(":");
     if (parseInt(info[1]) > 0) {
-      // Don't include the tasks that are already notified of.
-      if (SHOWN_NOTIFICATIONS[i] !== info[0]) {
+      if (!isTaskNotified(info[0])) {
         taskTemp.push(NOTIF_TASK_LIST[i]);
       }
+
     }
   }
 
@@ -86,8 +87,20 @@ function checkNotification() {
     return;
   }
 
+  console.log(priority);
+
   // Show notification in the pane also.
   showNotificationInPane(priority);
+}
+
+function isTaskNotified(taskId) {
+  for (let i = 0; i < SHOWN_NOTIFICATIONS.length; i++) {
+    if (SHOWN_NOTIFICATIONS[i] === taskId) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 function getTimeLeftString(taskTimeLeft) {
@@ -119,6 +132,8 @@ function showNotificationInPane(taskNotificationInfo) {
   taskInfo['taskDate'] = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + "";
   taskInfo['timeLeft'] = getTimeLeftString(info['taskTimeLeft']);
   taskInfo['taskText'] = info['taskText'];
+
+  console.log(SHOWN_NOTIFICATIONS);
 
   for (let i = 0; i < SHOWN_NOTIFICATIONS.length; i++) {
     if (SHOWN_NOTIFICATIONS[i] === info['taskId']) {
