@@ -87,8 +87,6 @@ function checkNotification() {
     return;
   }
 
-  console.log(priority);
-
   // Show notification in the pane also.
   showNotificationInPane(priority);
 }
@@ -133,8 +131,6 @@ function showNotificationInPane(taskNotificationInfo) {
   taskInfo['timeLeft'] = getTimeLeftString(info['taskTimeLeft']);
   taskInfo['taskText'] = info['taskText'];
 
-  console.log(SHOWN_NOTIFICATIONS);
-
   for (let i = 0; i < SHOWN_NOTIFICATIONS.length; i++) {
     if (SHOWN_NOTIFICATIONS[i] === info['taskId']) {
       return;
@@ -159,25 +155,8 @@ function showNotificationInPane(taskNotificationInfo) {
   );
 }
 
-
-function getNotificationTemplate(taskInfo) {
-  let node = '' +
-    '<a href="#" task-type="' + taskInfo['type'] + ':' + taskInfo['projectId'] + '" class="list-group-item list-group-item-action flex-column align-items-start">' +
-     '<div class="d-flex w-100 justify-content-between">' +
-      '<h5 class="mb-1">' + taskInfo['heading'] + '</h5>' +
-       '<small class="text-muted">' + taskInfo['taskDate'] + '</small>' +
-      '</div>' +
-      '<p class="mb-1">' + taskInfo['taskText'] + '</p>' +
-      '<small class="text-muted">' + taskInfo['timeLeft'] + '</small>' +
-    '</a>';
-
-  return node;
-}
-
 $(function () {
   $('#notification-icon').click(function () {
-    NOTIFICATION_COUNT = 0;
-    $('#notification-count-badge').fadeOut(200).text(NOTIFICATION_COUNT);
     showNotificationPane();
   });
 });
@@ -189,9 +168,16 @@ $(function () {
 });
 
 function showNotificationPane() {
+  NOTIFICATION_COUNT = 0;
+  $('#notification-count-badge').fadeOut(200).text(NOTIFICATION_COUNT);
   $('#notification-pane').slideDown(200);
 }
 
 function closeNotificationPane() {
   $('#notification-pane').slideUp(200);
+
+  // To not show empty list.
+  if (LIST_CONT_STATE === 1 || LIST_CONT_STATE === 4) {
+    showMainTaskListCont();
+  }
 }

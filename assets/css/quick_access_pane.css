@@ -44,8 +44,16 @@
 
 .quick-access-nav-items {
 	color: white;
-	padding: 10px;
+	padding: 7px;
+	margin: 5px 2px;
 	font-family: 'Ubuntu-Regular';
+}
+
+#quick-access-nav-item-notification {
+	color: red;
+	font-size: 25px;
+	vertical-align: middle;
+	position: relative;
 }
 
 #expand-back i {

@@ -259,6 +259,10 @@ function showProjectTaskListCont(projectId) {
   LIST_CONT_STATE = 2;
 }
 
+function showNotificationsListCont() {
+  showNotificationPane();
+}
+
 function getTaskTemplate(taskId, taskText, date, endTime) {
   let taskNode = '<li class="list-group-item" id="' + taskId + '" status="false">' +
     '<span id="task-complete-icon"><i class="fa fa-check"></i></span>' +
@@ -287,6 +291,20 @@ function getTaskTemplate(taskId, taskText, date, endTime) {
     '</li>';
 
   return taskNode;
+}
+
+function getNotificationTemplate(taskInfo) {
+  let node = '' +
+    '<a href="#" task-type="' + taskInfo['type'] + ':' + taskInfo['projectId'] + '" class="list-group-item list-group-item-action flex-column align-items-start">' +
+     '<div class="d-flex w-100 justify-content-between">' +
+      '<h5 class="mb-1">' + taskInfo['heading'] + '</h5>' +
+       '<small class="text-muted">' + taskInfo['taskDate'] + '</small>' +
+      '</div>' +
+      '<p class="mb-1">' + taskInfo['taskText'] + '</p>' +
+      '<small class="text-muted">' + taskInfo['timeLeft'] + '</small>' +
+    '</a>';
+
+  return node;
 }
 
 $(function () {

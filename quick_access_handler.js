@@ -52,6 +52,10 @@ $(function () {
       showNotesListCont();
       break;
 
+      case 4:
+      showNotificationsListCont();
+      break;
+
     }
   });
 });
@@ -197,5 +201,38 @@ $(function () {
   $('#quick-access-nav-item-note').click(function () {
     loadQuickNoteList();
     LIST_CONT_STATE = 3;
+  });
+});
+
+function loadQuickNotificationList() {
+  $('#quick-display-list ul').html('');
+
+  for (let i = 0; i < SHOWN_NOTIFICATIONS.length; i++) {
+    let info = getTaskInfo(SHOWN_NOTIFICATIONS[i]);
+    let taskInfo = {};
+
+    if (info['type'] === "project") {
+      taskInfo['type'] = "pt";
+      taskInfo['projectId'] = info['projectId'];
+      taskInfo['projectName'] = info['projectName'];
+      taskInfo['heading'] = info['projectName'];
+
+    } else if (info['type'] === "simple") {
+      taskInfo['type'] = "t";
+      taskInfo['heading'] = "Simple Task";
+    }
+
+    let date = new Date(parseInt(info['taskId'].split("_")[1]));
+    taskInfo['taskDate'] = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + "";
+    taskInfo['timeLeft'] = getTimeLeftString(info['taskTimeLeft']);
+    taskInfo['taskText'] = info['taskText'];
+    $('#quick-display-list ul').append(getNotificationTemplate(taskInfo));
+  }
+}
+
+$(function () {
+  $('#quick-access-nav-item-notification').click(function () {
+    loadQuickNotificationList();
+    LIST_CONT_STATE = 4;
   });
 });
