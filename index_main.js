@@ -419,6 +419,16 @@ function attachTaskOptionBtnListener() {
       let nodeId = $(this).parent().parent().parent().attr('id');
       $('#close-task-time-limit-modal').attr('task-id', nodeId);
       $('#close-task-time-limit-modal').attr('task-type', LIST_CONT_STATE === 1 ? 'main' : 'project');
+
+      // Fill in the input boxes with current date parameters.
+      let date = new Date();
+      $('#task-time-input-day').val(date.getDate().toString());
+      $('#task-time-input-month').val((date.getMonth() + 1).toString());
+      $('#task-time-input-year').val(date.getFullYear().toString());
+      $('#task-time-input-hour').val(date.getHours().toString());
+      $('#task-time-input-minute').val(date.getMinutes().toString());
+      $('#task-time-input-second').val(date.getSeconds().toString());
+
     });
   });
 }
