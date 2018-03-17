@@ -63,11 +63,13 @@
 #quick-add-menu {
   right: 0px;
   bottom: 0px;
-	padding: 10px;
+  padding: 10px;
   position: fixed;
   display: inline-block;
   border: 1px solid rgba(0, 0, 0, 0.1);
   background-color: #000;
+  border-radius: 2px;
+  box-shadow: 2px 3px 7px 0px rgba(0, 0, 0, 0.1);
 }
 
 #quick-add-menu i {
@@ -115,14 +117,15 @@
 	display: inline-block;
 	position: fixed;
 	bottom: 40px;
-	right: 0px;
-	color: white;
-	background-color: #e66a00;
-	box-shadow: 2px 3px 13px 0px rgba(0, 0, 0, 0.1);
+	right: 7px;
+	color: black;
+	background-color: #f75858;
+	box-shadow: 1px 11px 12px 3px rgba(0, 0, 0, 0.1);
 	font-family: 'Ubuntu-Regular';
 	cursor: pointer;
 	border-radius: 2px;
-	padding: 5px 10px;
+	padding: 8px 10px;
+	border: 1px solid rgba(0, 0, 0, 0.1);
 
 	display: none;
 }
