@@ -146,12 +146,18 @@ function showNotificationInPane(taskNotificationInfo) {
   $('#notification-pane ul').append(getNotificationTemplate(taskInfo));
   SHOWN_NOTIFICATIONS.push(info['taskId']);
 
+  let taskTextTemp = decodeURIComponent(taskInfo['taskText']);
+
+  if (taskTextTemp.length > 50) {
+    taskTextTemp = taskTextTemp.substr(0, 50) + "...";
+  }
+
   let screenSize = electron.screen.getPrimaryDisplay().size;
   ipcRenderer.send('notification-open',
     screenSize.width - 320,
     50,
-    taskInfo['timeLeft'],
-    (decodeURIComponent(taskInfo['taskText'].substr(0, 50) + "..."))
+    taskInfo['timeLeft'] + " left",
+    taskTextTemp
   );
 }
 
