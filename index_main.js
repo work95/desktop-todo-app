@@ -93,7 +93,11 @@ function attachTaskOptionBtnListener() {
       $('#task-input-error-box').text("").slideUp(300).css('color', 'black');
       let nodeId = $(this).parent().parent().parent().attr('id');
       TaskHandler.deleteTaskFromStore(nodeId, function () {
-        $('#' + nodeId).remove();
+        // Remove the task list node.
+        $("#" + nodeId).remove();
+
+        // Remove the notification list node.
+        $("#notif_" + nodeId).remove();
       });
     });
 
