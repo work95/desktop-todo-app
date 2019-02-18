@@ -24,85 +24,7 @@
     <ul class="list-group"></ul>
   </div>
 
-  <!-- Quick access view. -->
-  <div id="quick-access-cont">
-    <div id="quick-access-nav">
-      <span class="quick-access-nav-items" id="quick-access-nav-item-notification">
-        <i class="fa fa-bell"></i>
-      </span>
-      <span class="quick-access-nav-items btn btn-purple" id="quick-access-nav-item-task">Tasks</span>
-      <span class="quick-access-nav-items btn btn-deep-purple" id="quick-access-nav-item-note">Notes</span>
-      <span class="quick-access-nav-items btn btn-elegant dropdown-toggle" id="quick-access-nav-item-project" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Projects</span>
-
-      <div class="dropdown-menu" id="quick-nav-project-list"></div>
-
-      <span id="expand-back">
-        <i class="fa fa-external-link-square-alt"></i>
-      </span>
-    </div>
-
-    <div id="quick-display-list">
-      <ul class="list-group"></ul>
-    </div>
-
-    <div id="quick-add-menu">
-      <i class="fa fa-ellipsis-v"></i>
-    </div>
-
-    <div id="quick-access-dropdown-list">
-      <div id="quick-add-task-link" class="quick-access-dropdown-item">Add Task</div>
-      <div id="quick-add-note-link" class="quick-access-dropdown-item">Add Note</div>
-    </div>
-
-    <div id="quick-add-task" class="quick-add-input-cont">
-      <input type="text" id="quick-add-task-input" placeholder="Your Task." />
-      <span id="quick-add-task-tick"><i class="fa fa-check"></i></span>
-    </div>
-
-    <div id="quick-add-note" class="quick-add-input-cont">
-      <input type="text" id="quick-add-note-input" placeholder="Your Note." />
-      <span id="quick-add-note-tick"><i class="fa fa-check"></i></span>
-    </div>
-  </div>
-
-
-  <div id="connection-tracker-cont">
-
-    <span id="connection-tracker-cont-close-btn">
-      <i class="fa fa-angle-down"></i>
-    </span>
-
-    <div class="loader">Loading...</div>
-    <span id="connection-tracking-icon">
-      <i class=""></i>
-    </span>
-
-    <span id="connection-tracking-message">Checking for available servers...</span>
-    <div id="local-storage-message">Using local storage for now</div>
-    <div class="btn" id="try-another-server-link">Want to try another server</div>
-
-    <div id="manual-connection-add">
-      <input type="text" placeholder="Try another server (Server's URL)" autofocus />
-      <button id="manual-connection-add-btn" class="btn">Try server</button>
-      <span id="manual-connection-error-badge" class="badge">Nothing added</span>
-    </div>
-
-  </div>
-
   <div class="animated fadeInRight" id="log-error-cont">Error! Please refer logs.</div>
-
-  <div id="loading-screen">
-    <div class="outer">
-      <div class="middle">
-        <div class="inner">
-          <section id="load-screen-spinner">
-            <section class="spin load-spinner"></section>
-            <section class="spin-load-title" style="color: white;">Loading...</section>
-          </section>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <div class="modal fade" id="task-time-limit-cont" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -151,107 +73,6 @@
     </div>
   </div>
 
-  <div id="reglog-page">
-    <span id="reglog-close-btn">
-      <i class="fa fa-arrow-circle-left"></i>
-    </span>
-    <div id="tab-cont">
-      <div class="tabs-wrapper">
-        <ul class="nav classic-tabs tabs-orange" role="tablist">
-          <li class="nav-item">
-            <a class="nav-link waves-light" ref="pane2">Sign In</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link waves-light active" ref="pane1">Sign Up</a>
-          </li>
-        </ul>
-      </div>
-
-      <div class="tab-content card">
-
-        <div class="tab-content-body" id="pane2" state="off">
-          <form>
-            <p class="h5 text-center mb-4">Sign in</p>
-
-            <div id="email-tag-cont" class="h6 text-left mb-4">
-              <p id="email-tag"></p>
-              <span id="change-login-email">
-                <i class="fa fa-times"></i>
-              </span>
-            </div>
-
-            <div class="md-form" id="login-email-cont">
-              <i class="fa fa-envelope prefix grey-text"></i>
-              <input type="text" id="defaultForm-email" class="form-control" autofocus>
-              <label for="defaultForm-email">Your email</label>
-              <div id="log-email-error" class="reglog-error-box"></div>
-            </div>
-
-            <div class="md-form" id="login-pass-cont">
-              <i class="fa fa-lock prefix grey-text"></i>
-              <input type="password" id="defaultForm-pass" class="form-control">
-              <label for="defaultForm-pass">Your password</label>
-              <div id="log-pass-error" class="reglog-error-box"></div>
-            </div>
-
-            <div class="text-center">
-              <div id="check-email-btn" class="btn btn-elegant">Next</div>
-              <div id="login-btn" class="btn btn-elegant">Login</div>
-              <span class="badge red darken-3" id="login-btn-badge" style="display: none;"></span>
-            </div>
-          </form>
-        </div>
-
-        <div class="tab-content-body" id="pane1" state="on">
-          <form>
-            <p class="h5 text-center mb-4">Sign up</p>
-            <div class="md-form">
-              <i class="fa fa-user prefix grey-text"></i>
-              <input type="text" id="orangeForm-name" class="form-control" autofocus>
-              <label for="orangeForm-name">Your name</label>
-              <div id="reg-name-error" class="reglog-error-box"></div>
-            </div>
-            <div class="md-form">
-              <i class="fa fa-envelope prefix grey-text"></i>
-              <input type="text" id="orangeForm-email" class="form-control">
-              <label for="orangeForm-email">Your email</label>
-              <div id="reg-email-error" class="reglog-error-box"></div>
-            </div>
-
-            <div class="md-form">
-              <i class="fa fa-lock prefix grey-text"></i>
-              <input type="password" id="orangeForm-pass" class="form-control">
-              <label for="orangeForm-pass">Your password</label>
-              <div id="reg-pass-error" class="reglog-error-box"></div>
-            </div>
-
-            <div class="text-center">
-              <div id="register-btn" class="btn btn-elegant">Sign up</div>
-              <span class="badge red darken-3" id="reg-btn-badge" style="display: none;"></span>
-            </div>
-
-          </form>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <div id="notes-pane">
-    <div id="notes-pane-header">Notes</div>
-    <div id="notes-add-input-box" class="input-box">
-      <input type="text" id="notes-text-input" placeholder="Add a note" autofocus />
-      <div id="notes-input-error-box"></div>
-    </div>
-
-    <div id="notes-pane-close-btn">
-      <i class="fa fa-times"></i>
-    </div>
-    <div id="notes-list-cont" class="list-cont">
-      <ul class="list-group"></ul>
-    </div>
-  </div>
-
   <header class="purple darken-1">
     <div>
       <span id="user-name-display">
@@ -259,114 +80,33 @@
       </span>
 
       <span id="header-icon-cont">
-
         <span id="notification-icon">
           <i class="fa fa-bell"></i>
           <span id="notification-count-badge" class="badge badge-primary">0</span>
         </span>
 
-        <span id="quick-access-btn">
-          <i class="fa fa-external-link-square-alt"></i>
-        </span>
-
-        <span id="perform-sync" class="disabled">
-          <i class="fa fa-sync-alt"></i>
-        </span>
-
-        <span id="notes-icon">
-          <i class="fa fa-sticky-note"></i>
-        </span>
-
-        <span id="switch-list-cont">
-          <span>P</span>
-        </span>
-
-        <span id="delete-project-btn">
-          <i class="fa fa-trash"></i>
-        </span>
-
         <span id="add-task-btn" class="disabled">
           <i class="fa fa-plus"></i>
         </span>
-
-        <button type="button" id="reglog-btn" class="btn purple darken-4 waves-effect">SIGN IN</button>
-        <button type="button" id="sign-out-btn" class="btn red darken-4 waves-effect">SIGN OUT</button>
       </span>
     </div>
   </header>
 
   <article>
-    <span onclick="openProjectNav()" class="btn-floating float-btn" id="menu-icon">
-      P
-    </span>
-
-    <div id="side-nav" class="sidenav side-pane">
-      <section id="project-list-cont">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeProjectNav()">&times;</a>
-        <div id="project-pane-message-box">
-          <span></span>
-          <button id="project-pane-message-btn" class="btn btn-red darken-3"></button>
-        </div>
-        <a href="#" class="project-item" project-id="display: none;"></a>
-      </section>
-    </div>
-
-    <div id="startup-message-screen">
-      <section id="startup-message">
-        <h3>No tasks yet</h2>
-          <h6>Login to become more organized.</h6>
-          <div class="btn btn-indigo" id="startup-message-btn">
-            <p>Get Started</p>
-            <section id="startup-message-spinner" class="spin"></section>
-          </div>
-      </section>
-    </div>
-
-    <div id="project-add-input-box" class="input-box">
-      <input type="text" id="project-text-input" placeholder="Your project's name" autofocus />
-      <div id="project-input-error-box"></div>
-    </div>
-
     <div id="task-add-input-box" class="input-box">
       <input type="text" id="task-text-input" placeholder="What do you want to do next?" autofocus />
       <div id="task-input-error-box"></div>
     </div>
 
-    <div class="animated fadeInLeft" id="project-tag-display"></div>
-
     <div id="task-list-cont" class="list-cont">
       <ul class="list-group"></ul>
     </div>
-
-    <div id="project-task-list-cont" class="list-cont">
-      <ul class="list-group"></ul>
-    </div>
-
   </article>
 
-<script src="./index_main.js"></script>
-<script src="./reglog_handler.js"></script>
-<script src="./key_handler.js"></script>
-<script src="./task_handler.js"></script>
-<script src="./project_handler.js"></script>
-<script src="./notes_handler.js"></script>
-<script src="./notification_handler.js"></script>
-<script src="./quick_access_handler.js"></script>
+<script src="./boot.js"></script>
 <script src="./assets/js/popper.min.js"></script>
 <script src="./assets/js/bootstrap.min.js"></script>
 <script src="./assets/js/mdb.min.js"></script>
-<script>
-  $(window).on('load', function () {
-    removeLoadingScreen();
-    connectToServer();
-    if (loadLastLoginSession() === null) {
-      $('#startup-message-screen').fadeIn(1000);
-      return;
-    } else {
-      closeRegLogPane();
-    }
-  });
-</script>
 
 </body>
 
