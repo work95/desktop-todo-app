@@ -2,6 +2,7 @@ const countdown = require("countdown");
 const electron = require('electron');
 const {ipcRenderer} = require('electron');
 const Config = require("./Config");
+const UiIndex = require("./ui_index");
 const Utility = require("./Utility");
 
 module.exports = {
@@ -94,37 +95,3 @@ function getNotificationTemplate(taskInfo) {
 
   return node;
 }
-
-
-/* Notification list to be watched for changes. */
-const targetList = document.getElementById("notification-list");
-
-// What attributes to watch for.
-const observerPreferences = {
-  childList: true
-};
-
-// Observer initialization.
-const ThreadListObserver = new MutationObserver(function (mutations) {
-  mutations.forEach(function (mutation) {
-    if (mutation.type === "childList") {
-      // Get the notification children list size.
-      Config.NOTIFICATION_COUNT = $("#notification-list").children().length;
-
-      // Get the Id of the node removed, captured by the mutation object.
-      let notificationId = $(mutation.addedNodes[0]).attr("id");
-
-      // Get the index of the notification, which is removed.
-      let index = Config.SHOWN_NOTIFICATIONS.indexOf(notificationId);
-      // Remove the element from the array.
-      if (index > 0) { Config.SHOWN_NOTIFICATIONS.splice(index, 1); }
-
-      // Update the notification count.
-      $("#notification-count-badge").text(Config.NOTIFICATION_COUNT);
-    }
-  });
-});
-
-// Start observing.
-ThreadListObserver.observe(targetList, observerPreferences);
-
