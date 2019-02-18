@@ -69,7 +69,6 @@ const TaskHandler = module.exports = {
   deleteTaskFromStore: function (taskId, callback) {
     let filePathA = `./data-store/user-store/${Config.USER_ID}/task-store-dir`;
     let filePathB = `${filePathA}/task_list.txt`;
-    console.log(filePathB);
 
     if (!fs.existsSync(filePathB)) {
       typeof callback === "function" ? callback() : {};
