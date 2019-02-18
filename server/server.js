@@ -19,7 +19,7 @@ server.listen(7910, function () {
   logger.info("SERVER RUNNING AT 7910");
 });
 
-app.get('/poll', function (req, res) {
+app.get('/todo/poll', function (req, res) {
 
   'use strict';
   res.send({
@@ -29,10 +29,9 @@ app.get('/poll', function (req, res) {
 });
 
 /* Store the profile in the server's directory. */
-app.post('/portProfile', function (req, res) {
+app.post('/todo/portProfile', function (req, res) {
 
   'use strict';
-  console.log(req.body);
   let profile = req.body['profile'];
   if (!fs.existsSync('./user_list.txt')) {
     fs.writeFileSync('./user_list.txt', "");
@@ -54,13 +53,13 @@ app.post('/portProfile', function (req, res) {
   fs.writeFileSync('./user_' + profile['userInfo']['userId'] + '.txt', JSON.stringify(profile));
 
   // SYNC with other servers.
-  syncWithOtherServers();
+  // syncWithOtherServers();
 
   res.sendStatus(200);
 });
 
 /* Fetch the profile's information. */
-app.post('/getProfile', function (req, res) {
+app.post('/todo/getProfile', function (req, res) {
 
   'use strict';
   if (!fs.existsSync('./user_' + req.body.userId + '.txt')) {
@@ -75,7 +74,7 @@ app.post('/getProfile', function (req, res) {
 });
 
 /* Check if the user exists or not. */
-app.post('/getUser', function (req, res) {
+app.post('/todo/getUser', function (req, res) {
 
   'use strict';
   let userList = fs.readFileSync('./user_list.txt').toString().split('\n');
@@ -104,7 +103,7 @@ app.post('/getUser', function (req, res) {
   });
 });
 
-app.post('/sync', function (req, res) {
+app.post('/todo/sync', function (req, res) {
   let syncDetails = req.body;
   for (let i = 0; i < syncDetails['userList'].length; i++) {
     let userId = syncDetails['userList'][i];
@@ -125,8 +124,8 @@ app.post('/sync', function (req, res) {
 
 function syncWithOtherServers() {
   let servers = [
-    'http://127.0.0.1:7911/', 'http://192.168.1.2:7910/', 'http://192.168.1.3:7910/', 'http://192.168.1.4:7910/', 
-    'http://192.168.1.5:7910/', 'http://192.168.1.6:7910/', 'http://192.168.1.7:7910/', 'http://192.168.1.8:7910/'
+    'http://127.0.0.1:7910/todo/', 'http://192.168.1.2:7910/todo/', 'http://192.168.1.3:7910/todo/', 'http://192.168.1.4:7910/todo/', 
+    'http://192.168.1.5:7910/todo/', 'http://192.168.1.6:7910/todo/', 'http://192.168.1.7:7910/todo/', 'http://192.168.1.8:7910/todo/'
   ];
   let availableServer = [];
 
