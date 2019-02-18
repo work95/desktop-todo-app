@@ -85,13 +85,8 @@ function showNotification(taskInfo) {
   ipcRenderer.send('notification-open',
     screenSize.width - 320,
     50,
-<<<<<<< HEAD
-    taskInfo['timeLeft'] + " left",
-    taskTextTemp
-=======
     taskInfo['timeLeft'],
     (decodeURIComponent(taskInfo["taskText"]))
->>>>>>> development
   );
 }
 
