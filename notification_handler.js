@@ -4,18 +4,13 @@ const {ipcRenderer} = require('electron');
 const Config = require("./Config");
 const Utility = require("./Utility");
 
-var SHOWN_NOTIFICATIONS = [];
-var NOTIFICATION_COUNT = 0;
-
 module.exports = {
-  NOTIFICATION_COUNT,
-
   checkNotifications: function () {
     let list = Config.TASK_LIST.toKeyArray();
     let endTimeList = {};
     let showFlag = 0;
     for (let i = 0; i < list.length; i++) {
-      if (SHOWN_NOTIFICATIONS.indexOf(list[i]) < 0) {
+      if (Config.SHOWN_NOTIFICATIONS.indexOf(list[i]) < 0) {
         showFlag++;
         let time = Config.TASK_LIST.get(list[i])["taskEndTime"];
         if (time != null) {
@@ -31,7 +26,7 @@ module.exports = {
 }
 
 function isTaskNotified(taskId) {
-  if (SHOWN_NOTIFICATIONS.indexOf(taskId) < 0) {
+  if (Config.SHOWN_NOTIFICATIONS.indexOf(taskId) < 0) {
     return false;
   }
   return true;
@@ -49,17 +44,19 @@ function getTimeLeftObject(taskTimeLeft) {
   return countdown(new Date(), new Date(parseInt(taskTimeLeft)), units);
 }
 
+let lofo;
 function showNotifications(endTimeList) {
   let taskInfo = {};
   for (let i = 0; i < endTimeList.length; i++) {
     if (!isTaskNotified(endTimeList[i])) {
       let info = Config.TASK_LIST.get(endTimeList[i]);
-      if (getTimeLeftObject(info["taskEndTime"]).hours <= 1) {
+      let timeSpan = getTimeLeftObject(info["taskEndTime"]);
+      if (timeSpan.hours <= 1 && timeSpan.value > 0) {
         let date = new Date(parseInt(info["taskStartTime"]));
         taskInfo["taskId"] = info["taskId"];
         taskInfo["taskDate"] = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
         taskInfo["timeLeft"] = getTimeLeftString(info["taskEndTime"]);
-        taskInfo["taskText"] = info["taskText"];
+        taskInfo["taskText"] = decodeURIComponent(info["taskText"]);
         showNotification(taskInfo);
         return;
       }
@@ -68,18 +65,12 @@ function showNotifications(endTimeList) {
 }
 
 function showNotification(taskInfo) {
-  if (++NOTIFICATION_COUNT > 0) {
-    $('#notification-count-badge').fadeIn(200).text(NOTIFICATION_COUNT);
+  if (Config.NOTIFICATION_COUNT > 0) {
+    $('#notification-count-badge').fadeIn(200).text(Config.NOTIFICATION_COUNT);
   }
 
   $('#notification-pane ul').append(getNotificationTemplate(taskInfo));
-  SHOWN_NOTIFICATIONS.push(taskInfo["taskId"]);
-
-  let taskTextTemp = decodeURIComponent(taskInfo['taskText']);
-
-  if (taskTextTemp.length > 50) {
-    taskTextTemp = taskTextTemp.substr(0, 50) + "...";
-  }
+  Config.SHOWN_NOTIFICATIONS.push(taskInfo["taskId"]);
 
   let screenSize = electron.screen.getPrimaryDisplay().size;
   ipcRenderer.send('notification-open',
@@ -90,9 +81,10 @@ function showNotification(taskInfo) {
   );
 }
 
+/* Template for notification element. */
 function getNotificationTemplate(taskInfo) {
   let node = '' +
-    '<a href="#" class="list-group-item list-group-item-action flex-column align-items-start">' +
+    '<a href="#" id="notif_' + taskInfo["taskId"] + '" class="list-group-item list-group-item-action flex-column align-items-start">' +
     '<div class="d-flex w-100 justify-content-between">' +
     '<h5 class="mb-1">' + taskInfo["taskText"] + '</h5>' +
     '<small class="text-muted">' + taskInfo["taskDate"] + '</small>' +
@@ -102,3 +94,37 @@ function getNotificationTemplate(taskInfo) {
 
   return node;
 }
+
+
+/* Notification list to be watched for changes. */
+const targetList = document.getElementById("notification-list");
+
+// What attributes to watch for.
+const observerPreferences = {
+  childList: true
+};
+
+// Observer initialization.
+const ThreadListObserver = new MutationObserver(function (mutations) {
+  mutations.forEach(function (mutation) {
+    if (mutation.type === "childList") {
+      // Get the notification children list size.
+      Config.NOTIFICATION_COUNT = $("#notification-list").children().length;
+
+      // Get the Id of the node removed, captured by the mutation object.
+      let notificationId = $(mutation.addedNodes[0]).attr("id");
+
+      // Get the index of the notification, which is removed.
+      let index = Config.SHOWN_NOTIFICATIONS.indexOf(notificationId);
+      // Remove the element from the array.
+      if (index > 0) { Config.SHOWN_NOTIFICATIONS.splice(index, 1); }
+
+      // Update the notification count.
+      $("#notification-count-badge").text(Config.NOTIFICATION_COUNT);
+    }
+  });
+});
+
+// Start observing.
+ThreadListObserver.observe(targetList, observerPreferences);
+
