@@ -14,8 +14,14 @@ const IndexMain = module.exports = {
     if (!fs.existsSync(Config.BASE_STORE_DIR)) { fs.mkdirSync(Config.BASE_STORE_DIR); }
   },
 
+  checkUserDirectoryStructure: function () {
+    if (!fs.existsSync(Config.USER_STORE_DIR + "/" + Config.USER_ID)) {
+      fs.mkdirSync(Config.USER_STORE_DIR + "/" + Config.USER_ID);
+    }
+  },
+
   /* Load the User Id of the last logged in user or use default user. */
-  loadUserId: function () {
+  loadLastUserId: function () {
     if (!fs.existsSync(Config.USER_STORE_DIR)) { 
       fs.mkdirSync(Config.USER_STORE_DIR);
       fs.writeFileSync(Config.LAST_LOGIN_FILE, "");
@@ -36,7 +42,10 @@ const IndexMain = module.exports = {
     IndexMain.checkDirectoryStructure();
 
     // Load USER_ID.
-    Config.USER_ID = IndexMain.loadUserId() || "user_0";
+    Config.USER_ID = IndexMain.loadLastUserId() || "user_0";
+
+    // Check if the user's directory is okay.
+    IndexMain.checkUserDirectoryStructure();
 
     // Load configuration variables.
     Config.setupConfiguration();
