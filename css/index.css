@@ -75,11 +75,10 @@ article {
   margin: auto;
   left: 0px;
   right: 0px;
-  width: 90%;
-  background-color: #884d98;
-  padding: 10px;
+  width: 100%;
   max-width: 800px;
   position: fixed;
+  bottom: 0px;
   z-index: 11;
   border-radius: 2px;
   font-family: "Quicksand-Medium";
@@ -87,19 +86,20 @@ article {
 }
 
 .input-box input {
-  padding: 10px 0px;
+  padding: 10px;
   box-shadow: 0px 3px 13px 0px rgba(0, 0, 0, 0.1) !important;
   border: 0px;
   width: 100%;
   font-size: 15px;
   font-family: "Quicksand-Medium";
-  background-color: rgb(156, 81, 177) !important;
-  color: white;
+  background-color: white;
+  color: black;
+  border: 1px solid rgba(0, 0, 0, 0.2);
   border-bottom: 0px !important;
 }
 
 .input-box input::placeholder {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(0, 0, 0, 0.7);
 }
 
 #task-input-error-box {
@@ -198,7 +198,6 @@ article {
   height: 30px;
   margin-top: -20px;
   margin-right: -10px;
-
   display: none;
 }
 
