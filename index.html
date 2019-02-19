@@ -67,7 +67,11 @@
       </span>
 
       <span id="header-icon-cont">
-        <span id="add-task-btn">
+        <span id="task-list-refresh" class="header-icon">
+          <i class="fa fa-refresh"></i>
+        </span>
+
+        <span id="add-task-btn" class="header-icon">
           <i class="fa fa-plus"></i>
         </span>
       </span>
@@ -75,6 +79,10 @@
   </header>
 
   <article>
+    <div id="task-search-box" class="input-box">
+      <input type="text" id="task-search-input" placeholder="Enter task's text to search" autofocus />
+    </div>
+
     <div id="task-add-input-box" class="input-box">
       <input type="text" id="task-text-input" placeholder="What do you want to do next?" autofocus />
       <div id="task-input-error-box"></div>
