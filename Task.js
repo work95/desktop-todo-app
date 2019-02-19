@@ -25,11 +25,9 @@ Task.prototype.save = function (callback) {
 
 Task.prototype.saveInFile = function (callback) {
   let self = this;
-  let filePath = `./data-store/user-store/${Config.USER_ID}/task-store-dir/`;
-  if (!fs.existsSync(filePath)) {
-    fs.mkdirSync(filePath);
-  }
-  fs.writeFile(`${filePath}/${self.id}.txt`, JSON.stringify(self), function (err) {
+  let file = Config.TASK_STORE_DIR;
+  if (!fs.existsSync(file)) { fs.mkdirSync(file); }
+  fs.writeFile(`${file}/${self.id}.txt`, JSON.stringify(self), function (err) {
     if (err) { console.log(err); }
     typeof callback === "function" ? callback() : {};
   });
@@ -37,9 +35,9 @@ Task.prototype.saveInFile = function (callback) {
 
 Task.prototype.store = function (callback) {
   let self = this;
-  let filePath = `./data-store/user-store/${Config.USER_ID}/task-store-dir/`;
-  if (!fs.existsSync(filePath)) { fs.mkdirSync(filePath); }
-  fs.appendFile(`${filePath}/task_list.txt`, `${self.id},`, function (err) {
+  let filePath = Config.TASK_STORE_DIR;
+  if (!fs.existsSync(file)) { fs.mkdirSync(file); }
+  fs.appendFile(`${file}/task_list.txt`, `${self.id},`, function (err) {
     self.saveInFile(function () {
       typeof callback === "function" ? callback() : {};
     });
@@ -64,7 +62,7 @@ Task.prototype.addTimeLimit = function (endTime) {
 
 /* Delete the task from the record. */
 Task.prototype.delete = function (callback) {
-  let file = `./data-store/user-store/${Config.USER_ID}/task-store-dir`;
+  let file = Config.TASK_STORE_DIR;
   Config.Tasks.removeAndStore(this, function () {
     fs.unlinkSync(`${file}/${taskId}.txt`);
     typeof callback === "function" ? callback() : {};
@@ -78,7 +76,9 @@ Task.prototype.getTaskTemplate = function () {
   let taskNode =
     `<li class="list-group-item" id="${self.id}" status="false">
       <span id="task-complete-icon"><i class="fa fa-check"></i></span>
-      <span class="task-text">${self.text}<br />
+      <span class="task-text">
+        <span class="task-text-cont">${self.text}</span>
+        <br />
         <span class="task-start-date">${date.getDate()}/${(date.getMonth() + 1)}/${date.getFullYear()}</span>
         <span class="task-end-time"></span>
       </span>
