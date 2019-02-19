@@ -2,6 +2,18 @@
 
 const Utility = module.exports = {
 
+  subseq: function (val1, val2) {
+    let valA = escape(val1.toLowerCase());
+    let valB = escape(val2.toLowerCase());
+
+    let str = "";
+    for (let i = 0; i < valB.length; i++) {
+      str += `${valB[i]}.*`;
+    }
+
+    return ((valA.match(new RegExp(str, "i")) === null) ? false : true);
+  },
+
   /* 
    * Sorts the JSON according to the field in ascending order and returns the array of the keys. 
    */
