@@ -5,7 +5,6 @@ const fs = require("fs");
 const Config = require("./Config");
 const List = require("./List");
 const Task = require("./Task");
-const TaskHandler = require("./task_handler");
 
 
 function TaskList() {
@@ -36,9 +35,9 @@ TaskList.prototype.addAndStore = function (taskObj, callback) {
 }
 
 TaskList.prototype.addInStore = function (taskObj, callback) {
-  let filePath = `./data-store/user-store/${Config.USER_ID}/task-store-dir/`;
-  if (!fs.existsSync(filePath)) { fs.mkdirSync(filePath); }
-  fs.appendFile(`${filePath}/task_list.txt`, `${taskObj.id},`, function (err) {
+  let file = Config.TASK_STORE_DIR;
+  if (!fs.existsSync(file)) { fs.mkdirSync(file); }
+  fs.appendFile(`${file}/task_list.txt`, `${taskObj.id},`, function (err) {
     callback();
   });
 }
@@ -55,7 +54,7 @@ TaskList.prototype.removeAndStore = function (taskObj, callback) {
 }
 
 TaskList.prototype.removeFromStore = function (taskObj, callback) {
-  let filePathA = `./data-store/user-store/${Config.USER_ID}/task-store-dir`;
+  let filePathA = Config.TASK_STORE_DIR;
   let filePathB = `${filePathA}/task_list.txt`;
 
   if (!fs.existsSync(filePathB)) {
@@ -81,7 +80,7 @@ TaskList.prototype.removeFromStore = function (taskObj, callback) {
 }
 
 TaskList.prototype.loadList = function (callback) {
-  let file = `./data-store/user-store/${Config.USER_ID}/task-store-dir/task_list.txt`;
+  let file = `${Config.TASK_STORE_DIR}/task_list.txt`;
   if (!fs.existsSync(file)) {
     typeof callback === "function" ? callback() : {};
   } else {
@@ -94,7 +93,7 @@ TaskList.prototype.loadList = function (callback) {
         let list = data.toString().split(",");
         async.each(list, function (item, callback) {
           if (item != undefined && item.length > 0) {
-            TaskHandler.getTaskInfo(item, function (result) {
+            getTaskInfo(item, function (result) {
               Config.Tasks.add(new Task(result.id, result.text, result.startTime, result.endTime, result.status));
               callback();
             });
@@ -107,6 +106,22 @@ TaskList.prototype.loadList = function (callback) {
       }
     });
   }
+}
+
+/* Get the info of the task from the storage. */
+function getTaskInfo(taskId, callback) {
+  let file = `${Config.TASK_STORE_DIR}/${taskId}.txt`;
+  fs.readFile(file, function (err, data) {
+    if (err) {
+      // Log the error.
+      console.log(err);
+      callback();
+    } else {
+      let info = JSON.parse(data);
+      info["text"] = decodeURIComponent(info["text"]);
+      callback(info);
+    }
+  });
 }
 
 
