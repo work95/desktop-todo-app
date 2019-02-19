@@ -1,4 +1,4 @@
 node_modules/
-data-store/
-extras/
-logs/
+assets/
+.ds/
+.logs/
