@@ -11,7 +11,7 @@ const UiIndex = module.exports = {
   addTask: function (taskText, callback) {
     let task = new Task(null, taskText);
     task.save(function () {
-      task.displayTaskNode("append");
+      task.displayTaskNode("prepend");
       UiIndex.attachTaskOptionBtnListener();
       typeof callback === "function" ? callback() : {};
     });
