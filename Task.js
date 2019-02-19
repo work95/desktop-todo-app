@@ -35,7 +35,7 @@ Task.prototype.saveInFile = function (callback) {
 
 Task.prototype.store = function (callback) {
   let self = this;
-  let filePath = Config.TASK_STORE_DIR;
+  let file = Config.TASK_STORE_DIR;
   if (!fs.existsSync(file)) { fs.mkdirSync(file); }
   fs.appendFile(`${file}/task_list.txt`, `${self.id},`, function (err) {
     self.saveInFile(function () {
@@ -89,15 +89,9 @@ Task.prototype.getTaskTemplate = function () {
           <span class="dot"></span>
         </div>
         <div id="task-options-menu" class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
-          <a class="complete-task-btn" state="false" class="dropdown-item" href="#">
-            <span><i class="fa fa-check"></i></span>Task Complete
-          </a>
-          <a class="delete-task-btn" class="dropdown-item" href="#">
-            <span><i class="fa fa-trash-alt"></i></span>Delete Task
-          </a>
-          <a class="add-time-limit-btn" task-id="" class="dropdown-item" data-toggle="modal" data-target="#task-time-limit-cont" href="#">
-            <span><i class="fa fa-clock"></i></span>Add Time Limit
-          </a>
+          <a class="complete-task-btn" state="false" class="dropdown-item" href="#">Task Complete</a>
+          <a class="delete-task-btn" class="dropdown-item" href="#">Delete Task</a>
+          <a class="add-time-limit-btn" task-id="" class="dropdown-item" data-toggle="modal" data-target="#task-time-limit-cont" href="#">Add Time Limit</a>
         </div>
       </div>
     </li>`;
