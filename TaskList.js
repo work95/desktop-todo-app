@@ -49,6 +49,7 @@ TaskList.prototype.remove = function (taskObj) {
 TaskList.prototype.removeAndStore = function (taskObj, callback) {
   this.remove(taskObj);
   this.removeFromStore(taskObj, function () {
+    taskObj.delete();
     callback();
   });
 }
