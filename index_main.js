@@ -3,35 +3,30 @@
 const fs = require('fs');
 const Config = require("./Config");
 const NotificationHandler = require("./notification_handler");
-const TaskHandler = require("./task_handler");
+const TaskList = require("./TaskList");
 const UiIndex = require("./ui_index");
 
 const IndexMain = module.exports = {
 
   /* Check the storage directory structure. */
   checkDirectoryStructure: function () {
-    // Parent storage directory.
-    let mainDir = `./data-store/`;
-    
-    if (!fs.existsSync(mainDir)) { fs.mkdirSync(mainDir); }
+    // Parent storage directory.    
+    if (!fs.existsSync(Config.BASE_STORE_DIR)) { fs.mkdirSync(Config.BASE_STORE_DIR); }
   },
 
   /* Load the User Id of the last logged in user or use default user. */
   loadUserId: function () {
-    let userDir = `./data-store/user-store/`;
-    let userFile = `${userDir}/last_login.txt`;
-
-    if (!fs.existsSync(userDir)) { 
-      fs.mkdirSync(userDir);
-      fs.writeFileSync(userFile, "");
+    if (!fs.existsSync(Config.USER_STORE_DIR)) { 
+      fs.mkdirSync(Config.USER_STORE_DIR);
+      fs.writeFileSync(Config.LAST_LOGIN_FILE, "");
       return null;
     }
 
     // Create or read and return.
-    if (!fs.existsSync(userFile)) { 
-      fs.writeFileSync(userFile, ""); 
+    if (!fs.existsSync(Config.LAST_LOGIN_FILE)) { 
+      fs.writeFileSync(Config.LAST_LOGIN_FILE, ""); 
     } else {
-      return fs.readFileSync(userFile).toString();
+      return fs.readFileSync(Config.LAST_LOGIN_FILE).toString();
     }
   },
 
@@ -43,10 +38,16 @@ const IndexMain = module.exports = {
     // Load USER_ID.
     Config.USER_ID = IndexMain.loadUserId() || "user_0";
 
+    // Load configuration variables.
+    Config.setupConfiguration();
+
+    Config.Tasks = new TaskList();
+
     // Attach window key listeners.
     UiIndex.attachWindowKeyListener();
 
-    TaskHandler.loadTaskList(function () {
+
+    Config.Tasks.loadList(function () {
       UiIndex.displayTaskList(function () {
 
         // Keep on checking for notifications.
