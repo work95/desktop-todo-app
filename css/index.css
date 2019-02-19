@@ -208,6 +208,12 @@ article {
 /* 
  * Time constraint modal.
  */
+
+#task-time-limit-cont .modal-dialog { 
+  margin: auto;
+  margin-top: 20px;
+}
+
 #task-time-limit-cont div {
   max-width: 400px;
 }
@@ -264,7 +270,6 @@ article {
 #close-task-time-limit-modal {
   font-family: "Quicksand-Bold";
 }
-
 
 /* 
  * Custom Scrollbar.
