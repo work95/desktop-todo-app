@@ -2,32 +2,19 @@
 
 const countdown = require('countdown');
 const Config = require("./Config");
-const TaskHandler = require("./task_handler");
+const Task = require("./Task");
+
 
 const UiIndex = module.exports = {
 
   /* For adding the task text to the storage and display it. */
   addTask: function (taskText, callback) {
-    let date = new Date().getTime();
-    let taskId = `task_${date}`;
-
-    TaskHandler.addTask(taskId, taskText, function (result) {
-      UiIndex.attachTaskNodeToTheDisplay(TaskHandler.getTaskTemplate(taskId, taskText, date), "append");
+    let task = new Task(null, taskText);
+    task.save(function () {
+      task.displayTaskNode("append");
       UiIndex.attachTaskOptionBtnListener();
       typeof callback === "function" ? callback() : {};
     });
-  },
-
-  /* Attach the node to the display list. */
-  attachTaskNodeToTheDisplay: function (node, type) {
-    switch (type) {
-      case "append": 
-        $('#task-list-cont ul').append(node);
-        break;
-
-      case "prepend":
-        break;
-    }
   },
 
   /* Attaching click listeners on various options of the task. */
@@ -46,13 +33,13 @@ const UiIndex = module.exports = {
       $('.delete-task-btn').click(function () {
         // Remove error message if add task modal is open.
         $('#task-input-error-box').text("").slideUp(300).css('color', 'black');
-        let nodeId = $(this).parent().parent().parent().attr('id');
-        TaskHandler.deleteTaskFromStore(nodeId, function () {
+        let obj = $($(this).parent().parent().parent()).data("data");
+        Config.Tasks.removeAndStore(obj, function () {
           // Remove the task list node.
-          $("#" + nodeId).remove();
-
+          $("#" + obj.id).remove();
+  
           // Remove the notification list node.
-          $("#notif_" + nodeId).remove();
+          $("#notif_" + obj.id).remove();
         });
       });
 
@@ -60,20 +47,23 @@ const UiIndex = module.exports = {
       $('.complete-task-btn').click(function () {
         $('#task-input-error-box').text("").slideUp(300).css('color', 'black');
         let nodeId = $(this).parent().parent().parent().attr('id');
+        let obj = $($(this).parent().parent().parent()).data("data");
         if ($(this).attr('state') === "false") {
           $(this).attr('state', 'true');
+          $(this).parent().parent().parent().children(".task-text").children(".task-text-cont").css("text-decoration", "line-through");
           $('#' + nodeId).attr('status', 'true');
           $('#' + nodeId + ' .task-text').css('opacity', '0.5');
           $(this).html('<span><i class="fa fa-check"></i></span>Undone task');
           $(this).parent().parent().parent().children('span#task-complete-icon').fadeIn(300);
-          TaskHandler.updateTaskCompleteInStore(nodeId, true);
+          obj.updateTaskStatus(true, function () { });
         } else {
           $(this).attr('state', 'false');
           $('#' + nodeId).attr('status', 'false');
+          $(this).parent().parent().parent().children(".task-text").children(".task-text-cont").css("text-decoration", "");
           $('#' + nodeId + ' .task-text').css('opacity', '1');
           $(this).html('<span><i class="fa fa-check"></i></span>Complete task');
           $(this).parent().parent().parent().children('span#task-complete-icon').fadeOut(300);
-          TaskHandler.updateTaskCompleteInStore(nodeId, false);
+          obj.updateTaskStatus(false, function () { });
         }
       });
 
@@ -98,23 +88,25 @@ const UiIndex = module.exports = {
   /* Load the task list. */
   displayTaskList: function (callback) {
     // Cache the Task list.
-    let taskList = Config.TASK_LIST.toKeyArray();
+    let taskList = Config.Tasks.getKeys();
 
     // Clear the display list first (in case, updating the list).
     $('#task-list-cont ul').html('');
 
     for (let i = 0; i < taskList.length; i++) {
-      let data = Config.TASK_LIST.get(taskList[i]);
-      $('#task-list-cont ul').append(TaskHandler.getTaskTemplate(taskList[i], data["taskText"], data["taskStartTime"]));
-      if (!data["taskStatus"]) {
+      let data = Config.Tasks.getTask(taskList[i]);
+      data.displayTaskNode("append");
+      if (!data.status) {
         $('#' + taskList[i] + ' #task-complete-icon').fadeOut(300);
         $('#' + taskList[i]).attr('status', 'false');
         $('#' + taskList[i] + ' .task-text').css('opacity', '1');
+        $("#" + taskList[i]).children(".task-text").children(".task-text-cont").css("text-decoration", "");
         $('#' + taskList[i] + ' div div ' + '.complete-task-btn').attr('state', 'false').html('<span><i class="fa fa-check"></i></span>Complete task');;
       } else {
         $('#' + taskList[i] + ' #task-complete-icon').fadeIn(300);
         $('#' + taskList[i]).attr('status', 'true');
         $('#' + taskList[i] + ' .task-text').css('opacity', '0.5');
+        $("#" + taskList[i]).children(".task-text").children(".task-text-cont").css("text-decoration", "line-through");
         $('#' + taskList[i] + ' div div ' + '.complete-task-btn').attr('state', 'true').html('<span><i class="fa fa-check"></i></span>Undone task');
       }
     }
@@ -125,12 +117,12 @@ const UiIndex = module.exports = {
   /* Keep on updating the timer on each task which has a time constraint. */
   setTaskTimeLeft: function () {
     let units = countdown.YEARS | countdown.MONTHS | countdown.DAYS | countdown.HOURS | countdown.MINUTES | countdown.SECONDS;
-    let list = Config.TASK_LIST.toKeyArray();
+    let list = Config.Tasks.getKeys();
 
     for (let i = 0; i < list.length; i++) {
-      let info = Config.TASK_LIST.get(list[i]);
-      let node = $('#' + info["taskId"] + ' span .task-end-time');
-      if (!info["taskEndTime"]) {
+      let info = Config.Tasks.getTask(list[i]);
+      let node = $('#' + info.id + ' span .task-end-time');
+      if (!info.endTime) {
         node.text("");
         if ($('#' + info[0]).attr('status') === 'true') {
           $('#' + info[0]).css('border', '2px solid rgba(61, 199, 52, 0.43)');
@@ -139,9 +131,9 @@ const UiIndex = module.exports = {
         }
       } else {
         let dateStart = new Date();
-        let dateEnd = new Date(parseInt(info["taskEndTime"]));
-        let timeString = dateStart < dateEnd ? (countdown(new Date(), new Date(parseInt(info["taskEndTime"])), units).toString()) : "Time over";
-        if (info["taskStatus"]) {
+        let dateEnd = new Date(parseInt(info.endTime));
+        let timeString = dateStart < dateEnd ? (countdown(new Date(), new Date(parseInt(info.endTime)), units).toString()) : "Time over";
+        if (info.status) {
           node.text("");
           $('#' + info[0]).css('border', '2px solid rgba(61, 199, 52, 0.43)');
         } else {
@@ -284,8 +276,7 @@ $(function () {
     if ($('#remove-time-check input').prop('checked')) {
       endTime = null;
     }
-
-    TaskHandler.addTaskTimeLimit(taskId, endTime);
+    Config.Tasks.getTask(taskId).addTimeLimit(endTime);
   });
 });
 
