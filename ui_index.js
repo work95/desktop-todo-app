@@ -187,7 +187,12 @@ const UiIndex = module.exports = {
 
   /* Show the error box for the task input form. */
   showTaskInputErrorBox: function (message) {
-    $("#task-input-error-box").html((message || "")).slideDown(300);
+    if (message) {
+      $("#task-input-error-box").html(message).slideDown(300);
+      setTimeout(function () {
+        UiIndex.hideTaskInputErrorBoxMessage();
+      }, 3000);
+    }
   },
 
   /* Update the message of the task input form. */
