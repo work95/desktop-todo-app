@@ -61,12 +61,10 @@ Task.prototype.addTimeLimit = function (endTime) {
 }
 
 /* Delete the task from the record. */
-Task.prototype.delete = function (callback) {
+Task.prototype.delete = function () {
+  let self = this;
   let file = Config.TASK_STORE_DIR;
-  Config.Tasks.removeAndStore(this, function () {
-    fs.unlinkSync(`${file}/${taskId}.txt`);
-    typeof callback === "function" ? callback() : {};
-  });
+  fs.unlinkSync(`${file}/${self.id}.txt`);
 }
 
 /* HTML template for task. */
