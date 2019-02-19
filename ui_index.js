@@ -46,23 +46,14 @@ const UiIndex = module.exports = {
       /* Complete or undo the same, event handler. */
       $('.complete-task-btn').click(function () {
         $('#task-input-error-box').text("").slideUp(300).css('color', 'black');
-        let nodeId = $(this).parent().parent().parent().attr('id');
-        let obj = $($(this).parent().parent().parent()).data("data");
-        if ($(this).attr('state') === "false") {
-          $(this).attr('state', 'true');
-          $(this).parent().parent().parent().children(".task-text").children(".task-text-cont").css("text-decoration", "line-through");
-          $('#' + nodeId).attr('status', 'true');
-          $('#' + nodeId + ' .task-text').css('opacity', '0.5');
-          $(this).html('Undone task');
-          $(this).parent().parent().parent().children('span#task-complete-icon').fadeIn(300);
+        let parentNode = $(this).parent().parent().parent();
+        let obj = $(parentNode).data("data");
+
+        if ($(this).attr("status") === "false") {
+          UiIndex.updateNodeLook(parentNode, true);
           obj.updateTaskStatus(true, function () { });
         } else {
-          $(this).attr('state', 'false');
-          $('#' + nodeId).attr('status', 'false');
-          $(this).parent().parent().parent().children(".task-text").children(".task-text-cont").css("text-decoration", "");
-          $('#' + nodeId + ' .task-text').css('opacity', '1');
-          $(this).html('Complete task');
-          $(this).parent().parent().parent().children('span#task-complete-icon').fadeOut(300);
+          UiIndex.updateNodeLook(parentNode, false);
           obj.updateTaskStatus(false, function () { });
         }
       });
@@ -85,6 +76,22 @@ const UiIndex = module.exports = {
     });
   },
 
+  updateNodeLook: function (node, status) {
+    if (status) {
+      $(node).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", status);
+      $(node).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").html('Undone task');
+      $(node).children(".task-text").children(".task-text-cont").addClass("strikethrough");
+      $(node).children(".task-text").addClass("disabled-fade");
+      $(node).attr("status", status);
+    } else {
+      $(node).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", status);
+      $(node).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").html("Complete Task");
+      $(node).children(".task-text").children(".task-text-cont").removeClass("strikethrough");
+      $(node).children(".task-text").removeClass("disabled-fade");
+      $(node).attr("status", status);
+    }
+  },
+
   /* Load the task list. */
   displayTaskList: function (callback) {
     // Cache the Task list.
@@ -95,19 +102,18 @@ const UiIndex = module.exports = {
 
     for (let i = 0; i < taskList.length; i++) {
       let data = Config.Tasks.getTask(taskList[i]);
-      data.displayTaskNode("append");
       if (!data.status) {
-        $('#' + taskList[i] + ' #task-complete-icon').fadeOut(300);
-        $('#' + taskList[i]).attr('status', 'false');
-        $('#' + taskList[i] + ' .task-text').css('opacity', '1');
-        $("#" + taskList[i]).children(".task-text").children(".task-text-cont").css("text-decoration", "");
-        $('#' + taskList[i] + ' div div ' + '.complete-task-btn').attr('state', 'false').html('Complete task');;
+        data.displayTaskNode("prepend");
+        $(`#${taskList[i]}`).attr("status", 'false');
+        $(`#${taskList[i]} .task-text`).removeClass("disabled-fade");
+        $(`#${taskList[i]}`).children(".task-text").children(".task-text-cont").removeClass("strikethrough");
+        $(`#${taskList[i]} div div .complete-task-btn`).attr("status", 'false').html("Complete task");
       } else {
-        $('#' + taskList[i] + ' #task-complete-icon').fadeIn(300);
-        $('#' + taskList[i]).attr('status', 'true');
-        $('#' + taskList[i] + ' .task-text').css('opacity', '0.5');
-        $("#" + taskList[i]).children(".task-text").children(".task-text-cont").css("text-decoration", "line-through");
-        $('#' + taskList[i] + ' div div ' + '.complete-task-btn').attr('state', 'true').html('Undone task');
+        data.displayTaskNode("append");
+        $(`#${taskList[i]}`).attr("status", 'true');
+        $(`#${taskList[i]} .task-text`).addClass("disabled-fade");
+        $(`#${taskList[i]}`).children(".task-text").children(".task-text-cont").addClass("strikethrough");
+        $(`#${taskList[i]} div div .complete-task-btn`).attr("status", 'true').html('Undone task');
       }
     }
     UiIndex.attachTaskOptionBtnListener();
