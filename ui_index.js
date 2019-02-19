@@ -53,7 +53,7 @@ const UiIndex = module.exports = {
           $(this).parent().parent().parent().children(".task-text").children(".task-text-cont").css("text-decoration", "line-through");
           $('#' + nodeId).attr('status', 'true');
           $('#' + nodeId + ' .task-text').css('opacity', '0.5');
-          $(this).html('<span><i class="fa fa-check"></i></span>Undone task');
+          $(this).html('Undone task');
           $(this).parent().parent().parent().children('span#task-complete-icon').fadeIn(300);
           obj.updateTaskStatus(true, function () { });
         } else {
@@ -61,7 +61,7 @@ const UiIndex = module.exports = {
           $('#' + nodeId).attr('status', 'false');
           $(this).parent().parent().parent().children(".task-text").children(".task-text-cont").css("text-decoration", "");
           $('#' + nodeId + ' .task-text').css('opacity', '1');
-          $(this).html('<span><i class="fa fa-check"></i></span>Complete task');
+          $(this).html('Complete task');
           $(this).parent().parent().parent().children('span#task-complete-icon').fadeOut(300);
           obj.updateTaskStatus(false, function () { });
         }
@@ -101,13 +101,13 @@ const UiIndex = module.exports = {
         $('#' + taskList[i]).attr('status', 'false');
         $('#' + taskList[i] + ' .task-text').css('opacity', '1');
         $("#" + taskList[i]).children(".task-text").children(".task-text-cont").css("text-decoration", "");
-        $('#' + taskList[i] + ' div div ' + '.complete-task-btn').attr('state', 'false').html('<span><i class="fa fa-check"></i></span>Complete task');;
+        $('#' + taskList[i] + ' div div ' + '.complete-task-btn').attr('state', 'false').html('Complete task');;
       } else {
         $('#' + taskList[i] + ' #task-complete-icon').fadeIn(300);
         $('#' + taskList[i]).attr('status', 'true');
         $('#' + taskList[i] + ' .task-text').css('opacity', '0.5');
         $("#" + taskList[i]).children(".task-text").children(".task-text-cont").css("text-decoration", "line-through");
-        $('#' + taskList[i] + ' div div ' + '.complete-task-btn').attr('state', 'true').html('<span><i class="fa fa-check"></i></span>Undone task');
+        $('#' + taskList[i] + ' div div ' + '.complete-task-btn').attr('state', 'true').html('Undone task');
       }
     }
     UiIndex.attachTaskOptionBtnListener();
@@ -300,39 +300,3 @@ $(function () {
     UiIndex.closeNotificationPane();
   });
 });
-
-/* Notification list to be watched for changes. */
-const targetList = document.getElementById("notification-list");
-
-// What attributes to watch for.
-const observerPreferences = {
-  childList: true
-};
-
-// Observer initialization.
-const NotificationListObserver = new MutationObserver(function (mutations) {
-  mutations.forEach(function (mutation) {
-    if (mutation.type === "childList") {
-      // Get the notification children list size.
-      Config.NOTIFICATION_COUNT = $("#notification-list").children().length;
-
-      // Get the Id of the node removed, captured by the mutation object.
-      let notificationId = $(mutation.addedNodes[0]).attr("id");
-
-      // Get the index of the notification, which is removed.
-      let index = Config.SHOWN_NOTIFICATIONS.indexOf(notificationId);
-      // Remove the element from the array.
-      if (index > 0) { Config.SHOWN_NOTIFICATIONS.splice(index, 1); }
-
-      // If count is greater than 0, show the badge (while updating it too), else hide it.
-      if (Config.NOTIFICATION_COUNT > 0) {
-        UiIndex.showNotificationCounterBadge(Config.NOTIFICATION_COUNT);
-      } else {
-        UiIndex.hideNotificationCounterBadge();
-      }
-    }
-  });
-});
-
-// Start observing.
-NotificationListObserver.observe(targetList, observerPreferences);
