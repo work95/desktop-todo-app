@@ -1,0 +1,50 @@
+#notification-pane {    
+	position: fixed;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.94);
+	z-index: 99999;
+
+	display: none;
+}
+
+#notification-pane #notification-pane-close-btn i {
+	color: #fff;
+	float: right;
+	margin: 20px;
+	font-size: 30px;
+}
+
+#notification-pane .list-group {
+	width: 70%;
+	margin: 60px auto;
+}
+
+#notification-pane .list-group .list-group-item {
+	margin: 10px auto;
+	padding: 15px;
+	color: white;
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	background-color: rgba(0, 0, 0, 0.4);
+	box-shadow: 8px 13px 20px 0px rgba(0, 0, 0, 0.1);
+}
+
+#notification-pane .list-group .list-group-item div h5 {
+	font-family: "Quicksand-Bold";
+	font-size: 18px;
+}
+
+#notification-pane .list-group .list-group-item div small {
+	font-family: "Quicksand-Bold";
+}
+
+#notification-pane .list-group .list-group-item p {
+	font-family: "Quicksand-Bold";
+	font-size: 15px;
+	margin-top: 10px;
+}
+
+#notification-pane .list-group .list-group-item small {
+	font-family: "Quicksand-Bold";
+}
