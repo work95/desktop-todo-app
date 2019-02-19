@@ -89,7 +89,7 @@ Task.prototype.getTaskTemplate = function () {
           <span class="dot"></span>
         </div>
         <div id="task-options-menu" class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
-          <a class="complete-task-btn" state="false" class="dropdown-item" href="#">Task Complete</a>
+          <a class="complete-task-btn" status="false" class="dropdown-item" href="#">Task Complete</a>
           <a class="delete-task-btn" class="dropdown-item" href="#">Delete Task</a>
           <a class="add-time-limit-btn" task-id="" class="dropdown-item" data-toggle="modal" data-target="#task-time-limit-cont" href="#">Add Time Limit</a>
         </div>
@@ -112,6 +112,8 @@ Task.prototype.displayTaskNode = function (type) {
       break;
   }
   $("#" + this.id).data("data", this);
+
+  return $(node);
 }
 
 
