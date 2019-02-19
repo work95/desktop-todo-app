@@ -5,6 +5,7 @@ const fs = require("fs");
 const Config = require("./Config");
 const List = require("./List");
 const Task = require("./Task");
+const Utility = require("./Utility");
 
 
 function TaskList() {
@@ -107,6 +108,18 @@ TaskList.prototype.loadList = function (callback) {
       }
     });
   }
+}
+
+TaskList.prototype.searchTask = function (val) {
+  let list = Config.Tasks.getTasks();
+  let matchedTasks = [];
+  for (let i = 0; i < list.length; i++) {
+    if (Utility.subseq(list[i].text, val)) {
+      matchedTasks.push(list[i]);
+    }
+  }
+
+  return matchedTasks;
 }
 
 /* Get the info of the task from the storage. */

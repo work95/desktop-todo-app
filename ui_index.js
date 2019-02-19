@@ -95,7 +95,7 @@ const UiIndex = module.exports = {
     let taskList = Config.Tasks.getKeys();
 
     // Clear the display list first (in case, updating the list).
-    $('#task-list-cont ul').html('');
+    UiIndex.clearTaskListDisplay();
 
     for (let i = 0; i < taskList.length; i++) {
       let data = Config.Tasks.getTask(taskList[i]);
@@ -149,19 +149,22 @@ const UiIndex = module.exports = {
     }
   },
 
-  /* Show the notification pane. */
-  showNotificationPane: function () {
-    $("#notification-pane").slideDown(200);
+  clearTaskListDisplay: function () {
+    $('#task-list-cont ul').html("");
   },
 
-  /* Hide the notification pane. */
-  closeNotificationPane: function () {
-    $("#notification-pane").slideUp(200);
+  showTaskSearchBox: function () {
+    $("#task-search-box").fadeIn(200);
+    $("#task-search-input").focus();
+  },
+
+  hideTaskSearchBox: function () {
+    $("#task-search-box").fadeOut(200);
   },
 
   showTaskInputBox: function () {
     // Drop the task text input.
-    $("#task-add-input-box").slideDown(250);
+    $("#task-add-input-box").fadeIn(250);
     // Bring focus on the input form.
     $("#task-text-input").focus();
   },
@@ -169,7 +172,7 @@ const UiIndex = module.exports = {
   /* Hide the task input form box. */
   hideTaskInputBox: function () {
     // Drop the task text input.
-    $("#task-add-input-box").slideUp(250);
+    $("#task-add-input-box").fadeOut(250);
     UiIndex.updateTaskInputValue("");
     UiIndex.updateTaskInputErrorBoxMessage("");
     UiIndex.hideTaskInputErrorBoxMessage();
@@ -224,6 +227,7 @@ const UiIndex = module.exports = {
       // When escape key is pressed. Close all other windows and go back to word-meaning pane.
       if (keyCode === Config.KeyCodes.ESCAPE) {
         UiIndex.hideTaskInputBox();
+        UiIndex.hideTaskSearchBox();
       }
 
       // Do not alert when only Control key is pressed.
@@ -235,8 +239,14 @@ const UiIndex = module.exports = {
         // Even though event.key is not 'Control' (e.g., 'a' is pressed),
         // event.ctrlKey may be true if Ctrl key is pressed at the same time.
         switch (keyName) {
+          case "f":
+            UiIndex.showTaskSearchBox();
+            UiIndex.hideTaskInputBox();
+            break;
+
           case "t":
             UiIndex.showTaskInputBox();
+            UiIndex.hideTaskSearchBox();
             break;
 
           // Refresh app.
@@ -303,5 +313,38 @@ $(function () {
 $(function () {
   $('#notification-pane-close-btn').click(function () {
     UiIndex.closeNotificationPane();
+  });
+});
+
+$(function () {
+  $("#task-list-refresh").click(function() {
+    UiIndex.displayTaskList();
+  });
+});
+
+/* Search function. */
+$(function () {
+  let val = "";
+  let matchedTasks = [];
+  $("#task-search-box").on("keyup", function (event) {
+    val = $("#task-search-input").val().trim() || "";
+    if (val.length > 0) {
+      UiIndex.clearTaskListDisplay();
+      matchedTasks = Config.Tasks.searchTask(val);
+      for (let i = 0; i < matchedTasks.length; i++) {
+        let data = matchedTasks[i];
+        $(`#${data.id}`).attr("status", data.status);
+        if (!data.status) {
+          data.displayTaskNode("prepend");
+          $(`#${data.id}`).children(".task-text").removeClass("disabled-fade").children(".task-text-cont").removeClass("strikethrough");
+          $(`#${data.id}`).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", data.status).html("Complete task");
+        } else {
+          data.displayTaskNode("append");
+          $(`#${data.id}`).children(".task-text").addClass("disabled-fade").children(".task-text-cont").addClass("strikethrough");
+          $(`#${data.id}`).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", data.status).html('Undone task');
+        }
+      }
+      UiIndex.attachTaskOptionBtnListener();
+    }
   });
 });
