@@ -41,13 +41,15 @@ const IndexMain = module.exports = {
     // Load configuration variables.
     Config.setupConfiguration();
 
+    // Initialize the TaskList
     Config.Tasks = new TaskList();
 
     // Attach window key listeners.
     UiIndex.attachWindowKeyListener();
 
-
+    // Load the Tasks (TaskList).
     Config.Tasks.loadList(function () {
+      // Display the tasks.
       UiIndex.displayTaskList(function () {
 
         // Keep on checking for notifications.
