@@ -59,9 +59,9 @@ header {
   cursor: not-allowed;
 }
 
-.disable-fade {
-  opacity: 0.5;
-}
+.disabled-fade { opacity: 0.5; }
+.strikethrough { text-decoration: line-through; }
+
 
 article {
   overflow: auto;
