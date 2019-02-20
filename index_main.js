@@ -11,6 +11,7 @@ const IndexMain = module.exports = {
   checkDirectoryStructure: function () {
     // Parent storage directory.    
     if (!fs.existsSync(Config.BASE_STORE_DIR)) { fs.mkdirSync(Config.BASE_STORE_DIR); }
+    if (!fs.existsSync(Config.LOG_DIR)) { fs.mkdirSync(Config.LOG_DIR); }
   },
 
   checkUserDirectoryStructure: function () {

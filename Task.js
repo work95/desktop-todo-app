@@ -2,6 +2,7 @@
 
 const fs = require("fs");
 const Config = require("./Config");
+const Logging = require("./Logging");
 
 function Task(id, text, startTime, endTime, status) {
   let self = this;
@@ -28,7 +29,9 @@ Task.prototype.saveInFile = function (callback) {
   let file = Config.TASK_STORE_DIR;
   if (!fs.existsSync(file)) { fs.mkdirSync(file); }
   fs.writeFile(`${file}/${self.id}.txt`, JSON.stringify(self), function (err) {
-    if (err) { console.log(err); }
+    if (err) { 
+      Logging.logError(err, "Task.js", __STACK__[1].getLineNumber());
+    }
     typeof callback === "function" ? callback() : {};
   });
 }
@@ -38,6 +41,9 @@ Task.prototype.store = function (callback) {
   let file = Config.TASK_STORE_DIR;
   if (!fs.existsSync(file)) { fs.mkdirSync(file); }
   fs.appendFile(`${file}/task_list.txt`, `${self.id},`, function (err) {
+    if (err) {
+      Logging.logError(err, "Task.js", __STACK__[1].getLineNumber());
+    }
     self.saveInFile(function () {
       typeof callback === "function" ? callback() : {};
     });

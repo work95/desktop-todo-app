@@ -4,6 +4,7 @@ const async = require("async");
 const fs = require("fs");
 const Config = require("./Config");
 const List = require("./List");
+const Logging = require("./Logging");
 const Task = require("./Task");
 const Utility = require("./Utility");
 
@@ -39,6 +40,9 @@ TaskList.prototype.addInStore = function (taskObj, callback) {
   let file = Config.TASK_STORE_DIR;
   if (!fs.existsSync(file)) { fs.mkdirSync(file); }
   fs.appendFile(`${file}/task_list.txt`, `${taskObj.id},`, function (err) {
+    if (err) {
+      Logging.logError(err, "TaskList.js", __STACK__[1].getLineNumber());
+    }
     callback();
   });
 }
@@ -64,15 +68,14 @@ TaskList.prototype.removeFromStore = function (taskObj, callback) {
   } else {
     fs.readFile(filePathB, function (err, data) {
       if (err) {
-        // Log the error.
-        console.log(err);
+        Logging.logError(err, "TaskList.js", __STACK__[1].getLineNumber());
         callback();
       } else {
         data = data.toString().replace(`${taskObj.id},`, "");
 
         fs.writeFile(filePathB, data, function (err) {
           if (err) {
-            console.log(err);
+            Logging.logError(err, "TaskList.js", __STACK__[1].getLineNumber());
           }
           callback();
         });
@@ -88,8 +91,7 @@ TaskList.prototype.loadList = function (callback) {
   } else {
     fs.readFile(file, function (err, data) {
       if (err) {
-        // Log the error.
-        console.log(err);
+        Logging.logError(err, "TaskList.js", __STACK__[1].getLineNumber());
         typeof callback === "function" ? callback() : {};
       } else {
         let list = data.toString().split(",");
@@ -127,8 +129,7 @@ function getTaskInfo(taskId, callback) {
   let file = `${Config.TASK_STORE_DIR}/${taskId}.txt`;
   fs.readFile(file, function (err, data) {
     if (err) {
-      // Log the error.
-      console.log(err);
+      Logging.logError(err, "TaskList.js", __STACK__[1].getLineNumber());
       callback();
     } else {
       let info = JSON.parse(data);
