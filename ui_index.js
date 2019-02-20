@@ -1,6 +1,5 @@
 "use strict";
 
-const countdown = require('countdown');
 const Config = require("./Config");
 const Task = require("./Task");
 const Timer = require("./Timer");
