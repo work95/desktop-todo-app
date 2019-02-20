@@ -280,7 +280,27 @@ $(function () {
 /* Show the task add input form box. */
 $(function () {
   $('#add-task-btn').click(function () {
-    UiIndex.showTaskInputBox();
+    // Toggle open and close the input form.
+    $("#task-add-input-box").fadeToggle(250, function () {
+      $("#task-text-input").val("").focus();
+    });
+  });
+});
+
+$(function () {
+  $("#task-input-send-btn").click(function () {
+    let inputVal = UiIndex.getTaskInputBoxValue();
+    // If nothing is entered, show the error message.
+    if (inputVal.length < 1) {
+      UiIndex.showTaskInputErrorBox("Nothing entered");
+      return;
+    }
+
+    // Save and display the task.
+    UiIndex.addTask(inputVal, function () {
+      // Reset the input form.
+      UiIndex.updateTaskInputValue("");
+    });
   });
 });
 

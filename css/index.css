@@ -76,7 +76,7 @@ article {
   left: 0px;
   right: 0px;
   width: 100%;
-  max-width: 800px;
+  /* max-width: 800px; */
   position: fixed;
   bottom: 0px;
   z-index: 11;
@@ -100,6 +100,17 @@ article {
 
 .input-box input::placeholder {
   color: rgba(255, 255, 255, 0.7);
+}
+
+#task-input-send-btn {
+  position: fixed;
+  z-index: 99;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.3);
+  font-size: 25px;
+  padding: 9px 10px;
+  bottom: 0px;
+  right: 0px;
 }
 
 #task-input-error-box {
