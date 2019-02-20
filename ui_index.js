@@ -3,6 +3,7 @@
 const countdown = require('countdown');
 const Config = require("./Config");
 const Task = require("./Task");
+const Timer = require("./Timer");
 
 
 const UiIndex = module.exports = {
@@ -52,9 +53,13 @@ const UiIndex = module.exports = {
         if ($(this).attr("status") === "false") {
           UiIndex.updateNodeLook(parentNode, true);
           $('#task-list-cont ul').append(parentNode);
+          $(`#${obj.id} span .task-end-time`).text("");
+          clearInterval(Config.Timers[obj.id]);
+          delete Config.Timers[obj.id];
           obj.updateTaskStatus(true, function () { });
         } else {
           UiIndex.updateNodeLook(parentNode, false);
+          new Timer(obj.id, $(`#${obj.id} span .task-end-time`), obj.endTime);
           $('#task-list-cont ul').prepend(parentNode);
           obj.updateTaskStatus(false, function () { });
         }
@@ -100,53 +105,22 @@ const UiIndex = module.exports = {
     for (let i = 0; i < taskList.length; i++) {
       let data = Config.Tasks.getTask(taskList[i]);
       $(`#${taskList[i]}`).attr("status", data.status);
+      let node;
       if (!data.status) {
-        data.displayTaskNode("prepend");
+        node = data.displayTaskNode("prepend");
         $(`#${taskList[i]}`).children(".task-text").removeClass("disabled-fade").children(".task-text-cont").removeClass("strikethrough");
         $(`#${taskList[i]}`).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", data.status).html("Complete task");
+        if (data.endTime) {
+          new Timer(data.id, $(`#${taskList[i]} span .task-end-time`), data.endTime);
+        }
       } else {
-        data.displayTaskNode("append");
+        node = data.displayTaskNode("append");
         $(`#${taskList[i]}`).children(".task-text").addClass("disabled-fade").children(".task-text-cont").addClass("strikethrough");
         $(`#${taskList[i]}`).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", data.status).html('Undone task');
       }
     }
     UiIndex.attachTaskOptionBtnListener();
     typeof callback === "function" ? callback() : {};
-  },
-
-  /* Keep on updating the timer on each task which has a time constraint. */
-  setTaskTimeLeft: function () {
-    let units = countdown.YEARS | countdown.MONTHS | countdown.DAYS | countdown.HOURS | countdown.MINUTES | countdown.SECONDS;
-    let list = Config.Tasks.getKeys();
-
-    for (let i = 0; i < list.length; i++) {
-      let info = Config.Tasks.getTask(list[i]);
-      let node = $('#' + info.id + ' span .task-end-time');
-      if (!info.endTime) {
-        node.text("");
-        if ($('#' + info[0]).attr('status') === 'true') {
-          $('#' + info[0]).css('border', '2px solid rgba(61, 199, 52, 0.43)');
-        } else {
-          $('#' + info[0]).css('border', 'none');
-        }
-      } else {
-        let dateStart = new Date();
-        let dateEnd = new Date(parseInt(info.endTime));
-        let timeString = dateStart < dateEnd ? (countdown(new Date(), new Date(parseInt(info.endTime)), units).toString()) : "Time over";
-        if (info.status) {
-          node.text("");
-          $('#' + info[0]).css('border', '2px solid rgba(61, 199, 52, 0.43)');
-        } else {
-          if (timeString === "Time over") {
-            node.text(timeString);
-            $('#' + info[0]).css('border', '2px solid rgba(255, 0, 0, 0.43)');
-          } else {
-            node.text(timeString);
-            $('#' + info[0]).css('border', 'none');
-          }
-        }
-      }
-    }
   },
 
   clearTaskListDisplay: function () {
@@ -288,10 +262,19 @@ $(function () {
 
     let endTime = new Date(`${year}/${month}/${day} ${hour}:${minute}:${second}`).getTime();
     let taskId = $(this).attr('task-id').toString();
+    let taskObj = Config.Tasks.getTask(taskId);
+    taskObj.addTimeLimit(endTime);
     if ($('#remove-time-check input').prop('checked')) {
       endTime = null;
+      clearInterval(Config.Timers[taskId]);
+      delete Config.Timers[taskId];
+      $(`#${taskId} span .task-end-time`).text("");
+    } else if (!taskObj.status) {
+      // Delete previous timers, if any.
+      clearInterval(Config.Timers[taskId]);
+      delete Config.Timers[taskId];
+      new Timer(taskId, $(`#${taskId} span .task-end-time`), endTime);
     }
-    Config.Tasks.getTask(taskId).addTimeLimit(endTime);
   });
 });
 

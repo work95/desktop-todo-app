@@ -2,7 +2,6 @@
 
 const fs = require('fs');
 const Config = require("./Config");
-const NotificationHandler = require("./notification_handler");
 const TaskList = require("./TaskList");
 const UiIndex = require("./ui_index");
 
@@ -59,18 +58,7 @@ const IndexMain = module.exports = {
     // Load the Tasks (TaskList).
     Config.Tasks.loadList(function () {
       // Display the tasks.
-      UiIndex.displayTaskList(function () {
-
-        // Keep on checking for notifications.
-        setInterval(function () {
-          NotificationHandler.checkNotifications();
-        }, 5000);
-
-        // Keep on ticking the timer on the time constrained tasks.
-        setInterval(function () {
-          UiIndex.setTaskTimeLeft();
-        }, 3000);
-      });
+      UiIndex.displayTaskList(function () {});
     });
   }
 };

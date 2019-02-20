@@ -14,6 +14,8 @@ const USER_STORE_DIR = process.env.USER_STORE_DIR;
 const LAST_LOGIN_FILE = process.env.LAST_LOGIN_FILE;
 var TASK_STORE_DIR = process.env.TASK_STORE_DIR;
 
+var Timers = {};
+
 var Tasks;
 
 /* Common key codes. */
@@ -26,6 +28,7 @@ const KeyCodes = {
 };
 
 const Config = module.exports = {
+  Timers,
   TASK_LIST,
   Tasks,
   USER_ID,
