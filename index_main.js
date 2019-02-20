@@ -14,9 +14,8 @@ const IndexMain = module.exports = {
   },
 
   checkUserDirectoryStructure: function () {
-    if (!fs.existsSync(Config.USER_STORE_DIR + "/" + Config.USER_ID)) {
-      fs.mkdirSync(Config.USER_STORE_DIR + "/" + Config.USER_ID);
-    }
+    // Check user's directory.
+    if (!fs.existsSync(Config.USER_DIR)) { fs.mkdirSync(Config.USER_DIR); }
   },
 
   /* Load the User Id of the last logged in user or use default user. */
@@ -39,22 +38,16 @@ const IndexMain = module.exports = {
   init: function () {
     // Check directory structure.
     IndexMain.checkDirectoryStructure();
-
     // Load USER_ID.
     Config.USER_ID = IndexMain.loadLastUserId() || "user_0";
-
-    // Check if the user's directory is okay.
-    IndexMain.checkUserDirectoryStructure();
-
     // Load configuration variables.
     Config.setupConfiguration();
-
+    // Check if the user's directory is okay.
+    IndexMain.checkUserDirectoryStructure();
     // Initialize the TaskList
     Config.Tasks = new TaskList();
-
     // Attach window key listeners.
     UiIndex.attachWindowKeyListener();
-
     // Load the Tasks (TaskList).
     Config.Tasks.loadList(function () {
       // Display the tasks.
