@@ -1,22 +1,38 @@
 "use strict";
 
 const env = require("dotenv").config();
-const List = require("./List");
 
-var TASK_LIST = new List();
-var USER_ID = "user_0";
+/* 
+ * Directory variables. 
+ */
 
-var SHOWN_NOTIFICATIONS = [];
-var NOTIFICATION_COUNT = 0;
-
+/* Parent directory of the whole storage. */
 const BASE_STORE_DIR = process.env.BASE_STORE_DIR;
+
+/* User's base directory, where all the user's are stored. */
 const USER_STORE_DIR = process.env.USER_STORE_DIR;
+
+/* Where the last login file is stored. */
 const LAST_LOGIN_FILE = process.env.LAST_LOGIN_FILE;
+
+/* 
+ * Updated after USER_ID is set. That is why they are not constants. 
+ */
+
+/* Task storage directory of the current user. */
 var TASK_STORE_DIR = process.env.TASK_STORE_DIR;
 
+/* Current user's storage directory. */
+var USER_DIR = process.env.USER_STORE_DIR;
+
+/* Stores the Interval handle for various timers applied to time constrained tasks. */
 var Timers = {};
 
+/* Task List object. */
 var Tasks;
+
+/* Current user's ID. This value is public. */
+var USER_ID = "user_0";
 
 /* Common key codes. */
 const KeyCodes = {
@@ -29,18 +45,17 @@ const KeyCodes = {
 
 const Config = module.exports = {
   Timers,
-  TASK_LIST,
   Tasks,
   USER_ID,
-  SHOWN_NOTIFICATIONS,
-  NOTIFICATION_COUNT,
   KeyCodes,
   LAST_LOGIN_FILE,
   BASE_STORE_DIR,
   USER_STORE_DIR,
   TASK_STORE_DIR,
+  USER_DIR,
 
   setupConfiguration: function () {
     Config.TASK_STORE_DIR = `${Config.USER_STORE_DIR}/${Config.USER_ID}/${Config.TASK_STORE_DIR}`;
+    Config.USER_DIR = `${Config.USER_DIR}/${Config.USER_ID}`;
   }
 };
