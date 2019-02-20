@@ -10,7 +10,7 @@ let notificationWindow;
 function createWindow () {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 800, 
+    width: 500, 
     height: 600,
     minWidth: 500,
     minHeight: 400,
