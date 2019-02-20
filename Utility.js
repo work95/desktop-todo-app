@@ -8,9 +8,12 @@ const Utility = module.exports = {
 
     let str = "";
     for (let i = 0; i < valB.length; i++) {
-      str += `${valB[i]}.*`;
+      if (valB[i] === "*" || valB[i] === "." || valB[i] === "/") {
+        str += `\\${valB[i]}`;
+      } else {
+        str += `${valB[i]}.*`;
+      }
     }
-
     return ((valA.match(new RegExp(str, "i")) === null) ? false : true);
   },
 
