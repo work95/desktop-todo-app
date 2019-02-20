@@ -15,6 +15,13 @@ const USER_STORE_DIR = process.env.USER_STORE_DIR;
 /* Where the last login file is stored. */
 const LAST_LOGIN_FILE = process.env.LAST_LOGIN_FILE;
 
+/* Logging dir. */
+const LOG_DIR = process.env.LOG_DIR;
+
+/* Logging file. */
+const LOG_FILE = process.env.LOG_FILE;
+
+
 /* 
  * Updated after USER_ID is set. That is why they are not constants. 
  */
@@ -51,6 +58,8 @@ const Config = module.exports = {
   LAST_LOGIN_FILE,
   BASE_STORE_DIR,
   USER_STORE_DIR,
+  LOG_DIR,
+  LOG_FILE,
   TASK_STORE_DIR,
   USER_DIR,
 
