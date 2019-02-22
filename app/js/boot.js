@@ -1,8 +1,8 @@
 "use strict";
 
-window.$ = window.jQuery = require('./assets/js/jquery-3.2.1.min.js');
+window.$ = window.jQuery = require('../assets/js/jquery-3.2.1.min.js');
 
-require("./index_main").init();
+require("../js/index_main").init();
 
 /* Property for getting the stack trace. Used by below two properties. */
 Object.defineProperty(global, '__STACK__', {

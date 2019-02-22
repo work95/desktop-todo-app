@@ -19,7 +19,7 @@ header {
   overflow: auto;
   width: 100%;
   z-index: 10;
-  background-color: rgb(97, 45, 111);
+  background-color: #35194e;
 }
 
 #logo-cont {
@@ -76,7 +76,6 @@ article {
   left: 0px;
   right: 0px;
   width: 100%;
-  /* max-width: 800px; */
   position: fixed;
   bottom: 0px;
   z-index: 11;
@@ -183,7 +182,7 @@ article {
   margin-left: 10px;
   padding: 10px;
   border: none;
-  background-color: rgb(97, 45, 111);
+  background-color: #35194e;
   box-shadow: 2px 4px 8px 0 rgba(46, 61, 73, 0.2);
 }
 
@@ -201,7 +200,7 @@ article {
 #task-options-menu a:hover {
   background-color: rgba(255, 255, 255, 0.8);
   box-shadow: 2px 4px 8px 0 rgba(46, 61, 73, 0.2);
-  color: rgb(97, 45, 111);
+  color: #35194e;
 }
 
 #task-complete-icon {
@@ -227,6 +226,7 @@ article {
 
 .modal-footer {
   border-top: 0px;
+  background-color: #35194e
 }
 
 #task-time-limit-cont .modal-dialog { 
@@ -289,6 +289,7 @@ article {
 
 #close-task-time-limit-modal {
   font-family: "Quicksand-Bold";
+  color: black !important;
 }
 
 /* 

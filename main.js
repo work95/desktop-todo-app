@@ -20,11 +20,11 @@ function createWindow () {
   });
 
   // Don't show the default electron window menu.
-  win.setMenu(null);
+  // win.setMenu(null);
 
   // and load the index.html of the app.
   win.loadURL(url.format({
-    pathname: path.join(__dirname, 'index.html'),
+    pathname: path.join(__dirname, './app/html/index.html'),
     protocol: 'file:',
     slashes: true
   }));
@@ -56,7 +56,7 @@ function createNotificationWindow(x, y) {
   });
 
   notificationWindow.loadURL(url.format({
-    pathname: path.join(__dirname, 'index_notification.html'),
+    pathname: path.join(__dirname, './app/html/index_notification.html'),
     protocol: 'file:',
     slashes: true
   }));
