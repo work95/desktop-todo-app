@@ -22,12 +22,12 @@ header {
   background-color: #35194e;
 }
 
-#logo-cont {
+#current-date-cont {
   position: relative;
   z-index: 1;
 }
 
-#logo-cont h2 {
+#current-date-cont h1 {
   color: white;
   margin-left: 50px;
   margin-bottom: 0px;
