@@ -50,6 +50,17 @@ const KeyCodes = {
   "ENTER": 13
 };
 
+const MonthNames = [
+  "January", "February", "March", "April",
+  "May", "June", "July", "August", 
+  "September",  "October", "November", "December"
+];
+
+const MonthNamesShort = [
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+];
+
 const Config = module.exports = {
   Timers,
   Tasks,
@@ -62,6 +73,8 @@ const Config = module.exports = {
   LOG_FILE,
   TASK_STORE_DIR,
   USER_DIR,
+  MonthNames,
+  MonthNamesShort,
 
   setupConfiguration: function () {
     Config.TASK_STORE_DIR = `${Config.USER_STORE_DIR}/${Config.USER_ID}/${Config.TASK_STORE_DIR}`;
