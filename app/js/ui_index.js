@@ -350,3 +350,9 @@ $(function () {
     }
   });
 });
+
+/* Show the current day's date and month. */
+$(function () {
+  let date = new Date();
+  $("#current-date-cont h1").html(`${Config.MonthNamesShort[date.getMonth()]} ${date.getDate()}`);
+});
