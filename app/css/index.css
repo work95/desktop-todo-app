@@ -148,6 +148,21 @@ article {
   margin-bottom: 10px;
 }
 
+#task-action-icons {
+  float: right;
+  margin-right: -20px;
+  margin-top: -20px;
+  margin-left: 20px;
+}
+
+#task-action-icons span {
+  margin-right: 5px;
+  color: grey;
+  font-size: 20px;
+  display: block;
+}
+
+
 /* 
  * Task list item's date and time. 
  */

@@ -80,13 +80,20 @@ Task.prototype.getTaskTemplate = function () {
   let taskNode =
     `<li class="list-group-item" id="${self.id}" status="false">
       <span id="task-complete-icon"><i class="fa fa-check"></i></span>
+
+      <span id="task-action-icons">
+        <span class="complete-task-btn" status="false" class="dropdown-item" href="#"><i class="fa fa-check"></i></span>
+        <span class="delete-task-btn" class="dropdown-item" href="#"><i class="fa fa-trash-o"></i></span>
+        <span class="add-time-limit-btn" task-id="" class="dropdown-item" data-toggle="modal" data-target="#task-time-limit-cont" href="#"><i class="fa fa-clock-o"></i></span>
+      </span>
+
       <span class="task-text">
         <span class="task-text-cont">${self.text}</span>
         <br />
         <span class="task-start-date">${date.getDate()}/${(date.getMonth() + 1)}/${date.getFullYear()}</span>
         <span class="task-end-time"></span>
       </span>
-      <div class="task-options-cont">
+      <!--<div class="task-options-cont">
         <div class="dot-set dropdown" id="dropdownMenu2" data-toggle="dropdown" aria-expanded="false">
           <span class="dot"></span>
           <span class="dot"></span>
@@ -96,7 +103,7 @@ Task.prototype.getTaskTemplate = function () {
           <a class="complete-task-btn" status="false" class="dropdown-item" href="#">Task Complete</a>
           <a class="delete-task-btn" class="dropdown-item" href="#">Delete Task</a>
           <a class="add-time-limit-btn" task-id="" class="dropdown-item" data-toggle="modal" data-target="#task-time-limit-cont" href="#">Add Time Limit</a>
-        </div>
+        </div>-->
       </div>
     </li>`;
 

@@ -38,7 +38,7 @@ const UiIndex = module.exports = {
       $('.delete-task-btn').click(function () {
         // Remove error message if add task modal is open.
         $('#task-input-error-box').text("").slideUp(300).css('color', 'black');
-        let obj = $($(this).parent().parent().parent()).data("data");
+        let obj = $($(this).parent().parent()).data("data");
         Config.Tasks.removeAndStore(obj, function () {
           // Remove the task list node.
           $("#" + obj.id).remove();
@@ -51,7 +51,7 @@ const UiIndex = module.exports = {
       /* Complete or undo the same, event handler. */
       $('.complete-task-btn').click(function () {
         $('#task-input-error-box').text("").slideUp(300).css('color', 'black');
-        let parentNode = $(this).parent().parent().parent();
+        let parentNode = $(this).parent().parent();
         let obj = $(parentNode).data("data");
 
         if ($(this).attr("status") === "false") {
@@ -71,7 +71,7 @@ const UiIndex = module.exports = {
 
       /* Set time limit modal opening event handler. */
       $('.add-time-limit-btn').click(function () {
-        let nodeId = $(this).parent().parent().parent().attr('id');
+        let nodeId = $(this).parent().parent().attr('id');
         $('#close-task-time-limit-modal').attr('task-id', nodeId);
         $('#close-task-time-limit-modal').attr('task-type', 'main');
 
@@ -90,10 +90,10 @@ const UiIndex = module.exports = {
   updateNodeLook: function (node, status) {
     $(node).attr("status", status);
     if (status) {
-      $(node).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", status).html("Undone Task");
+      $(node).children("#task-action-icons").children(".complete-task-btn").attr("status", status);
       $(node).children(".task-text").addClass("disabled-fade").children(".task-text-cont").addClass("strikethrough");
     } else {
-      $(node).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", status).html("Complete Task");
+      $(node).children("#task-action-icons").children(".complete-task-btn").attr("status", status);
       $(node).children(".task-text").removeClass("disabled-fade").children(".task-text-cont").removeClass("strikethrough");
     }
   },
@@ -363,22 +363,43 @@ $(function () {
   let matchedTasks = [];
   $("#task-search-box").on("keyup", function (event) {
     val = $("#task-search-input").val().trim() || "";
+    observer1.stopObservation();
     if (val.length > 0) {
       UiIndex.clearTaskListDisplay();
-      matchedTasks = Config.Tasks.searchTask(val);
-      for (let i = 0; i < matchedTasks.length; i++) {
-        let data = matchedTasks[i];
-        $(`#${data.id}`).attr("status", data.status);
-        if (!data.status) {
-          data.displayTaskNode("prepend");
-          $(`#${data.id}`).children(".task-text").removeClass("disabled-fade").children(".task-text-cont").removeClass("strikethrough");
-          $(`#${data.id}`).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", data.status).html("Complete task");
-        } else {
-          data.displayTaskNode("append");
-          $(`#${data.id}`).children(".task-text").addClass("disabled-fade").children(".task-text-cont").addClass("strikethrough");
-          $(`#${data.id}`).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", data.status).html('Undone task');
+      if (val[0] === ":" && val.length > 1) {
+        Config.Tasks.searchAllTasks(val.substring(1), function (result) {
+          matchedTasks = result;
+          for (let i = 0; i < matchedTasks.length; i++) {
+            let data = matchedTasks[i];
+            $(`#${data.id}`).attr("status", data.status);
+            if (!data.status) {
+              data.displayTaskNode("prepend");
+              $(`#${data.id}`).children(".task-text").removeClass("disabled-fade").children(".task-text-cont").removeClass("strikethrough");
+              $(`#${data.id}`).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", data.status).html("Complete task");
+            } else {
+              data.displayTaskNode("append");
+              $(`#${data.id}`).children(".task-text").addClass("disabled-fade").children(".task-text-cont").addClass("strikethrough");
+              $(`#${data.id}`).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", data.status).html('Undone task');
+            }
+          }
+        });
+      } else {
+        matchedTasks = Config.Tasks.searchTask(val);
+        for (let i = 0; i < matchedTasks.length; i++) {
+          let data = matchedTasks[i];
+          $(`#${data.id}`).attr("status", data.status);
+          if (!data.status) {
+            data.displayTaskNode("prepend");
+            $(`#${data.id}`).children(".task-text").removeClass("disabled-fade").children(".task-text-cont").removeClass("strikethrough");
+            $(`#${data.id}`).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", data.status).html("Complete task");
+          } else {
+            data.displayTaskNode("append");
+            $(`#${data.id}`).children(".task-text").addClass("disabled-fade").children(".task-text-cont").addClass("strikethrough");
+            $(`#${data.id}`).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", data.status).html('Undone task');
+          }
         }
       }
+      observer1.startObservation();
       UiIndex.attachTaskOptionBtnListener();
     }
   });
@@ -422,7 +443,7 @@ function shiftDisplayPane(date, callback) {
 }
 
 function displayEmptyListBanner() {
-  $("#empty-list-banner").fadeIn(100);
+  $("#empty-list-banner").fadeIn(0);
 }
 
 function hideEmptyListBanner() {

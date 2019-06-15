@@ -144,6 +144,34 @@ TaskList.prototype.loadList = function (callback) {
   }
 }
 
+TaskList.prototype.getAllTasks = function (container, callback) {
+  let file = `${Config.TASK_STORE_DIR}/task_list.txt`;
+  if (!fs.existsSync(file)) {
+    typeof callback === "function" ? callback() : {};
+  } else {
+    fs.readFile(file, function (err, data) {
+      if (err) {
+        Logging.logError(err, "TaskList.js", __STACK__[1].getLineNumber());
+        typeof callback === "function" ? callback() : {};
+      } else {
+        let list = data.toString().split(",");
+        async.each(list, function (item, callback) {
+          if (item != undefined && item.length > 0) {
+            getTaskInfo(item, function (result) {
+              container.add(result.id, new Task(result.id, result.text, result.startTime, result.endTime, result.status));
+              callback();
+            });
+          } else {
+            callback();
+          }
+        }, function (err) {
+          typeof callback === "function" ? callback() : {};
+        });
+      }
+    });
+  }
+}
+
 TaskList.prototype.searchTask = function (val) {
   let list = Config.Tasks.getTasks();
   let matchedTasks = [];
@@ -154,6 +182,20 @@ TaskList.prototype.searchTask = function (val) {
   }
 
   return matchedTasks;
+}
+
+TaskList.prototype.searchAllTasks = function (val, callback) {
+  let list = new List();
+  let matchedTasks = [];
+  Config.Tasks.getAllTasks(list, function () {
+    list = list.toValueArray();
+    for (let i = 0; i < list.length; i++) {
+      if (Utility.subseq(list[i].text, val)) {
+        matchedTasks.push(list[i]);
+      }
+    }
+    callback(matchedTasks);
+  });
 }
 
 /* Get the info of the task from the storage. */

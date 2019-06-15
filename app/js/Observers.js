@@ -13,7 +13,10 @@ Observer.prototype.startObservation = function () {
   self.observer.observe(self.target, self.observableAttributes);
 };
 
-Observer.prototype.stopObservation = function () {};
+Observer.prototype.stopObservation = function () {
+  let self = this;
+  self.observer.disconnect();
+};
 
 
 module.exports = Observer;
