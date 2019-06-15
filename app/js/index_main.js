@@ -50,7 +50,7 @@ const IndexMain = module.exports = {
     // Attach window key listeners.
     UiIndex.attachWindowKeyListener();
     // Load the Tasks (TaskList).
-    Config.Tasks.loadList(function () {
+    Config.Tasks.loadListByDate(new Date(), function () {
       // Display the tasks.
       UiIndex.displayTaskList(function () {});
     });

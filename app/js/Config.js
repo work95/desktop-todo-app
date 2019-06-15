@@ -38,6 +38,9 @@ var Timers = {};
 /* Task List object. */
 var Tasks;
 
+/* Date shift count (signed integer). */
+var DateShift = 0;
+
 /* Current user's ID. This value is public. */
 var USER_ID = "user_0";
 
@@ -64,6 +67,7 @@ const MonthNamesShort = [
 const Config = module.exports = {
   Timers,
   Tasks,
+  DateShift,
   USER_ID,
   KeyCodes,
   LAST_LOGIN_FILE,

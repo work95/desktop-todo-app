@@ -22,6 +22,17 @@ header {
   background-color: #35194e;
 }
 
+.date-shift-btn {
+  margin-left: 20px;
+  margin-right: 20px;
+  color: white;
+  font-size: 29px;
+}
+
+#previous-date-shift-btn {
+  float: left;
+}
+
 #current-date-cont {
   position: relative;
   z-index: 1;
@@ -29,7 +40,8 @@ header {
 
 #current-date-cont h1 {
   color: white;
-  margin-left: 50px;
+  margin-left: 20px;
+  margin-right: 20px;
   margin-bottom: 0px;
   float: left;
   font-family: "Quicksand-Medium";
@@ -214,6 +226,20 @@ article {
 #task-complete-icon i {
   color: #ff3f00;
   font-size: 30px;
+}
+
+#empty-list-banner {
+  display: none;
+  text-align: center;
+}
+
+#empty-list-banner-text {
+  font-family: "Quicksand-Bold";
+  color: grey;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin: 10px;
+  box-shadow: 1px 4px 14px 0px rgba(0, 0, 0, 0.1);
 }
 
 /* 

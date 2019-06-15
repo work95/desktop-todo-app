@@ -60,11 +60,17 @@
 
   <header>
     <div>
+      <span class="date-shift-btn" id="previous-date-shift-btn"><i class="fa fa-arrow-circle-left"></i></span>
       <span id="current-date-cont">
         <h1></h1>
       </span>
+      <span class="date-shift-btn" id="next-date-shift-btn"><i class="fa fa-arrow-circle-right"></i></span>
 
       <span id="header-icon-cont">
+        <span id="date-shift-home-btn" class="header-icon">
+          <i class="fa fa-home"></i>
+        </span>
+
         <span id="task-list-refresh" class="header-icon">
           <i class="fa fa-refresh"></i>
         </span>
@@ -88,7 +94,11 @@
     </div>
 
     <div id="task-list-cont" class="list-cont">
-      <ul class="list-group"></ul>
+      <ul class="list-group" id="task-list-cont-main"></ul>
+    </div>
+
+    <div id="empty-list-banner">
+      <h2 id="empty-list-banner-text">No tasks.</h2>
     </div>
   </article>
 

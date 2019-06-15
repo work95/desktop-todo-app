@@ -1,6 +1,7 @@
 "use strict";
 
 const Config = require("./Config");
+const Observer = require("./Observers");
 const Task = require("./Task");
 const Timer = require("./Timer");
 
@@ -10,10 +11,14 @@ const UiIndex = module.exports = {
   /* For adding the task text to the storage and display it. */
   addTask: function (taskText, callback) {
     let task = new Task(null, taskText);
-    task.save(function () {
-      task.displayTaskNode("prepend");
-      UiIndex.attachTaskOptionBtnListener();
-      typeof callback === "function" ? callback() : {};
+    shiftDisplayPane(new Date(), function () {
+      Config.DateShift = 0;
+      hideEmptyListBanner();
+      task.save(function () {
+        task.displayTaskNode("prepend");
+        UiIndex.attachTaskOptionBtnListener();
+        typeof callback === "function" ? callback() : {};
+      });
     });
   },
 
@@ -101,23 +106,29 @@ const UiIndex = module.exports = {
     // Clear the display list first (in case, updating the list).
     UiIndex.clearTaskListDisplay();
 
-    for (let i = 0; i < taskList.length; i++) {
-      let data = Config.Tasks.getTask(taskList[i]);
-      $(`#${taskList[i]}`).attr("status", data.status);
-      let node;
-      if (!data.status) {
-        node = data.displayTaskNode("prepend");
-        $(`#${taskList[i]}`).children(".task-text").removeClass("disabled-fade").children(".task-text-cont").removeClass("strikethrough");
-        $(`#${taskList[i]}`).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", data.status).html("Complete task");
-        if (data.endTime) {
-          new Timer(data.id, $(`#${taskList[i]} span .task-end-time`), data.endTime);
+    if (taskList.length < 1) {
+      displayEmptyListBanner();
+    } else {
+      hideEmptyListBanner();
+      for (let i = 0; i < taskList.length; i++) {
+        let data = Config.Tasks.getTask(taskList[i]);
+        $(`#${taskList[i]}`).attr("status", data.status);
+        let node;
+        if (!data.status) {
+          node = data.displayTaskNode("prepend");
+          $(`#${taskList[i]}`).children(".task-text").removeClass("disabled-fade").children(".task-text-cont").removeClass("strikethrough");
+          $(`#${taskList[i]}`).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", data.status).html("Complete task");
+          if (data.endTime) {
+            new Timer(data.id, $(`#${taskList[i]} span .task-end-time`), data.endTime);
+          }
+        } else {
+          node = data.displayTaskNode("append");
+          $(`#${taskList[i]}`).children(".task-text").addClass("disabled-fade").children(".task-text-cont").addClass("strikethrough");
+          $(`#${taskList[i]}`).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", data.status).html('Undone task');
         }
-      } else {
-        node = data.displayTaskNode("append");
-        $(`#${taskList[i]}`).children(".task-text").addClass("disabled-fade").children(".task-text-cont").addClass("strikethrough");
-        $(`#${taskList[i]}`).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", data.status).html('Undone task');
       }
     }
+
     UiIndex.attachTaskOptionBtnListener();
     typeof callback === "function" ? callback() : {};
   },
@@ -226,6 +237,20 @@ const UiIndex = module.exports = {
           case "r":
             // event.preventDefault();
             break;
+          
+          case "ArrowLeft":
+            Config.DateShift--;
+            let dateA = new Date();
+            dateA.setDate(dateA.getDate() + Config.DateShift);
+            shiftDisplayPane(dateA, function () {});
+            break;
+
+          case "ArrowRight":
+            Config.DateShift++;
+            let dateB = new Date();
+            dateB.setDate(dateB.getDate() + Config.DateShift);
+            shiftDisplayPane(dateB, function () {});
+            break;
 
           // Process the inputted task text.
           case "Enter":
@@ -324,6 +349,14 @@ $(function () {
   });
 });
 
+$(function () {
+  $("#date-shift-home-btn").click(function () {
+    shiftDisplayPane(new Date(), function () {
+      Config.DateShift = 0;
+    });
+  });
+});
+
 /* Search function. */
 $(function () {
   let val = "";
@@ -353,6 +386,60 @@ $(function () {
 
 /* Show the current day's date and month. */
 $(function () {
-  let date = new Date();
-  $("#current-date-cont h1").html(`${Config.MonthNamesShort[date.getMonth()]} ${date.getDate()}`);
+  // let date = new Date();
+  changeHeaderDate(new Date());
+  // $("#current-date-cont h1").html(`${Config.MonthNamesShort[date.getMonth()]} ${date.getDate()}`);
 });
+
+function changeHeaderDate(date) {
+  $("#current-date-cont h1").html(`${Config.MonthNamesShort[date.getMonth()]} ${date.getDate()}`);
+}
+
+/* Shift to previous date or next date. */
+$(function () {
+  $("#previous-date-shift-btn").click(function () {
+    Config.DateShift--;
+    let date = new Date();
+    date.setDate(date.getDate() + Config.DateShift);
+    shiftDisplayPane(date, function () {});
+  });
+
+  $("#next-date-shift-btn").click(function () {
+    Config.DateShift++;
+    let date = new Date();
+    date.setDate(date.getDate() + Config.DateShift);
+    shiftDisplayPane(date, function () {});
+  });
+});
+
+function shiftDisplayPane(date, callback) {
+  changeHeaderDate(date);
+  Config.Tasks.loadListByDate(date, function () {
+    UiIndex.displayTaskList(function () {
+      callback();
+    });
+  });
+}
+
+function displayEmptyListBanner() {
+  $("#empty-list-banner").fadeIn(100);
+}
+
+function hideEmptyListBanner() {
+  $("#empty-list-banner").fadeOut(0);
+}
+
+const observer1 = new Observer(document.getElementById("task-list-cont-main"), { childList: true });
+
+observer1.observer = new MutationObserver(function (mutations) {
+  mutations.forEach(function (mutation) {
+    if (mutation.type === "childList") {
+      if ($("#task-list-cont-main").children().length < 1) {
+        displayEmptyListBanner();
+      } else {
+        hideEmptyListBanner();
+      }
+    }
+  });
+});
+observer1.startObservation();

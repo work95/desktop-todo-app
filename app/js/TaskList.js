@@ -84,6 +84,38 @@ TaskList.prototype.removeFromStore = function (taskObj, callback) {
   }
 }
 
+TaskList.prototype.loadListByDate = function (date, callback) {
+  let file = `${Config.TASK_STORE_DIR}/task_list.txt`;
+  let time = date.toLocaleDateString();
+  if (!fs.existsSync(file)) {
+    typeof callback === "function" ? callback() : {};
+  } else {
+    fs.readFile(file, function (err, data) {
+      if (err) {
+        Logging.logError(err, "TaskList.js", __STACK__[1].getLineNumber());
+        typeof callback === "function" ? callback() : {};
+      } else {
+        let list = data.toString().split(",");
+        Config.Tasks = new TaskList();
+        async.each(list, function (item, callback) {
+          if (item != undefined && item.length > 0) {
+            getTaskInfo(item, function (result) {
+              if (new Date(parseInt(result.startTime)).toLocaleDateString() === time) {
+                Config.Tasks.add(new Task(result.id, result.text, result.startTime, result.endTime, result.status));
+              }
+              callback();
+            });
+          } else {
+            callback();
+          }
+        }, function (err) {
+          typeof callback === "function" ? callback() : {};
+        });
+      }
+    });
+  }
+}
+
 TaskList.prototype.loadList = function (callback) {
   let file = `${Config.TASK_STORE_DIR}/task_list.txt`;
   if (!fs.existsSync(file)) {
