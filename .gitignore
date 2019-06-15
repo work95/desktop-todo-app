@@ -2,3 +2,4 @@ node_modules/
 assets/
 .ds/
 .logs/
+data-store/
