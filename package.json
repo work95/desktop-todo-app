@@ -5,12 +5,25 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron ."
+    "start": "electron .",
+    "build": "webpack --config webpack.config.js --progress --inline --hot --open --watch"
   },
   "author": "Kunal Sharma",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^1.8.8"
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/preset-react": "^7.0.0",
+    "autoprefixer": "^9.6.1",
+    "babel-loader": "^8.0.6",
+    "css-loader": "^3.1.0",
+    "electron": "^1.8.8",
+    "file-loader": "^4.1.0",
+    "postcss-loader": "^3.0.0",
+    "style-loader": "^0.23.1",
+    "webpack": "^4.36.1",
+    "webpack-cli": "^3.3.6",
+    "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
     "async": "^2.6.2",
@@ -18,6 +31,8 @@
     "countdown": "^2.6.0",
     "dotenv": "^6.2.0",
     "express": "^4.17.1",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
     "request": "^2.85.0",
     "tracer": "^0.8.15"
   }

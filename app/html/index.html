@@ -13,100 +13,13 @@
 </head>
 
 <body>
-  <div class="modal fade" id="task-time-limit-cont" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">What time does the task end?</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
+  <div id="root"></div>
 
-        <div class="modal-body">
-          <div id="task-time-input-day-part">
-            <label for="task-time-input-day">On which day?</label>
-            <input type="text" id="task-time-input-day" placeholder="DD" />
-            <span class="disable-fade">/</span>
-            <input type="text" id="task-time-input-month" placeholder="MM" />
-            <span class="disable-fade">/</span>
-            <input type="text" id="task-time-input-year" placeholder="YYYY" />
-          </div>
-
-          <div id="task-time-input-time-part">
-            <label for="task-time-input-time-cont">At what time?</label>
-            <span id="task-time-input-time-cont">
-              <input type="text" id="task-time-input-hour" />
-              <span class="disable-fade">:</span>
-              <input type="text" id="task-time-input-minute" />
-              <span class="disable-fade">:</span>
-              <input type="text" id="task-time-input-second" />
-            </span>
-          </div>
-
-          <div id="remove-time-check">
-            <input type="checkbox" id="remove-time-input" />
-            <label for="remove-time-input">Remove time limit</label>
-          </div>
-        </div>
-
-        <div class="modal-footer">
-          <button type="button" class="btn btn-white" task-id="" task-type="" data-dismiss="modal" id="close-task-time-limit-modal">Save</button>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <header>
-    <div>
-      <span class="date-shift-btn" id="previous-date-shift-btn"><i class="fa fa-arrow-circle-left"></i></span>
-      <span id="current-date-cont">
-        <h1></h1>
-      </span>
-      <span class="date-shift-btn" id="next-date-shift-btn"><i class="fa fa-arrow-circle-right"></i></span>
-
-      <span id="header-icon-cont">
-        <span id="date-shift-home-btn" class="header-icon">
-          <i class="fa fa-home"></i>
-        </span>
-
-        <span id="task-list-refresh" class="header-icon">
-          <i class="fa fa-refresh"></i>
-        </span>
-
-        <span id="add-task-btn" class="header-icon">
-          <i class="fa fa-plus"></i>
-        </span>
-      </span>
-    </div>
-  </header>
-
-  <article>
-    <div id="task-search-box" class="input-box">
-      <input type="text" id="task-search-input" placeholder="Enter task's text to search" autofocus />
-    </div>
-
-    <div id="task-add-input-box" class="input-box">
-      <div id="task-input-error-box"></div>
-      <input type="text" id="task-text-input" placeholder="What do you want to do next?" autofocus />
-      <span id="task-input-send-btn"><i class="fa fa-send"></i></span>
-    </div>
-
-    <div id="task-list-cont" class="list-cont">
-      <ul class="list-group" id="task-list-cont-main"></ul>
-    </div>
-
-    <div id="empty-list-banner">
-      <h2 id="empty-list-banner-text">No tasks.</h2>
-    </div>
-  </article>
-
-  <script src="../js/boot.js"></script>
+  <script src="../../dist/start.js"></script>
+  <script src="../../dist/boot.js"></script>
   <script src="../assets/js/popper.min.js"></script>
   <script src="../assets/js/bootstrap.min.js"></script>
   <script src="../assets/js/mdb.min.js"></script>
 
 </body>
-
 </html>

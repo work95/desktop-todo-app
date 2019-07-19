@@ -3,3 +3,4 @@ assets/
 .ds/
 .logs/
 data-store/
+dist/
