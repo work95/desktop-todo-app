@@ -29,6 +29,32 @@ TaskList.prototype.add = function (taskObj) {
   this.list.add(taskObj.id, taskObj);
 }
 
+TaskList.prototype.store = function (callback) {
+  fs.writeFile(`${Config.TASK_STORE_DIR}/mainStore.json`, JSON.stringify(this), (err) => {
+    if (err) {
+      Logging.logError(err, "TaskList.js", __STACK__[1].getLineNumber());
+    }
+    callback();
+  });
+}
+
+TaskList.prototype.load = function (callback) {
+  fs.readFile(`${Config.TASK_STORE_DIR}/mainStore.json`, (err, data) => {
+    if (err) {
+      Logging.logError(err, "TaskList.js", __STACK__[1].getLineNumber());
+    } else {
+      let self = this;
+      let oldData = JSON.parse(data).list.container;
+      self.list = new List();
+      for (let i in oldData) {
+        let task = oldData[i];
+        self.add(new Task(task.id, task.text, task.startTime, task.endTime, task.status));
+      }
+    }
+    callback();
+  });
+}
+
 TaskList.prototype.addAndStore = function (taskObj, callback) {
   this.add(taskObj);
   this.addInStore(taskObj, function () {
