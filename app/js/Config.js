@@ -32,6 +32,8 @@ var TASK_STORE_DIR = process.env.TASK_STORE_DIR;
 /* Current user's storage directory. */
 var USER_DIR = process.env.USER_STORE_DIR;
 
+var TASK_STORAGE_FILE = process.env.TASK_STORAGE_FILE;
+
 /* Stores the Interval handle for various timers applied to time constrained tasks. */
 var Timers = {};
 
@@ -80,6 +82,7 @@ const Config = module.exports = {
   LOG_FILE,
   TASK_STORE_DIR,
   USER_DIR,
+  TASK_STORAGE_FILE,
   MonthNames,
   MonthNamesShort,
   CurrentDate,
@@ -87,5 +90,6 @@ const Config = module.exports = {
   setupConfiguration: function () {
     Config.TASK_STORE_DIR = `${Config.USER_STORE_DIR}/${Config.USER_ID}/${Config.TASK_STORE_DIR}`;
     Config.USER_DIR = `${Config.USER_DIR}/${Config.USER_ID}`;
+    Config.TASK_STORAGE_FILE = `${Config.TASK_STORE_DIR}/${Config.TASK_STORAGE_FILE}`;
   }
 };

@@ -52,7 +52,7 @@ TaskList.prototype.addTask = function (task, callback) {
  * Serialize the TaskList object.
  */
 TaskList.prototype.store = function (callback) {
-  fs.writeFile(`${Config.TASK_STORE_DIR}/mainStore.json`, JSON.stringify(this), (err) => {
+  fs.writeFile(Config.TASK_STORAGE_FILE, JSON.stringify(this), (err) => {
     if (err) {
       Logging.logError(err, "TaskList.js", __STACK__[1].getLineNumber());
     }
@@ -64,7 +64,7 @@ TaskList.prototype.store = function (callback) {
  * Deserialize the TaskList object.
  */
 TaskList.prototype.load = function (callback) {
-  fs.readFile(`${Config.TASK_STORE_DIR}/mainStore.json`, (err, data) => {
+  fs.readFile(Config.TASK_STORAGE_FILE, (err, data) => {
     if (err) {
       Logging.logError(err, "TaskList.js", __STACK__[1].getLineNumber());
     } else {
