@@ -54,7 +54,7 @@ TaskList.prototype.addTask = function (task, callback) {
 TaskList.prototype.store = function (callback) {
   fs.writeFile(Config.TASK_STORAGE_FILE, JSON.stringify(this), (err) => {
     if (err) {
-      Logging.logError(err, "TaskList.js", __STACK__[1].getLineNumber());
+      Logging.logError(err, "TaskList.js");
     }
     callback();
   });
@@ -66,7 +66,7 @@ TaskList.prototype.store = function (callback) {
 TaskList.prototype.load = function (callback) {
   fs.readFile(Config.TASK_STORAGE_FILE, (err, data) => {
     if (err) {
-      Logging.logError(err, "TaskList.js", __STACK__[1].getLineNumber());
+      Logging.logError(err, "TaskList.js");
     } else {
       let self = this;
       let oldData = JSON.parse(data).list.container;
