@@ -110,28 +110,21 @@ TaskList.prototype.getTasksByDate = function (date) {
   return taskList;
 }
 
+/**
+ * Searches for task in the current time pane. 
+ */
 TaskList.prototype.searchTask = function (val) {
-  let list = Config.Tasks.getTasks();
-  let matchedTasks = [];
-  for (let i = 0; i < list.length; i++) {
-    if (Utility.subseq(list[i].text, val)) {
-      matchedTasks.push(list[i]);
-    }
-  }
-
-  return matchedTasks;
+  // Fetch the tasks for the date of the current pane.
+  let list = Config.Tasks.getTasksByDate(Config.CurrentDate);
+  return list.filter((task) => Utility.subseq(task.text, val));
 }
 
+/**
+ * Searches for all tasks. 
+ */
 TaskList.prototype.searchAllTasks = function (val) {
-  let matchedTasks = [];
-  let list = Config.Tasks.getTasks();
-  for (let i = 0; i < list.length; i++) {
-    if (Utility.subseq(list[i].text, val)) {
-      matchedTasks.push(list[i]);
-    }
-  }
+  return Config.Tasks.getTasks().filter((task) => Utility.subseq(task.text, val));
 }
-
 
 /** 
  * Update the status of the task. 
