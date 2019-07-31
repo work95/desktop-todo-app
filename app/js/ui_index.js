@@ -14,7 +14,7 @@ const UiIndex = module.exports = {
     shiftDisplayPane(new Date(), function () {
       Config.DateShift = 0;
       hideEmptyListBanner();
-      task.save(function () {
+      Config.Tasks.addTask(task, () => {
         task.displayTaskNode("prepend");
         UiIndex.attachTaskOptionBtnListener();
         typeof callback === "function" ? callback() : {};
@@ -39,7 +39,7 @@ const UiIndex = module.exports = {
         // Remove error message if add task modal is open.
         $('#task-input-error-box').text("").slideUp(300).css('color', 'black');
         let obj = $($(this).parent().parent()).data("data");
-        Config.Tasks.removeAndStore(obj, function () {
+        Config.Tasks.removeTask(obj, function () {
           // Remove the task list node.
           $("#" + obj.id).remove();
   
@@ -60,12 +60,12 @@ const UiIndex = module.exports = {
           $(`#${obj.id} span .task-end-time`).text("");
           clearInterval(Config.Timers[obj.id]);
           delete Config.Timers[obj.id];
-          obj.updateTaskStatus(true, function () { });
+          Config.Tasks.updateTaskStatus(obj.id, true);
         } else {
           UiIndex.updateNodeLook(parentNode, false);
           new Timer(obj.id, $(`#${obj.id} span .task-end-time`), obj.endTime);
           $('#task-list-cont ul').prepend(parentNode);
-          obj.updateTaskStatus(false, function () { });
+          Config.Tasks.updateTaskStatus(obj.id, false);
         }
       });
 
@@ -99,9 +99,9 @@ const UiIndex = module.exports = {
   },
 
   /* Load the task list. */
-  displayTaskList: function (callback) {
+  displayTaskList: function (date, callback) {
     // Cache the Task list.
-    let taskList = Config.Tasks.getKeys();
+    let taskList = Config.Tasks.getTasksByDate(date);
 
     // Clear the display list first (in case, updating the list).
     UiIndex.clearTaskListDisplay();
@@ -111,20 +111,19 @@ const UiIndex = module.exports = {
     } else {
       hideEmptyListBanner();
       for (let i = 0; i < taskList.length; i++) {
-        let data = Config.Tasks.getTask(taskList[i]);
-        $(`#${taskList[i]}`).attr("status", data.status);
-        let node;
+        let data = taskList[i];
+        $(`#${taskList[i].id}`).attr("status", data.status);
         if (!data.status) {
-          node = data.displayTaskNode("prepend");
-          $(`#${taskList[i]}`).children(".task-text").removeClass("disabled-fade").children(".task-text-cont").removeClass("strikethrough");
-          $(`#${taskList[i]}`).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", data.status).html("Complete task");
+          data.displayTaskNode("prepend");
+          $(`#${taskList[i].id}`).children(".task-text").removeClass("disabled-fade").children(".task-text-cont").removeClass("strikethrough");
+          $(`#${taskList[i].id}`).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", data.status).html("Complete task");
           if (data.endTime) {
-            new Timer(data.id, $(`#${taskList[i]} span .task-end-time`), data.endTime);
+            new Timer(data.id, $(`#${taskList[i].id} span .task-end-time`), data.endTime);
           }
         } else {
-          node = data.displayTaskNode("append");
-          $(`#${taskList[i]}`).children(".task-text").addClass("disabled-fade").children(".task-text-cont").addClass("strikethrough");
-          $(`#${taskList[i]}`).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", data.status).html('Undone task');
+          data.displayTaskNode("append");
+          $(`#${taskList[i].id}`).children(".task-text").addClass("disabled-fade").children(".task-text-cont").addClass("strikethrough");
+          $(`#${taskList[i].id}`).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", data.status).html('Undone task');
         }
       }
     }
@@ -287,7 +286,7 @@ $(function () {
     let endTime = new Date(`${year}/${month}/${day} ${hour}:${minute}:${second}`).getTime();
     let taskId = $(this).attr('task-id').toString();
     let taskObj = Config.Tasks.getTask(taskId);
-    taskObj.addTimeLimit(endTime);
+    Config.Tasks.addTaskTimeLimit(taskObj.id, endTime);
     if ($('#remove-time-check input').prop('checked')) {
       endTime = null;
       clearInterval(Config.Timers[taskId]);
@@ -345,7 +344,7 @@ $(function () {
 
 $(function () {
   $("#task-list-refresh").click(function() {
-    UiIndex.displayTaskList();
+    UiIndex.displayTaskList(Config.CurrentDate, () => {});
   });
 });
 
@@ -407,9 +406,7 @@ $(function () {
 
 /* Show the current day's date and month. */
 $(function () {
-  // let date = new Date();
   changeHeaderDate(new Date());
-  // $("#current-date-cont h1").html(`${Config.MonthNamesShort[date.getMonth()]} ${date.getDate()}`);
 });
 
 function changeHeaderDate(date) {
@@ -434,12 +431,9 @@ $(function () {
 });
 
 function shiftDisplayPane(date, callback) {
+  Config.CurrentDate = date;
   changeHeaderDate(date);
-  Config.Tasks.loadListByDate(date, function () {
-    UiIndex.displayTaskList(function () {
-      callback();
-    });
-  });
+  UiIndex.displayTaskList(date, () => callback());
 }
 
 function displayEmptyListBanner() {

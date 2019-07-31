@@ -1,9 +1,5 @@
 "use strict";
 
-const fs = require("fs");
-const Config = require("./Config");
-const Logging = require("./Logging");
-
 function Task(id, text, startTime, endTime, status) {
   let self = this;
 
@@ -16,62 +12,6 @@ function Task(id, text, startTime, endTime, status) {
   self.endTime = endTime || null;
   self.status = status || false;
 };
-
-Task.prototype.save = function (callback) {
-  Config.Tasks.add(this);
-  this.store(function () {
-    typeof callback === "function" ? callback() : {};
-  });
-}
-
-Task.prototype.saveInFile = function (callback) {
-  let self = this;
-  let file = Config.TASK_STORE_DIR;
-  if (!fs.existsSync(file)) { fs.mkdirSync(file); }
-  fs.writeFile(`${file}/${self.id}.txt`, JSON.stringify(self), function (err) {
-    if (err) { 
-      Logging.logError(err, "Task.js", __STACK__[1].getLineNumber());
-    }
-    typeof callback === "function" ? callback() : {};
-  });
-}
-
-Task.prototype.store = function (callback) {
-  let self = this;
-  let file = Config.TASK_STORE_DIR;
-  if (!fs.existsSync(file)) { fs.mkdirSync(file); }
-  fs.appendFile(`${file}/task_list.txt`, `${self.id},`, function (err) {
-    if (err) {
-      Logging.logError(err, "Task.js", __STACK__[1].getLineNumber());
-    }
-    self.saveInFile(function () {
-      typeof callback === "function" ? callback() : {};
-    });
-  });
-}
-
-/* Update the task completion status. */
-Task.prototype.updateTaskStatus = function (status, callback) {
-  this.status = status;
-  this.saveInFile(function () {
-    typeof callback === "function" ? callback() : {};
-  });
-}
-
-/* Add time constraint on the task. */
-Task.prototype.addTimeLimit = function (endTime) {
-  this.endTime = endTime;
-  this.saveInFile(function () {
-    typeof callback === "function" ? callback() : {};
-  });
-}
-
-/* Delete the task from the record. */
-Task.prototype.delete = function () {
-  let self = this;
-  let file = Config.TASK_STORE_DIR;
-  fs.unlinkSync(`${file}/${self.id}.txt`);
-}
 
 /* HTML template for task. */
 Task.prototype.getTaskTemplate = function () {

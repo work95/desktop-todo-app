@@ -44,6 +44,9 @@ var DateShift = 0;
 /* Current user's ID. This value is public. */
 var USER_ID = "user_0";
 
+/* Date of the current open pane. */
+var CurrentDate = new Date();
+
 /* Common key codes. */
 const KeyCodes = {
   "ESCAPE": 27,
@@ -79,6 +82,7 @@ const Config = module.exports = {
   USER_DIR,
   MonthNames,
   MonthNamesShort,
+  CurrentDate,
 
   setupConfiguration: function () {
     Config.TASK_STORE_DIR = `${Config.USER_STORE_DIR}/${Config.USER_ID}/${Config.TASK_STORE_DIR}`;
