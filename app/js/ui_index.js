@@ -15,11 +15,28 @@ const UiIndex = module.exports = {
       Config.DateShift = 0;
       hideEmptyListBanner();
       Config.Tasks.addTask(task, () => {
-        task.displayTaskNode("prepend");
+        UiIndex.displayTaskNode(task, "prepend");
         UiIndex.attachTaskOptionBtnListener();
         typeof callback === "function" ? callback() : {};
       });
     });
+  },
+
+  /* Attach the node to the display list. */
+  displayTaskNode: function (task, type) {
+    let node = task.getTaskTemplate();
+    switch (type) {
+      case "append":
+        $('#task-list-cont ul').append(node);
+        break;
+
+      case "prepend":
+        $('#task-list-cont ul').prepend(node);
+        break;
+    }
+    $("#" + task.id).data("data", task);
+
+    return $(node);
   },
 
   /* Attaching click listeners on various options of the task. */
@@ -114,14 +131,14 @@ const UiIndex = module.exports = {
         let data = taskList[i];
         $(`#${taskList[i].id}`).attr("status", data.status);
         if (!data.status) {
-          data.displayTaskNode("prepend");
+          UiIndex.displayTaskNode(data, "prepend");
           $(`#${taskList[i].id}`).children(".task-text").removeClass("disabled-fade").children(".task-text-cont").removeClass("strikethrough");
           $(`#${taskList[i].id}`).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", data.status).html("Complete task");
           if (data.endTime) {
             new Timer(data.id, $(`#${taskList[i].id} span .task-end-time`), data.endTime);
           }
         } else {
-          data.displayTaskNode("append");
+          UiIndex.displayTaskNode(data, "append");
           $(`#${taskList[i].id}`).children(".task-text").addClass("disabled-fade").children(".task-text-cont").addClass("strikethrough");
           $(`#${taskList[i].id}`).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", data.status).html('Undone task');
         }
@@ -372,11 +389,11 @@ $(function () {
             let data = matchedTasks[i];
             $(`#${data.id}`).attr("status", data.status);
             if (!data.status) {
-              data.displayTaskNode("prepend");
+              UiIndex.displayTaskNode(data, "prepend");
               $(`#${data.id}`).children(".task-text").removeClass("disabled-fade").children(".task-text-cont").removeClass("strikethrough");
               $(`#${data.id}`).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", data.status).html("Complete task");
             } else {
-              data.displayTaskNode("append");
+              UiIndex.displayTaskNode(data, "append");
               $(`#${data.id}`).children(".task-text").addClass("disabled-fade").children(".task-text-cont").addClass("strikethrough");
               $(`#${data.id}`).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", data.status).html('Undone task');
             }
@@ -388,11 +405,11 @@ $(function () {
           let data = matchedTasks[i];
           $(`#${data.id}`).attr("status", data.status);
           if (!data.status) {
-            data.displayTaskNode("prepend");
+            UiIndex.displayTaskNode(data, "prepend");
             $(`#${data.id}`).children(".task-text").removeClass("disabled-fade").children(".task-text-cont").removeClass("strikethrough");
             $(`#${data.id}`).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", data.status).html("Complete task");
           } else {
-            data.displayTaskNode("append");
+            UiIndex.displayTaskNode(data, "append");
             $(`#${data.id}`).children(".task-text").addClass("disabled-fade").children(".task-text-cont").addClass("strikethrough");
             $(`#${data.id}`).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", data.status).html('Undone task');
           }

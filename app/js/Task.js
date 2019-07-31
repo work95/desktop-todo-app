@@ -50,22 +50,5 @@ Task.prototype.getTaskTemplate = function () {
   return taskNode;
 }
 
-/* Attach the node to the display list. */
-Task.prototype.displayTaskNode = function (type) {
-  let node = this.getTaskTemplate();
-  switch (type) {
-    case "append":
-      $('#task-list-cont ul').append(node);
-      break;
-
-    case "prepend":
-      $('#task-list-cont ul').prepend(node);
-      break;
-  }
-  $("#" + this.id).data("data", this);
-
-  return $(node);
-}
-
 
 module.exports = Task;
