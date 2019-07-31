@@ -12,27 +12,45 @@ function TaskList() {
   this.list = new List();
 };
 
+/**
+ * Get the Task object to corresponding @param taskId.
+ */
 TaskList.prototype.getTask = function (taskId) {
   return this.list.get(taskId);
 }
 
+/**
+ * Get an array of all the Tasks' 'id'.
+ */
 TaskList.prototype.getKeys = function () {
   return this.list.toKeyArray();
 }
 
+/**
+ * Get an array of all the Task objects.
+ */
 TaskList.prototype.getTasks = function () {
   return this.list.toValueArray();
 }
 
-TaskList.prototype.add = function (taskObj) {
-  this.list.add(taskObj.id, taskObj);
+/**
+ * Add task @param taskObj in TaskList.
+ */
+TaskList.prototype.add = function (task) {
+  this.list.add(task.id, task);
 }
 
-TaskList.prototype.addTask = function (taskObj, callback) {
-  this.add(taskObj);
+/**
+ * Add task @param task in TaskList and storage too.
+ */
+TaskList.prototype.addTask = function (task, callback) {
+  this.add(task);
   this.store(() => callback());
 }
 
+/**
+ * Serialize the TaskList object.
+ */
 TaskList.prototype.store = function (callback) {
   fs.writeFile(`${Config.TASK_STORE_DIR}/mainStore.json`, JSON.stringify(this), (err) => {
     if (err) {
@@ -42,6 +60,9 @@ TaskList.prototype.store = function (callback) {
   });
 }
 
+/**
+ * Deserialize the TaskList object.
+ */
 TaskList.prototype.load = function (callback) {
   fs.readFile(`${Config.TASK_STORE_DIR}/mainStore.json`, (err, data) => {
     if (err) {
@@ -58,15 +79,24 @@ TaskList.prototype.load = function (callback) {
   });
 }
 
+/**
+ * Remove the task from TaskList.
+ */
 TaskList.prototype.remove = function (taskObj) {
   this.list.remove(taskObj.id);
 }
 
+/**
+ * Remove the task from TaskList and storage too.
+ */
 TaskList.prototype.removeTask = function (taskObj, callback) {
   this.remove(taskObj);
   this.store(() => callback());
 }
 
+/**
+ * Returns the list of tasks filtered by the given date.
+ */
 TaskList.prototype.getTasksByDate = function (date) {
   let list = this.getTasks();
   let time = date.toLocaleDateString();
@@ -102,12 +132,18 @@ TaskList.prototype.searchAllTasks = function (val) {
   }
 }
 
+
+/** 
+ * Update the status of the task. 
+ */
 TaskList.prototype.updateTaskStatus = function (taskId, status) {
   this.getTask(taskId).status = status;
   this.store(() => {});
 }
 
-/* Add time constraint on the task. */
+/** 
+ * Add time constraint on the task. 
+ */
 TaskList.prototype.addTaskTimeLimit = function (taskId, endTime) {
   this.getTask(taskId).endTime = endTime;
   this.store(() => {});
