@@ -128,19 +128,19 @@ const UiIndex = module.exports = {
     } else {
       hideEmptyListBanner();
       for (let i = 0; i < taskList.length; i++) {
-        let data = taskList[i];
-        $(`#${taskList[i].id}`).attr("status", data.status);
-        if (!data.status) {
-          UiIndex.displayTaskNode(data, "prepend");
+        let task = taskList[i];
+        $(`#${taskList[i].id}`).attr("status", task.status);
+        if (!task.status) {
+          UiIndex.displayTaskNode(task, "prepend");
           $(`#${taskList[i].id}`).children(".task-text").removeClass("disabled-fade").children(".task-text-cont").removeClass("strikethrough");
-          $(`#${taskList[i].id}`).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", data.status).html("Complete task");
-          if (data.endTime) {
-            new Timer(data.id, $(`#${taskList[i].id} span .task-end-time`), data.endTime);
+          $(`#${taskList[i].id}`).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", task.status).html("Complete task");
+          if (task.endTime) {
+            new Timer(task.id, $(`#${taskList[i].id} span .task-end-time`), task.endTime);
           }
         } else {
-          UiIndex.displayTaskNode(data, "append");
+          UiIndex.displayTaskNode(task, "append");
           $(`#${taskList[i].id}`).children(".task-text").addClass("disabled-fade").children(".task-text-cont").addClass("strikethrough");
-          $(`#${taskList[i].id}`).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", data.status).html('Undone task');
+          $(`#${taskList[i].id}`).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", task.status).html('Undone task');
         }
       }
     }
@@ -302,14 +302,14 @@ $(function () {
 
     let endTime = new Date(`${year}/${month}/${day} ${hour}:${minute}:${second}`).getTime();
     let taskId = $(this).attr('task-id').toString();
-    let taskObj = Config.Tasks.getTask(taskId);
-    Config.Tasks.addTaskTimeLimit(taskObj.id, endTime);
+    let task = Config.Tasks.getTask(taskId);
+    Config.Tasks.addTaskTimeLimit(task.id, endTime);
     if ($('#remove-time-check input').prop('checked')) {
       endTime = null;
       clearInterval(Config.Timers[taskId]);
       delete Config.Timers[taskId];
       $(`#${taskId} span .task-end-time`).text("");
-    } else if (!taskObj.status) {
+    } else if (!task.status) {
       // Delete previous timers, if any.
       clearInterval(Config.Timers[taskId]);
       delete Config.Timers[taskId];
@@ -386,32 +386,32 @@ $(function () {
         Config.Tasks.searchAllTasks(val.substring(1), function (result) {
           matchedTasks = result;
           for (let i = 0; i < matchedTasks.length; i++) {
-            let data = matchedTasks[i];
-            $(`#${data.id}`).attr("status", data.status);
-            if (!data.status) {
-              UiIndex.displayTaskNode(data, "prepend");
-              $(`#${data.id}`).children(".task-text").removeClass("disabled-fade").children(".task-text-cont").removeClass("strikethrough");
-              $(`#${data.id}`).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", data.status).html("Complete task");
+            let task = matchedTasks[i];
+            $(`#${task.id}`).attr("status", task.status);
+            if (!task.status) {
+              UiIndex.displayTaskNode(task, "prepend");
+              $(`#${task.id}`).children(".task-text").removeClass("disabled-fade").children(".task-text-cont").removeClass("strikethrough");
+              $(`#${task.id}`).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", task.status).html("Complete task");
             } else {
-              UiIndex.displayTaskNode(data, "append");
-              $(`#${data.id}`).children(".task-text").addClass("disabled-fade").children(".task-text-cont").addClass("strikethrough");
-              $(`#${data.id}`).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", data.status).html('Undone task');
+              UiIndex.displayTaskNode(task, "append");
+              $(`#${task.id}`).children(".task-text").addClass("disabled-fade").children(".task-text-cont").addClass("strikethrough");
+              $(`#${task.id}`).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", task.status).html('Undone task');
             }
           }
         });
       } else {
         matchedTasks = Config.Tasks.searchTask(val);
         for (let i = 0; i < matchedTasks.length; i++) {
-          let data = matchedTasks[i];
-          $(`#${data.id}`).attr("status", data.status);
-          if (!data.status) {
-            UiIndex.displayTaskNode(data, "prepend");
-            $(`#${data.id}`).children(".task-text").removeClass("disabled-fade").children(".task-text-cont").removeClass("strikethrough");
-            $(`#${data.id}`).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", data.status).html("Complete task");
+          let task = matchedTasks[i];
+          $(`#${task.id}`).attr("status", task.status);
+          if (!task.status) {
+            UiIndex.displayTaskNode(task, "prepend");
+            $(`#${task.id}`).children(".task-text").removeClass("disabled-fade").children(".task-text-cont").removeClass("strikethrough");
+            $(`#${task.id}`).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", task.status).html("Complete task");
           } else {
-            UiIndex.displayTaskNode(data, "append");
-            $(`#${data.id}`).children(".task-text").addClass("disabled-fade").children(".task-text-cont").addClass("strikethrough");
-            $(`#${data.id}`).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", data.status).html('Undone task');
+            UiIndex.displayTaskNode(task, "append");
+            $(`#${task.id}`).children(".task-text").addClass("disabled-fade").children(".task-text-cont").addClass("strikethrough");
+            $(`#${task.id}`).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", task.status).html('Undone task');
           }
         }
       }
