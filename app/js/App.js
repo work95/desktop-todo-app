@@ -1,26 +1,42 @@
 import fs from "fs";
 import React from "react";
 import Config from "./Config";
+import Init from "../js/Init";
 import List from "./List";
 import Utility from "./Utility";
 import DateShiftPane from "./components/DateShiftPane";
 import HeaderActionButton from "./components/HeaderActionButton";
+import TaskBox from "./components/TaskBox";
 import TaskList from "./components/TaskList";
 import TimeLimitModal from "./components/TimeLimitModal";
-import TaskBox from "./components/TaskBox";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      // Date currently on.
       currentDate: new Date(),
+
+      // How many steps back or forward.
       dateShift: 0,
+
+      // Array of tasks for the current date (currentDate).
       LocalTaskList: [],
+
+      // JSON containing all the tasks.
       MainTaskList: new List(),
+
+      // Set limit for this task.
       currentTimeLimitTask: "",
+
+      // Show/hide state for add task box.
       showAddTaskBox: false,
+
+      // Show/hide state for search task box.
       showSearchTaskBox: false,
+
+      // Show/hide state for task time limit modal.
       showTimeLimitModal: false
     };
 
@@ -41,11 +57,13 @@ class App extends React.Component {
     this.openTimeLimitModal = this.openTimeLimitModal.bind(this);
   }
 
+  /* Get an array of tasks for the provided date. */
   getTasksByDate(date, list) {
-    return (list || this.state.MainTaskList.toValueArray() || []).filter((task) => 
+    return (list || this.state.MainTaskList.getValues() || []).filter((task) => 
       (new Date(task.startTime).toLocaleDateString() === date.toLocaleDateString()));
   }
 
+  /* Load tasks for one day backward. */
   dateShiftBackward() {
     let date = new Date();
     let shift = this.state.dateShift - 1;
@@ -57,6 +75,7 @@ class App extends React.Component {
     });
   }
 
+  /* Load tasks for one day forward. */
   dateShiftForward() {
     let date = new Date();
     let shift = this.state.dateShift + 1;
@@ -68,6 +87,7 @@ class App extends React.Component {
     });
   }
 
+  /* Shift back to the today's date. */
   dateShiftHome() {
     this.setState({
       dateShift: 0,
@@ -76,46 +96,22 @@ class App extends React.Component {
     });
   }
 
-  refreshTaskList() {
-    this.setState({
-      LocalTaskList: this.getTasksByDate(this.state.currentDate)
-    });
-  }
-
-  addTask(text) {
-    let date = new Date().getTime();
-    let id = `task_${date}`;
-    this.state.MainTaskList.add(id, {id: id, text: text, startTime: date, endTime: null, status: false})
-    this.storeTaskList();
-    this.dateShiftHome();
-  }
-
-  searchTask(text) {
-    // Fetch the tasks for the date of the current pane and then filter.
-    let list = this.state.MainTaskList.toValueArray().filter((task) => Utility.subseq(task.text, text));
-    let searchedList = new List();
-    list.map((task) => searchedList.add(task.id, task));
-    this.setState({
-      LocalTaskList: list
-    });
-  }
-
-  storeTaskList() {
-    fs.writeFileSync(Config.TASK_STORAGE_FILE, JSON.stringify(this.state.MainTaskList));
-  }
-
+  /* Load the lists before the <TaskList /> is rendered. */
   componentWillMount() {
-    // Setup the configuration parameters.
-    Config.setupConfiguration();
-    let list = this.load();
+    // Run startup functions.
+    Init.init();
 
+    // Deserialize the JSON stored in main file.
+    let list = this.load();
+    
     // Load the 'LocalTaskList' before component renders.
     this.setState({
-      LocalTaskList: this.getTasksByDate(this.state.currentDate, list.toValueArray()),
+      LocalTaskList: this.getTasksByDate(this.state.currentDate, list.getValues()),
       MainTaskList: list
     });
   }
 
+  /* Deserialize the JSON object stored in file. */
   load() {
     let oldData = JSON.parse(fs.readFileSync(Config.TASK_STORAGE_FILE)).container;
     let list = new List();
@@ -129,10 +125,44 @@ class App extends React.Component {
         status: task.status
       });
     }
-
+    
     return list;
   }
+  
+  /* Serialize the JSON object. */
+  storeTaskList() {
+    fs.writeFileSync(Config.TASK_STORAGE_FILE, JSON.stringify(this.state.MainTaskList));
+  }
 
+  /* Reload the task list. */
+  refreshTaskList() {
+    this.setState({
+      LocalTaskList: this.getTasksByDate(this.state.currentDate)
+    });
+  }
+
+  /* Add task. */
+  addTask(text) {
+    let date = new Date().getTime();
+    let id = `task_${date}`;
+    this.state.MainTaskList.add(id, {id: id, text: text, startTime: date, endTime: null, status: false})
+    this.storeTaskList();
+    this.dateShiftHome();
+  }
+
+  /* Search for tasks. */
+  searchTask(text) {
+    // Fetch the tasks for the date of the current pane and then filter.
+    let list = this.state.MainTaskList.getValues().filter((task) => Utility.subseq(task.text, text));
+    let searchedList = new List();
+    list.map((task) => searchedList.add(task.id, task));
+    this.setState({
+      LocalTaskList: list
+    });
+  }
+  
+
+  /* Task status set to true or false. */
   onComplete(id) {
     let task = this.state.MainTaskList.get(id);
     task.status = !task.status;
@@ -142,6 +172,7 @@ class App extends React.Component {
     });
   }
 
+  /* Delete task. */
   onDelete(id) {
     this.state.MainTaskList.remove(id);
     this.storeTaskList();
@@ -150,16 +181,19 @@ class App extends React.Component {
     });
   }
 
+  /* Set state for add task box. */
   openAddTaskBox() {
     this.setState({ showAddTaskBox: !this.state.showAddTaskBox });
   }
 
+  /* Set state for search task box. */
   openSearchTaskBox() {
     this.setState({ 
       showSearchTaskBox: !this.state.showSearchTaskBox
     });
   }
 
+  /* Set state for add task time limit modal. */
   openTimeLimitModal(id) {
     this.setState({
       currentTimeLimitTask: id,
@@ -167,6 +201,7 @@ class App extends React.Component {
     });
   }
 
+  /* Set the time limit for a task 'this.state.currentTimeLimitTask' */
   setTimeLimit(day, month, year, hour, minute, second) {
     let endTime = new Date(`${year}/${month}/${day} ${hour}:${minute}:${second}`).getTime();
     let taskId = this.state.currentTimeLimitTask;
@@ -181,9 +216,9 @@ class App extends React.Component {
 
   render() {
     const {LocalTaskList, currentDate, showAddTaskBox, showSearchTaskBox, showTimeLimitModal} = this.state;
-    const {dateShiftBackward, dateShiftForward, getTasksByDate,
-      dateShiftHome, refreshTaskList, addTask, searchTask, onComplete, 
-      onDelete, openAddTaskBox, openSearchTaskBox, openTimeLimitModal, setTimeLimit} = this;
+    const {dateShiftBackward, dateShiftForward, getTasksByDate, dateShiftHome, 
+      refreshTaskList, addTask, searchTask, onComplete, onDelete, openAddTaskBox, 
+      openSearchTaskBox, openTimeLimitModal, setTimeLimit} = this;
 
     return (
       <div id="main-container">
