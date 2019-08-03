@@ -5,7 +5,7 @@ const Config = require("./Config");
 
 module.exports = {
   logError: function (message, moduleName) {
-    let logMessage = `[${new Date().toLocaleString()} (${moduleName}:${__STACK__[2].getLineNumber()})] ${message}\n`;
+    let logMessage = `[${new Date().toLocaleString()} (${moduleName})] ${message}\n`;
     fs.appendFileSync(Config.LOG_FILE, logMessage);
   }
 };
