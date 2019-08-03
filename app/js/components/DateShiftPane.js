@@ -1,5 +1,6 @@
 import React from "react";
 import Config from "../Config";
+import "../../css/DateShiftPane.css";
 
 const DateShiftPane = ({date = date || new Date(), dateShiftBackward = f => f, dateShiftForward = f => f}) => {
   return (

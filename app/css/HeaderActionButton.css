@@ -1,0 +1,12 @@
+#header-icon-cont {
+  float: right;
+  margin-top: 10px;
+  margin-right: 30px;
+}
+
+#header-icon-cont span { margin-left: 30px; }
+#header-icon-cont span i { font-size: 25px; }
+
+.header-icon i {
+  color: white;
+}

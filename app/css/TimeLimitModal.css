@@ -1,0 +1,71 @@
+.modal-header {
+  border-bottom: 0px;
+}
+
+.modal-footer {
+  border-top: 0px;
+  background-color: #35194e
+}
+
+#task-time-limit-cont .modal-dialog { 
+  margin: auto;
+  margin-top: 20px;
+}
+
+#task-time-limit-cont div {
+  max-width: 400px;
+}
+
+#task-time-limit-cont div .modal-header {
+  font-family: "Quicksand-Medium";
+  font-weight: 600;
+  font-size: 20px;
+}
+
+#task-time-input-day-part label,
+#task-time-input-time-part label {
+  font-size: 15px;
+  font-family: "Quicksand-Medium";
+  position: relative;
+  top: 8px;
+  margin-right: 10px;
+}
+
+#task-time-input-day-part label {
+  margin-right: 7px;
+}
+
+#task-time-input-day-part input,
+#task-time-input-time-part input {
+  width: 50px;
+  font-size: 15px;
+  text-align: center;
+  display: inline-block;
+  margin: auto 10px;
+  text-align: center;
+  font-family: "Quicksand-Medium";
+}
+
+#task-time-input-day-part input {
+  width: 50px;
+}
+
+#remove-time-check {
+  margin-top: 25px;
+  font-family: "Quicksand-Medium";
+}
+
+#remove-time-check input {
+  position: relative;
+  top: 2px;
+  margin-right: 2px;
+}
+
+#remove-time-check label {
+  font-size: 15px;
+}
+
+#close-task-time-limit-modal {
+  font-family: "Quicksand-Bold";
+  color: black !important;
+}

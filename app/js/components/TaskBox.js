@@ -1,4 +1,5 @@
 import React from "react";
+import "../../css/TaskBox.css";
 
 const TaskBox = ({placeholder, actionHandler, show}) => {
   let _input;

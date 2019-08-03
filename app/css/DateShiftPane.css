@@ -1,0 +1,30 @@
+.date-shift-btn {
+  margin-left: 20px;
+  margin-right: 20px;
+  color: white;
+  font-size: 29px;
+}
+
+#previous-date-shift-btn {
+  float: left;
+}
+
+#current-date-cont {
+  position: relative;
+  z-index: 1;
+}
+
+#current-date-cont h1 {
+  color: white;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 0px;
+  float: left;
+  font-family: "Quicksand-Medium";
+  position: relative;
+  z-index: -1;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 2.2;
+  letter-spacing: 1px;
+}
