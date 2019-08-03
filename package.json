@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron main.js",
-    "build": "webpack --config webpack.config.js --progress --hot --watch"
+    "build": "webpack --config webpack.config.js --progress --hot --watch",
+    "clean": "rm -rf dist/"
   },
   "author": "Kunal Sharma",
   "license": "ISC",
