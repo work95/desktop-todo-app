@@ -47,46 +47,44 @@ function List(buffer, delim) {
   self.length = size;
 }
 
+
 List.prototype.add = function (key, value) {
   this.container[key] = value;
   this.keys.push(key);
-  this.length++;
+  this.keys = Array.from(new Set(this.keys));
+  this.length = this.keys.length;
 };
 
 List.prototype.remove = function (key) {
   delete this.container[key];
   this.keys.splice(this.keys.indexOf(key), 1);
-  this.length--;
+  this.length = this.keys.length;
 };
 
 List.prototype.get = function (key) {
   return this.container[key];
 };
 
-List.prototype.toKeyArray = function () {
+List.prototype.getKeys = function () {
   let self = this;
   let array = [];
-
+  
   for (let item in self.container) {
     array.push(item);
   }
-
+  
   return array;
-};
+}
 
-List.prototype.toValueArray = function () {
+List.prototype.getValues = function () {
   let self = this;
   let array = [];
-
+  
   for (let item in self.container) {
     array.push(self.container[item]);
   }
-
+  
   return array;
-};
+}
 
-List.prototype.toArray = function () {
-  return this.toValueArray();
-};
-
-module.exports = List;
+export default List;
