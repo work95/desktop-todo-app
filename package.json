@@ -2,11 +2,11 @@
   "name": "xc9-todo",
   "version": "0.0.0",
   "description": "ToDo List",
-  "main": "main.js",
+  "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron .",
-    "build": "webpack --config webpack.config.js --progress --inline --hot --open --watch"
+    "start": "electron main.js",
+    "build": "webpack --config webpack.config.js --progress --hot --watch"
   },
   "author": "Kunal Sharma",
   "license": "ISC",
@@ -27,13 +27,11 @@
   },
   "dependencies": {
     "async": "^2.6.2",
-    "body-parser": "^1.19.0",
     "countdown": "^2.6.0",
     "dotenv": "^6.2.0",
     "express": "^4.17.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "request": "^2.85.0",
-    "tracer": "^0.8.15"
+    "request": "^2.85.0"
   }
 }
