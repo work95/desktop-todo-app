@@ -1,0 +1,104 @@
+/* 
+ * Task list item. 
+ */
+ .list-cont ul li {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  box-shadow: -2px 4px 10px 1px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+}
+
+#task-action-icons {
+  float: right;
+  margin-right: -20px;
+  margin-top: -20px;
+  margin-left: 20px;
+}
+
+#task-action-icons span {
+  margin-right: 5px;
+  color: grey;
+  font-size: 20px;
+  display: block;
+}
+
+
+/* 
+ * Task list item's date and time. 
+ */
+.task-start-date,
+.task-end-time, .note-date {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.5);
+  font-family: "Quicksand-Bold";
+}
+
+.task-end-time {
+  margin-left: 10px;
+}
+
+/* 
+ * Task options container.
+ */
+.task-options-cont {
+  position: relative;
+  top: 3px;
+  float: right;
+  cursor: pointer;
+}
+
+.dot-set {
+  padding: 0px 10px;
+  display: inline-block;
+}
+
+.dot {
+  margin-bottom: 2px;
+  display: block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: black;
+}
+
+.dot:last-child {
+  margin-bottom: 0px;
+}
+
+#task-options-menu {
+  margin-left: 10px;
+  padding: 10px;
+  border: none;
+  background-color: #35194e;
+  box-shadow: 2px 4px 8px 0 rgba(46, 61, 73, 0.2);
+}
+
+#task-options-menu a span i {
+  margin-right: 10px;
+}
+
+#task-options-menu a {
+  border-radius: 4px;
+  padding: 5px 5px;
+  display: block;
+  color: white;
+}
+
+#task-options-menu a:hover {
+  background-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 2px 4px 8px 0 rgba(46, 61, 73, 0.2);
+  color: #35194e;
+}
+
+#task-complete-icon {
+  width: 30px;
+  height: 30px;
+  margin-top: -20px;
+  margin-right: -10px;
+  display: none;
+}
+
+#task-complete-icon i {
+  color: #ff3f00;
+  font-size: 30px;
+}

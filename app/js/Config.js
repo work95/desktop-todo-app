@@ -1,6 +1,6 @@
 "use strict";
 
-const env = require("dotenv").config();
+require("dotenv").config();
 
 /* 
  * Directory variables. 
@@ -90,6 +90,6 @@ const Config = module.exports = {
   setupConfiguration: function () {
     Config.TASK_STORE_DIR = `${Config.USER_STORE_DIR}/${Config.USER_ID}/${Config.TASK_STORE_DIR}`;
     Config.USER_DIR = `${Config.USER_DIR}/${Config.USER_ID}`;
-    Config.TASK_STORAGE_FILE = `${Config.TASK_STORE_DIR}/${Config.TASK_STORAGE_FILE}`;
+    Config.TASK_STORAGE_FILE = `${Config.USER_STORE_DIR}/${Config.USER_ID}/${Config.TASK_STORAGE_FILE}`;
   }
 };

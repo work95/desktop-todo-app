@@ -60,6 +60,8 @@ const config2 = {
     sourceMapFilename: "start.map"
   },
   devtool: "#source-map",
+  target: "node",
+  externals: [nodeExternals()],
   module: {
     rules: [
       {

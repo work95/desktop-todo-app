@@ -2,7 +2,6 @@
 
 const fs = require('fs');
 const Config = require("./Config");
-const TaskList = require("./TaskList");
 const UiIndex = require("./ui_index");
 
 const IndexMain = module.exports = {
@@ -45,14 +44,7 @@ const IndexMain = module.exports = {
     Config.setupConfiguration();
     // Check if the user's directory is okay.
     IndexMain.checkUserDirectoryStructure();
-    // Initialize the TaskList
-    Config.Tasks = new TaskList();
     // Attach window key listeners.
     UiIndex.attachWindowKeyListener();
-    // Load the Tasks (TaskList).
-    Config.Tasks.load(() => {
-      // Display the tasks.
-      UiIndex.displayTaskList(new Date(), () => {})
-    });
   }
 };

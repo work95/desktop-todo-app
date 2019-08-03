@@ -1,0 +1,22 @@
+/* 
+ * Task list container. 
+ */
+ .list-cont {
+  width: 80%;
+  margin: auto;
+  font-family: "Quicksand-Bold";
+  margin-top: 30px;
+}
+
+#empty-list-banner {
+  text-align: center;
+}
+
+#empty-list-banner-text {
+  font-family: "Quicksand-Bold";
+  color: grey;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin: 10px;
+  box-shadow: 1px 4px 14px 0px rgba(0, 0, 0, 0.1);
+}

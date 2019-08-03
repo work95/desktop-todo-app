@@ -1,69 +1,17 @@
 "use strict";
 
 const Config = require("./Config");
-const Observer = require("./Observers");
-const Task = require("./Task");
 const Timer = require("./Timer");
 
 
 const UiIndex = module.exports = {
 
-  /* For adding the task text to the storage and display it. */
-  addTask: function (taskText, callback) {
-    let task = new Task(null, taskText);
-    shiftDisplayPane(new Date(), function () {
-      Config.DateShift = 0;
-      hideEmptyListBanner();
-      Config.Tasks.addTask(task, () => {
-        UiIndex.displayTaskNode(task, "prepend");
-        UiIndex.attachTaskOptionBtnListener();
-        typeof callback === "function" ? callback() : {};
-      });
-    });
-  },
-
-  /* Attach the node to the display list. */
-  displayTaskNode: function (task, type) {
-    let node = task.getTaskTemplate();
-    switch (type) {
-      case "append":
-        $('#task-list-cont ul').append(node);
-        break;
-
-      case "prepend":
-        $('#task-list-cont ul').prepend(node);
-        break;
-    }
-    $("#" + task.id).data("data", task);
-
-    return $(node);
-  },
-
   /* Attaching click listeners on various options of the task. */
   attachTaskOptionBtnListener: function () {
     $(function () {
       /* Unbind the previous ones. */
-      $('.delete-task-btn').unbind('click');
       $('.complete-task-btn').unbind('click');
       $('.add-time-limit-btn').unbind('click');
-
-      /* 
-       * Bind again. 
-       */
-
-       /* Delete the task button event handler. */
-      $('.delete-task-btn').click(function () {
-        // Remove error message if add task modal is open.
-        $('#task-input-error-box').text("").slideUp(300).css('color', 'black');
-        let obj = $($(this).parent().parent()).data("data");
-        Config.Tasks.removeTask(obj, function () {
-          // Remove the task list node.
-          $("#" + obj.id).remove();
-  
-          // Remove the notification list node.
-          $("#notif_" + obj.id).remove();
-        });
-      });
 
       /* Complete or undo the same, event handler. */
       $('.complete-task-btn').click(function () {
@@ -104,118 +52,9 @@ const UiIndex = module.exports = {
     });
   },
 
-  updateNodeLook: function (node, status) {
-    $(node).attr("status", status);
-    if (status) {
-      $(node).children("#task-action-icons").children(".complete-task-btn").attr("status", status);
-      $(node).children(".task-text").addClass("disabled-fade").children(".task-text-cont").addClass("strikethrough");
-    } else {
-      $(node).children("#task-action-icons").children(".complete-task-btn").attr("status", status);
-      $(node).children(".task-text").removeClass("disabled-fade").children(".task-text-cont").removeClass("strikethrough");
-    }
-  },
-
-  /* Load the task list. */
-  displayTaskList: function (date, callback) {
-    // Cache the Task list.
-    let taskList = Config.Tasks.getTasksByDate(date);
-
-    // Clear the display list first (in case, updating the list).
-    UiIndex.clearTaskListDisplay();
-
-    if (taskList.length < 1) {
-      displayEmptyListBanner();
-    } else {
-      hideEmptyListBanner();
-      for (let i = 0; i < taskList.length; i++) {
-        let task = taskList[i];
-        $(`#${taskList[i].id}`).attr("status", task.status);
-        if (!task.status) {
-          UiIndex.displayTaskNode(task, "prepend");
-          $(`#${taskList[i].id}`).children(".task-text").removeClass("disabled-fade").children(".task-text-cont").removeClass("strikethrough");
-          $(`#${taskList[i].id}`).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", task.status).html("Complete task");
-          if (task.endTime) {
-            new Timer(task.id, $(`#${taskList[i].id} span .task-end-time`), task.endTime);
-          }
-        } else {
-          UiIndex.displayTaskNode(task, "append");
-          $(`#${taskList[i].id}`).children(".task-text").addClass("disabled-fade").children(".task-text-cont").addClass("strikethrough");
-          $(`#${taskList[i].id}`).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", task.status).html('Undone task');
-        }
-      }
-    }
-
-    UiIndex.attachTaskOptionBtnListener();
-    typeof callback === "function" ? callback() : {};
-  },
-
-  clearTaskListDisplay: function () {
-    $('#task-list-cont ul').html("");
-  },
-
-  showTaskSearchBox: function () {
-    $("#task-search-box").fadeIn(200);
-    $("#task-search-input").focus();
-  },
-
-  hideTaskSearchBox: function () {
-    $("#task-search-box").fadeOut(200);
-  },
-
-  showTaskInputBox: function () {
-    // Drop the task text input.
-    $("#task-add-input-box").fadeIn(250);
-    // Bring focus on the input form.
-    $("#task-text-input").focus();
-  },
-
-  /* Hide the task input form box. */
-  hideTaskInputBox: function () {
-    // Drop the task text input.
-    $("#task-add-input-box").fadeOut(250);
-    UiIndex.updateTaskInputValue("");
-    UiIndex.updateTaskInputErrorBoxMessage("");
-    UiIndex.hideTaskInputErrorBoxMessage();
-  },
-
   /* Update the value of the task input form. */
   updateTaskInputValue: function (value) {
     $("#task-text-input").val(value);
-  },
-
-  /* Get the value of the task input form. */
-  getTaskInputBoxValue: function () {
-    return $("#task-text-input").val() || "";
-  },
-
-  /* Show the error box for the task input form. */
-  showTaskInputErrorBox: function (message) {
-    if (message) {
-      $("#task-input-error-box").html(message).slideDown(300);
-      setTimeout(function () {
-        UiIndex.hideTaskInputErrorBoxMessage();
-      }, 3000);
-    }
-  },
-
-  /* Update the message of the task input form. */
-  updateTaskInputErrorBoxMessage: function (message) {
-    $("#task-input-error-box").html(message);
-  },
-
-  /* Hide the error box for the task input form. */
-  hideTaskInputErrorBoxMessage: function () {
-    $("#task-input-error-box").slideUp(300);
-  },
-
-  /* Show the notification counter badge. */
-  showNotificationCounterBadge: function (count) {
-    $("#notification-count-badge").fadeIn(100).text(count);
-  },
-
-  /* Hide the notification counter badge. */
-  hideNotificationCounterBadge: function () {
-    $("#notification-count-badge").fadeOut(100);
   },
 
   /* For performing operations when certain key combinations are pressed. */
@@ -225,10 +64,7 @@ const UiIndex = module.exports = {
       const keyCode = event.keyCode;
 
       // When escape key is pressed. Close all other windows and go back to word-meaning pane.
-      if (keyCode === Config.KeyCodes.ESCAPE) {
-        UiIndex.hideTaskInputBox();
-        UiIndex.hideTaskSearchBox();
-      }
+      if (keyCode === Config.KeyCodes.ESCAPE) {}
 
       // Do not alert when only Control key is pressed.
       if (keyCode === Config.KeyCodes.CONTROL) {
@@ -240,49 +76,19 @@ const UiIndex = module.exports = {
         // event.ctrlKey may be true if Ctrl key is pressed at the same time.
         switch (keyName) {
           case "f":
-            UiIndex.showTaskSearchBox();
-            UiIndex.hideTaskInputBox();
             break;
 
-          case "t":
-            UiIndex.showTaskInputBox();
-            UiIndex.hideTaskSearchBox();
+            case "t":
             break;
 
           // Refresh app.
           case "r":
             // event.preventDefault();
             break;
-          
-          case "ArrowLeft":
-            Config.DateShift--;
-            let dateA = new Date();
-            dateA.setDate(dateA.getDate() + Config.DateShift);
-            shiftDisplayPane(dateA, function () {});
-            break;
-
-          case "ArrowRight":
-            Config.DateShift++;
-            let dateB = new Date();
-            dateB.setDate(dateB.getDate() + Config.DateShift);
-            shiftDisplayPane(dateB, function () {});
-            break;
 
           // Process the inputted task text.
           case "Enter":
             event.preventDefault();
-            let inputVal = UiIndex.getTaskInputBoxValue();
-            // If nothing is entered, show the error message.
-            if (inputVal.length < 1) {
-              UiIndex.showTaskInputErrorBox("Nothing entered");
-              return;
-            }
-
-            // Save and display the task.
-            UiIndex.addTask(inputVal, function () {
-              // Reset the input form.
-              UiIndex.updateTaskInputValue("");
-            });
             break;
         }
       }
@@ -317,161 +123,3 @@ $(function () {
     }
   });
 });
-
-/* Show the task add input form box. */
-$(function () {
-  $('#add-task-btn').click(function () {
-    // Toggle open and close the input form.
-    $("#task-add-input-box").fadeToggle(250, function () {
-      $("#task-text-input").val("").focus();
-    });
-  });
-});
-
-$(function () {
-  $("#task-input-send-btn").click(function () {
-    let inputVal = UiIndex.getTaskInputBoxValue();
-    // If nothing is entered, show the error message.
-    if (inputVal.length < 1) {
-      UiIndex.showTaskInputErrorBox("Nothing entered");
-      return;
-    }
-
-    // Save and display the task.
-    UiIndex.addTask(inputVal, function () {
-      // Reset the input form.
-      UiIndex.updateTaskInputValue("");
-    });
-  });
-});
-
-/* Show the notification pane. */
-$(function () {
-  $('#notification-icon').click(function () {
-    UiIndex.showNotificationPane();
-  });
-});
-
-/* Close the notification pane. */
-$(function () {
-  $('#notification-pane-close-btn').click(function () {
-    UiIndex.closeNotificationPane();
-  });
-});
-
-$(function () {
-  $("#task-list-refresh").click(function() {
-    UiIndex.displayTaskList(Config.CurrentDate, () => {});
-  });
-});
-
-$(function () {
-  $("#date-shift-home-btn").click(function () {
-    shiftDisplayPane(new Date(), function () {
-      Config.DateShift = 0;
-    });
-  });
-});
-
-/* Search function. */
-$(function () {
-  let val = "";
-  let matchedTasks = [];
-  $("#task-search-box").on("keyup", function (event) {
-    val = $("#task-search-input").val().trim() || "";
-    observer1.stopObservation();
-    if (val.length > 0) {
-      UiIndex.clearTaskListDisplay();
-      if (val[0] === ":" && val.length > 1) {
-        Config.Tasks.searchAllTasks(val.substring(1), function (result) {
-          matchedTasks = result;
-          for (let i = 0; i < matchedTasks.length; i++) {
-            let task = matchedTasks[i];
-            $(`#${task.id}`).attr("status", task.status);
-            if (!task.status) {
-              UiIndex.displayTaskNode(task, "prepend");
-              $(`#${task.id}`).children(".task-text").removeClass("disabled-fade").children(".task-text-cont").removeClass("strikethrough");
-              $(`#${task.id}`).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", task.status).html("Complete task");
-            } else {
-              UiIndex.displayTaskNode(task, "append");
-              $(`#${task.id}`).children(".task-text").addClass("disabled-fade").children(".task-text-cont").addClass("strikethrough");
-              $(`#${task.id}`).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", task.status).html('Undone task');
-            }
-          }
-        });
-      } else {
-        matchedTasks = Config.Tasks.searchTask(val);
-        for (let i = 0; i < matchedTasks.length; i++) {
-          let task = matchedTasks[i];
-          $(`#${task.id}`).attr("status", task.status);
-          if (!task.status) {
-            UiIndex.displayTaskNode(task, "prepend");
-            $(`#${task.id}`).children(".task-text").removeClass("disabled-fade").children(".task-text-cont").removeClass("strikethrough");
-            $(`#${task.id}`).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", task.status).html("Complete task");
-          } else {
-            UiIndex.displayTaskNode(task, "append");
-            $(`#${task.id}`).children(".task-text").addClass("disabled-fade").children(".task-text-cont").addClass("strikethrough");
-            $(`#${task.id}`).children(".task-options-cont").children("#task-options-menu").children(".complete-task-btn").attr("status", task.status).html('Undone task');
-          }
-        }
-      }
-      observer1.startObservation();
-      UiIndex.attachTaskOptionBtnListener();
-    }
-  });
-});
-
-/* Show the current day's date and month. */
-$(function () {
-  changeHeaderDate(new Date());
-});
-
-function changeHeaderDate(date) {
-  $("#current-date-cont h1").html(`${Config.MonthNamesShort[date.getMonth()]} ${date.getDate()}`);
-}
-
-/* Shift to previous date or next date. */
-$(function () {
-  $("#previous-date-shift-btn").click(function () {
-    Config.DateShift--;
-    let date = new Date();
-    date.setDate(date.getDate() + Config.DateShift);
-    shiftDisplayPane(date, function () {});
-  });
-
-  $("#next-date-shift-btn").click(function () {
-    Config.DateShift++;
-    let date = new Date();
-    date.setDate(date.getDate() + Config.DateShift);
-    shiftDisplayPane(date, function () {});
-  });
-});
-
-function shiftDisplayPane(date, callback) {
-  Config.CurrentDate = date;
-  changeHeaderDate(date);
-  UiIndex.displayTaskList(date, () => callback());
-}
-
-function displayEmptyListBanner() {
-  $("#empty-list-banner").fadeIn(0);
-}
-
-function hideEmptyListBanner() {
-  $("#empty-list-banner").fadeOut(0);
-}
-
-const observer1 = new Observer(document.getElementById("task-list-cont-main"), { childList: true });
-
-observer1.observer = new MutationObserver(function (mutations) {
-  mutations.forEach(function (mutation) {
-    if (mutation.type === "childList") {
-      if ($("#task-list-cont-main").children().length < 1) {
-        displayEmptyListBanner();
-      } else {
-        hideEmptyListBanner();
-      }
-    }
-  });
-});
-observer1.startObservation();
