@@ -2,9 +2,8 @@
 
 const fs = require('fs');
 const Config = require("./Config");
-const UiIndex = require("./ui_index");
 
-const IndexMain = module.exports = {
+const Init = module.exports = {
 
   /* Check the storage directory structure. */
   checkDirectoryStructure: function () {
@@ -37,14 +36,12 @@ const IndexMain = module.exports = {
   /* Main entry point of the application. */
   init: function () {
     // Check directory structure.
-    IndexMain.checkDirectoryStructure();
+    Init.checkDirectoryStructure();
     // Load USER_ID.
-    Config.USER_ID = IndexMain.loadLastUserId() || "user_0";
+    Config.USER_ID = Init.loadLastUserId() || "user_0";
     // Load configuration variables.
     Config.setupConfiguration();
     // Check if the user's directory is okay.
-    IndexMain.checkUserDirectoryStructure();
-    // Attach window key listeners.
-    UiIndex.attachWindowKeyListener();
+    Init.checkUserDirectoryStructure();
   }
 };
